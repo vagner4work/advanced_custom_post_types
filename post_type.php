@@ -1,12 +1,8 @@
 <?php
 class post_type extends acpt {
+	
 	/**
-	 * Make Post Type
-	 * 
-	 * @param string -> post type name
-	 * @param array -> settings
-	 * @param string -> singular name
-	 * @param string -> plural name
+	 * Make Post Type. Do not use before init.
 	 * 
 	 * $settings = array(
 	 *	'public' => true,
@@ -16,8 +12,11 @@ class post_type extends acpt {
 	 *	'supports' => array( ... ),
 	 *	'hierarchical' => true,
 	 * );
-	 *
-	 *
+	 * 
+	 * @param string $post_type post type name
+	 * @param array $settings settings
+	 * @param string $singular singular name
+	 * @param string $plural plural name
 	 */
 	function make($post_type, $settings, $singular, $plural) {
 		// Test for param
