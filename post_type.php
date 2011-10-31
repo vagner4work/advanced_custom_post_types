@@ -9,36 +9,36 @@ class post_type extends acpt {
 	 * @param string -> plural name
 	 * 
 	 * $settings = array(
-	 *				'public' => true,
-	 *				'has_archive' => true,
-	 *				'show_ui' => true,
-	 *				'taxonomies' => array( ... ),
-	 *				'supports' => array( ... ),
-	 *				'hierarchical' => true,
+	 *	'public' => true,
+	 *	'has_archive' => true,
+	 *	'show_ui' => true,
+	 *	'taxonomies' => array( ... ),
+	 *	'supports' => array( ... ),
+	 *	'hierarchical' => true,
 	 * );
 	 *
 	 *
 	 */
 	function make($post_type, $settings, $singlular, $plural) {
-		// Test for Settings
-		if(!$post_type) exit('You need to enter a post type.');
-		if(!$settings) exit('You need to enter a settings.');
-		if(!$singlular) exit('You need to enter a singular name.');
-		if(!$plural) exit('You need to enter a plural name.');
+		// Test for param
+		if(!$post_type) exit('Making Post Type: You need to enter a post type.');
+		if(!$settings) exit('Making Post Type: You need to enter a settings.');
+		if(!$singlular) exit('Making Post Type: You need to enter a singular name.');
+		if(!$plural) exit('Making Post Type: You need to enter a plural name.');
 		
 		$labels = array(
-			'name' => $plural,
-			'singular_name' => $singlular,
+			'name' => ucwords( $plural),
+			'singular_name' => ucwords($singlular),
 			'add_new' => 'Add New',
-			'add_new_item' => 'Add New '.$singlular,
-			'edit_item' => 'Edit '.$singlular,
-			'new_item' => 'New '.$singlular,
-			'view_item' => 'View '.$singlular,
-			'search_items' => 'Search '.$plural,
+			'add_new_item' => 'Add New '.ucwords($singlular),
+			'edit_item' => 'Edit '.ucwords($singlular),
+			'new_item' => 'New '.ucwords($singlular),
+			'view_item' => 'View '.ucwords($singlular),
+			'search_items' => 'Search '.ucwords($plural),
 			'not_found' =>  'No '.$plural.' found',
 			'not_found_in_trash' => 'No '.$plural.' found in Trash', 
 			'parent_item_colon' => '',
-			'menu_name' => $plural
+			'menu_name' => ucwords($plural)
 		);
 		
 		$capabilities = array(
@@ -56,8 +56,8 @@ class post_type extends acpt {
 		$args = array(
 			'labels' => $labels,
 			'description' => $plural,
-			'capability_type' => $singlular,
-			'capabilities' => $capabilities,
+			// 'capability_type' => $singlular,
+			// 'capabilities' => $capabilities,
 			'rewrite' => array( 'slug' => $plural),
 			
 			'public' => $settings['public'], // Boolean
