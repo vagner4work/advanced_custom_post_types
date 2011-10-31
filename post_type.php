@@ -19,21 +19,21 @@ class post_type extends acpt {
 	 *
 	 *
 	 */
-	function make($post_type, $settings, $singlular, $plural) {
+	function make($post_type, $settings, $singular, $plural) {
 		// Test for param
 		if(!$post_type) exit('Making Post Type: You need to enter a post type.');
 		if(!$settings) exit('Making Post Type: You need to enter a settings.');
-		if(!$singlular) exit('Making Post Type: You need to enter a singular name.');
+		if(!$singular) exit('Making Post Type: You need to enter a singular name.');
 		if(!$plural) exit('Making Post Type: You need to enter a plural name.');
 		
 		$labels = array(
 			'name' => ucwords( $plural),
-			'singular_name' => ucwords($singlular),
+			'singular_name' => ucwords($singular),
 			'add_new' => 'Add New',
-			'add_new_item' => 'Add New '.ucwords($singlular),
-			'edit_item' => 'Edit '.ucwords($singlular),
-			'new_item' => 'New '.ucwords($singlular),
-			'view_item' => 'View '.ucwords($singlular),
+			'add_new_item' => 'Add New '.ucwords($singular),
+			'edit_item' => 'Edit '.ucwords($singular),
+			'new_item' => 'New '.ucwords($singular),
+			'view_item' => 'View '.ucwords($singular),
 			'search_items' => 'Search '.ucwords($plural),
 			'not_found' =>  'No '.$plural.' found',
 			'not_found_in_trash' => 'No '.$plural.' found in Trash', 
@@ -43,20 +43,20 @@ class post_type extends acpt {
 		
 		$capabilities = array(
 			'publish_posts' => 'publish_'.$plural,
-			'edit_post' => 'edit_'.$singlular,
+			'edit_post' => 'edit_'.$singular,
 			'edit_posts' => 'edit_'.$plural,
 			'edit_others_posts' => 'edit_others_'.$plural,
-			'delete_post' => 'delete_'.$singlular,
+			'delete_post' => 'delete_'.$singular,
 			'delete_posts' => 'delete_'.$plural,
 			'delete_others_posts' => 'delete_others_'.$plural,
-			'read_post' => 'read_'.$singlular,
+			'read_post' => 'read_'.$singular,
 			'read_private_posts' => 'read_private_'.$plural,
 		);
 		
 		$args = array(
 			'labels' => $labels,
 			'description' => $plural,
-			// 'capability_type' => $singlular,
+			// 'capability_type' => $singular,
 			// 'capabilities' => $capabilities,
 			'rewrite' => array( 'slug' => $plural),
 			
@@ -70,6 +70,9 @@ class post_type extends acpt {
 		
 		// Register post type
 		register_post_type( $post_type, $args);
+		
+		// Set Messages
+		// add_filter('post_updated_messages', 'custom_messages');
 		
 	}
 	
