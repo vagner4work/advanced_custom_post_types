@@ -25,19 +25,22 @@ class post_type extends acpt {
 		if(!$singular) exit('Making Post Type: You need to enter a singular name.');
 		if(!$plural) exit('Making Post Type: You need to enter a plural name.');
 		
+		$upperPlural = ucwords( $plural);
+		$upperSingular = ucwords($singular);
+
 		$labels = array(
-			'name' => ucwords( $plural),
-			'singular_name' => ucwords($singular),
+			'name' => $upperPlural,
+			'singular_name' => $upperSingular,
 			'add_new' => 'Add New',
-			'add_new_item' => 'Add New '.ucwords($singular),
-			'edit_item' => 'Edit '.ucwords($singular),
-			'new_item' => 'New '.ucwords($singular),
-			'view_item' => 'View '.ucwords($singular),
-			'search_items' => 'Search '.ucwords($plural),
+			'add_new_item' => 'Add New '.$upperSingular,
+			'edit_item' => 'Edit '.$upperSingular,
+			'new_item' => 'New '.$upperSingular,
+			'view_item' => 'View '.$upperSingular,
+			'search_items' => 'Search '.$upperPlural,
 			'not_found' =>  'No '.$plural.' found',
 			'not_found_in_trash' => 'No '.$plural.' found in Trash', 
 			'parent_item_colon' => '',
-			'menu_name' => ucwords($plural)
+			'menu_name' => $upperPlural,
 		);
 		
 		$capabilities = array(
@@ -69,10 +72,6 @@ class post_type extends acpt {
 		
 		// Register post type
 		register_post_type( $post_type, $args);
-		
-		// Set Messages
-		// add_filter('post_updated_messages', 'custom_messages');
-		
 	}
 	
 	/**
