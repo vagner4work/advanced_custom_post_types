@@ -4,3 +4,26 @@ Advanced Custom Post Types
 This will be a framework for creating not only custom post types in WordPress but it will also give you the ability to rapidly create custom fields.
 
 by Kevin Dees at http://kevindees.cc
+
+Usage
+===
+
+Use a php include to add the file acpt.php to your plugin or functions.php theme file.
+
+Making a Custom Post Type
+===
+
+include('acpt/acpt.php');
+
+$pt = new post_type();
+
+$args = array(
+	'public' => true,
+	'has_archive' => true,
+	'show_ui' => true,
+	'taxonomies' => '',
+	'supports' => array( 'title', 'editor' ),
+	'hierarchical' => true,
+);
+
+$pt->make('course', $args, 'course', 'courses');
