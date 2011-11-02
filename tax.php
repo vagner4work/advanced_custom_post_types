@@ -6,7 +6,7 @@ class tax extends acpt {
 	*
 	* @param string $singular singular name is required
 	* @param string $plural plural name is required
-	* @param boolean $hierarchical hierarchy is required
+	* @param boolean $hierarchical add hierarchy
 	* @param boolean $cap turn on custom capabilities
 	* @param string|array $post_type set the post types which to apply taxonomy (null is an option)
 	* @param array $settings args override and extend
@@ -70,7 +70,7 @@ class tax extends acpt {
 		    'rewrite' => array( 'slug' => $singular ),
 		);
 		
-		$args = array_merge($args, $cap, $settings);
+		$args = array_merge($args, $hierarchical, $cap, $settings);
 			
 		register_taxonomy($singular, $post_type, $args);
 	}
