@@ -43,14 +43,6 @@ class post_type extends acpt {
 			'read_private_posts' => 'read_private_'.$plural,
 		);
 		
-		$args = array(
-			'labels' => $labels,
-			'description' => $plural,
-			'rewrite' => array( 'slug' => $plural),
-			'public' => true,
-			'has_archive' => true,
-		);
-		
 		if(!$settings) $settings = array();
 		if($cap === true) :
 			$cap = array(
@@ -60,6 +52,14 @@ class post_type extends acpt {
 		else :
 			$cap = array();
 		endif;
+		
+		$args = array(
+			'labels' => $labels,
+			'description' => $plural,
+			'rewrite' => array( 'slug' => $plural),
+			'public' => true,
+			'has_archive' => true,
+		);
 		
 		$args = array_merge($args, $cap, $settings);
 		
