@@ -6,7 +6,7 @@ class post_type extends acpt {
 	 * 
 	 * @param string $singular singular name is required
 	 * @param string $plural plural name is required
-	 * @param buleon $cap turn on custom capabilities
+	 * @param boolean $cap turn on custom capabilities
 	 * @param array $settings args override and extend
 	 */
 	function make($singular, $plural, $cap, $settings) {
