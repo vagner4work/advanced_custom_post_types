@@ -55,5 +55,8 @@ class acpt {
 	}
 }
 
-// Make and Meta
+// Make Post Type
 include('post_type.php');
+
+// Make Tax
+include('tax.php');
