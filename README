@@ -15,15 +15,17 @@ Making a Custom Post Type
 
 include('acpt/acpt.php');
 
-$pt = new post_type();
+add_action('init', 'makethem');
+function makethem() {
+	$pt = new post_type();
 
-$args = array(
-	'public' => true,
-	'has_archive' => true,
-	'show_ui' => true,
-	'taxonomies' => '',
-	'supports' => array( 'title', 'editor' ),
-	'hierarchical' => true,
-);
-
-$pt->make('course', $args, 'course', 'courses');
+	$args = array(
+		'public' => true,
+		'has_archive' => true,
+		'show_ui' => true,
+		'taxonomies' => array('category', 'post_tag'),
+		'supports' => array( 'title', 'editor', 'page-attributes'  ),
+		'hierarchical' => true,
+	);
+	$pt->make('course', $args, 'course', 'courses');
+}
