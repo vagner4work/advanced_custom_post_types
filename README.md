@@ -13,47 +13,47 @@ Use a php include to add the file acpt.php to your plugin or functions.php theme
 Making a Custom Post Type
 ===
 
-include('acpt/acpt.php');
+	include('acpt/acpt.php');
 
-add_action('init', 'makethem');
-function makethem() {
-	$pt = new post_type();
+	add_action('init', 'makethem');
+	function makethem() {
+		$pt = new post_type();
 
-	$args = array(
-		'taxonomies' => array('category', 'post_tag'),
-		'supports' => array( 'title', 'editor', 'page-attributes'  ),
-		'hierarchical' => true,
-	);
-	$pt->make('course','courses', false,  $args );
-}
+		$args = array(
+			'taxonomies' => array('category', 'post_tag'),
+			'supports' => array( 'title', 'editor', 'page-attributes'  ),
+			'hierarchical' => true,
+		);
+		$pt->make('course','courses', false,  $args );
+	}
 
 Making a Taxonomy
 ===
 
-include('acpt/acpt.php');
+	include('acpt/acpt.php');
 
-add_action('init', 'makethem');
-function makethem() {
-	$tx = new tax();
-	$tx->make('color','colors', false );
-}
+	add_action('init', 'makethem');
+	function makethem() {
+		$tx = new tax();
+		$tx->make('color','colors', false );
+	}
 
 Together
 ===
 
-include('acpt/acpt.php');
+	include('acpt/acpt.php');
 
-add_action('init', 'makethem');
-function makethem() {
-	$tx = new tax();
-	$tx->make('color', 'colors', true);
+	add_action('init', 'makethem');
+	function makethem() {
+		$tx = new tax();
+		$tx->make('color', 'colors', true);
 
-	$pt = new post_type();
-	$args = array(
-		'taxonomies' => array('color'),
-		'supports' => array( 'title', 'editor', 'page-attributes'  ),
-		'hierarchical' => true,
-	);
-	$pt->make('course','courses', false,  $args );
-	$pt->make('book','books', false,  $args );
-}
+		$pt = new post_type();
+		$args = array(
+			'taxonomies' => array('color'),
+			'supports' => array( 'title', 'editor', 'page-attributes'  ),
+			'hierarchical' => true,
+		);
+		$pt->make('course','courses', false,  $args );
+		$pt->make('book','books', false,  $args );
+	}
