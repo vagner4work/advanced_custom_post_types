@@ -11,7 +11,7 @@ For custom fields try http://wordpress.org/extend/plugins/advanced-custom-fields
 Usage
 ===
 
-Use a php include to add the file acpt.php to your plugin or functions.php theme file.
+Use a php include to add the file acpt.php to your plugin or functions.php theme file. For more advanced users look at the code comments for help on what args are avalible.
 
 Making a Custom Post Type
 ===
