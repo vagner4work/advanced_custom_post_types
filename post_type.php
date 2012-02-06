@@ -9,7 +9,7 @@ class post_type extends acpt {
 	 * @param boolean $cap turn on custom capabilities
 	 * @param array $settings args override and extend
 	 */
-	function make($singular, $plural, $cap, $settings) {
+	function make($singular, $plural, $cap = false, $settings = array() ) {
 		if(!$singular) exit('Making Post Type: You need to enter a singular name.');
 		if(!$plural) exit('Making Post Type: You need to enter a plural name.');
 		
@@ -43,7 +43,6 @@ class post_type extends acpt {
 			'read_private_posts' => 'read_private_'.$plural,
 		);
 		
-		if(!$settings) $settings = array();
 		if($cap === true) :
 			$cap = array(
 				'capability_type' => $singular,
