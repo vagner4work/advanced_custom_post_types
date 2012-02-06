@@ -13,8 +13,19 @@ Usage
 
 Use a php include to add the file acpt.php to your plugin or functions.php theme file. For more advanced users look at the code comments for help on what args are avalible.
 
-Making a Custom Post Type
+Troubleshooting
 ===
+
+Slug
+==
+
+If your slugs are not working be sure you have flushed the permalink rules. To do this go to the permalinks and save the settings. No need to mod the .htaccess file if told.
+
+Code
+===
+
+Making a Custom Post Type
+==
 
 	include('acpt/acpt.php');
 
@@ -31,7 +42,7 @@ Making a Custom Post Type
 	}
 
 Making a Taxonomy
-===
+==
 
 	include('acpt/acpt.php');
 
@@ -42,7 +53,7 @@ Making a Taxonomy
 	}
 
 Together
-===
+==
 
 	include('acpt/acpt.php');
 
