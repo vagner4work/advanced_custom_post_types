@@ -1,9 +1,12 @@
 Advanced Custom Post Types
 ===
 
-This will be a framework for creating not only custom post types in WordPress but it will also give you the ability to rapidly create custom fields.
+This will be a framework for creating not only custom post types in WordPress but it will also give you the ability to rapidly create custom fields later on.
 
 by Kevin Dees at http://kevindees.cc
+or on twitter https://twitter.com/kevindees
+
+For custom fields try http://wordpress.org/extend/plugins/advanced-custom-fields
 
 Usage
 ===
