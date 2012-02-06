@@ -26,3 +26,34 @@ function makethem() {
 	);
 	$pt->make('course','courses', false,  $args );
 }
+
+Making a Taxonomy
+===
+
+include('acpt/acpt.php');
+
+add_action('init', 'makethem');
+function makethem() {
+	$tx = new tax();
+	$tx->make('color','colors', false );
+}
+
+Together
+===
+
+include('acpt/acpt.php');
+
+add_action('init', 'makethem');
+function makethem() {
+	$tx = new tax();
+	$tx->make('color', 'colors', true);
+
+	$pt = new post_type();
+	$args = array(
+		'taxonomies' => array('color'),
+		'supports' => array( 'title', 'editor', 'page-attributes'  ),
+		'hierarchical' => true,
+	);
+	$pt->make('course','courses', false,  $args );
+	$pt->make('book','books', false,  $args );
+}
