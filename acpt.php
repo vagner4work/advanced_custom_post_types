@@ -67,3 +67,6 @@ include('post_type.php');
 
 // Make Tax
 include('tax.php');
+
+// Make Role
+include('role.php');
