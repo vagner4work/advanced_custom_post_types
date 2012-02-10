@@ -53,6 +53,13 @@ class acpt {
 				$field = '<input type="text" class="text">';
 		}
 	}
+
+	function make_computer_name($name) {
+		$pattern = '/(\s+)/';
+		$replacement = '_';
+		$computerName = preg_replace($pattern,$replacement,strtolower(trim($name)));
+		return $computerName;
+	}
 }
 
 // Make Post Type

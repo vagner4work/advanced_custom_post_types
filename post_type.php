@@ -12,9 +12,14 @@ class post_type extends acpt {
 	function make($singular, $plural, $cap = false, $settings = array() ) {
 		if(!$singular) exit('Making Post Type: You need to enter a singular name.');
 		if(!$plural) exit('Making Post Type: You need to enter a plural name.');
+
+		// make lowercase
+		$singular = strtolower($singular);
+		$plural = strtolower($plural);
 		
-		$upperPlural = ucwords( $plural);
+		// make uppercase
 		$upperSingular = ucwords($singular);
+		$upperPlural = ucwords($plural);
 
 		$labels = array(
 			'name' => $upperPlural,
