@@ -77,6 +77,12 @@ Plugins: http://codex.wordpress.org/Function_Reference/register_activation_hook
 
 WARNING: You should not work with roles unless you know what you are doing. Also, Be sure you consider a plan of attack for when your theme or plugin is removed or deactivated. Using roles is ment for advanced users only.
 
+Make Arguments
+---
+
+You can set the first argument with capital letters. Formatted name is suggested.
+
+
 Bad Code Example
 ---
 

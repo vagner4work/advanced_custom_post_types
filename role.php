@@ -11,7 +11,7 @@ class role extends acpt {
 	/**
 	 * Make Role. Do not use before init. Use before making a post type.
 	 * 
-	 * @param string $name name is required
+	 * @param string $role formatted role is suggested. role is required
 	 * @param array $settings args override and extend
 	 * @param array $postType args singular then plueral post type names
 	 */
