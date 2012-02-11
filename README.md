@@ -91,6 +91,7 @@ Bad Code Example
 	function makethem() {
 		$r = new role();
 		$r->make('Library Manager', array('read'), array('book', 'books'));
+		$r->update('Administrator', null, null, array('book','books'));
 	}
 
 Good Code Example
@@ -101,6 +102,7 @@ Good Code Example
 	function makethem() {
 		$r = new role();
 		$r->make('Library Manager', array('read'), array('book', 'books'));
+		$r->update('Administrator', null, null, array('book','books'));
 	}
 
 
