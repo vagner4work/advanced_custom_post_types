@@ -118,3 +118,47 @@ Code Example
 		$pt->make('book','books', false,  $args );
 		$pt->make('course','courses', false,  $args );
 	}
+
+Together: Post Type, Meta Box, Form and Taxonomy
+===
+
+This is still not fully tested and needs a lot of security work. Use at your own risk.
+
+Code
+---
+
+	include('acpt/acpt.php');
+	add_action('admin_init', 'meta_boxes');
+	function meta_boxes() {
+		$m = new meta_box();
+		$m->make('New box');
+		$m->make('Details');
+	}
+
+	add_action('init', 'makethem');
+	function makethem() {
+		$r = new role();
+		$p = new post_type();
+		$t = new tax();
+		$t->make('color','colors', false);
+		$args = array(
+	        'taxonomies' => array('color'),
+	        'supports' => array( 'title', 'editor', 'page-attributes', 'new_box', 'details' ),
+	        'hierarchical' => true,
+	    );
+	    $p->make('book', 'books', false, $args);
+	}
+
+	function new_box() {
+		$f = new form();
+		$f->make('new');
+		$f->input('name');
+		$f->end();
+	}
+
+	function details() {
+		$f = new form();
+		$f->make('details');
+		$f->editor('textbox');
+		$f->end();
+	}

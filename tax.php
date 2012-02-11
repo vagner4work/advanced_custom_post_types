@@ -11,7 +11,7 @@ class tax extends acpt {
 	* @param string|array $post_type set the post types which to apply taxonomy (null is an option)
 	* @param array $settings args override and extend
 	*/
-	function make($singular, $plural, $hierarchical = false, $post_type = null, $cap = false, $settings = array() ) {
+	function make($singular = null, $plural = null, $hierarchical = false, $post_type = null, $cap = false, $settings = array() ) {
 		if(!$singular) exit('Making Taxonomy: You need to enter a singular name.');
 		if(!$plural) exit('Making Taxonomy: You need to enter a plural name.');
 
@@ -68,8 +68,5 @@ class tax extends acpt {
 		$args = array_merge($args, $hierarchical, $cap, $settings);
 			
 		register_taxonomy($singular, $post_type, $args);
-	}
-	
-	function meta() {
 	}
 }

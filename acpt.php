@@ -6,7 +6,7 @@
 */
 
 if($wp_version < '3.3' || $wp_version == null ): exit('You need the 3.3 version of WordPress.');
-else: $acpt_version = '0.0.1';
+else: $acpt_version = '0.6';
 endif;
 
 class acpt {
@@ -37,21 +37,6 @@ class acpt {
 			return $messages;
 		};
 		add_filter('post_updated_messages', $func);
-	}
-	
-	function custom_field($type) {
-		switch ($type) {
-			case 'text':
-				$field = '<input type="text" class="text">';
-			case 'textarea' :
-				$field = '<textarea class="textarea"></textarea>';
-			case 'image' :
-				$field = '<input type="text" class="image">';
-			case 'editor' :
-				$field = '<textarea class="editor"></textarea>';
-			default :
-				$field = '<input type="text" class="text">';
-		}
 	}
 
 	function make_computer_name($name) {
