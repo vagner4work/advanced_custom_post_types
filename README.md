@@ -72,7 +72,7 @@ Roles are the most powerful part of ACPT. You can make(), update() and remove() 
 
 For basic usage be sure you know how switching themes and activating plugins work.
 
-Themes: http://codex.wordpress.org/Plugin_API/Action_Reference/switch_theme
+Themes: http://www.krishnakantsharma.com/2011/01/activationdeactivation-hook-for-wordpress-theme/
 Plugins: http://codex.wordpress.org/Function_Reference/register_activation_hook
 
 WARNING: You should not work with roles unless you know what you are doing. Also, Be sure you consider a plan of attack for when your theme or plugin is removed or deactivated. Using roles is ment for advanced users only.
@@ -93,19 +93,6 @@ Bad Code Example
 		$r->make('Library Manager', array('read'), array('book', 'books'));
 		$r->update('Administrator', null, null, array('book','books'));
 	}
-
-Good Code Example
----
-
-	include('acpt/acpt.php');
-	add_action('switch_theme', 'makethem');
-	function makethem() {
-		$r = new role();
-		$r->make('Library Manager', array('read'), array('book', 'books'));
-		$r->update('Administrator', null, null, array('book','books'));
-	}
-
-
 
 Together: Post Type and Taxonomy
 ===
