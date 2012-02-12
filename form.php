@@ -80,7 +80,6 @@ class form extends acpt {
         global $post;
 
         if($value = get_post_meta($post->ID, 'acpt_'.$this->formName.'_'.$name, true)) $content = $value;
-        echo $content;
         wp_editor(
             $content,
             'wysisyg_'.$this->formName.'_'.$name,
