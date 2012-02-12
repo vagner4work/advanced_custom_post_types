@@ -139,7 +139,6 @@ Code
 
 	add_action('init', 'makethem');
 	function makethem() {
-		$r = new role();
 		$p = new post_type();
 		$t = new tax();
 		$t->make('color','colors', false);

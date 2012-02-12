@@ -48,10 +48,16 @@ class acpt {
 }
 
 // Make Post Type
-include('post_type.php');
+include('core/post_type.php');
 
 // Make Tax
-include('tax.php');
+include('core/tax.php');
 
 // Make Role
-include('role.php');
+include('core/role.php');
+
+// Make Role
+include('core/form.php');
+
+// Make Role
+include('core/meta_box.php');
