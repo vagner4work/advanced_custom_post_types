@@ -37,14 +37,14 @@ Code Example
 
 	add_action('init', 'makethem');
 	function makethem() {
-		$pt = new post_type();
+        $args = array(
+            'taxonomies' => array('category', 'post_tag'),
+            'supports' => array( 'title', 'editor', 'page-attributes'  ),
+            'hierarchical' => true,
+        );
 
-		$args = array(
-			'taxonomies' => array('category', 'post_tag'),
-			'supports' => array( 'title', 'editor', 'page-attributes'  ),
-			'hierarchical' => true,
-		);
-		$pt->make('book','books', false,  $args );
+		$books = new post_type('book','books', false,  $args );
+
 	}
 
 Making a Taxonomy
@@ -61,8 +61,7 @@ Code Example
 
 	add_action('init', 'makethem');
 	function makethem() {
-		$tx = new tax();
-		$tx->make('color','colors', false );
+		$colors = new tax('color','colors', false );
 	}
 
 Roles
@@ -107,19 +106,20 @@ Code Example
 	include('acpt/acpt.php');
 
 	add_action('init', 'makethem');
-	function makethem() {
-		$tx = new tax();
-		$tx->make('color', 'colors', true);
+    function makethem() {
 
-		$pt = new post_type();
-		$args = array(
-			'taxonomies' => array('color'),
-			'supports' => array( 'title', 'editor', 'page-attributes'  ),
-			'hierarchical' => true,
-		);
-		$pt->make('book','books', false,  $args );
-		$pt->make('course','courses', false,  $args );
-	}
+    	$args = array(
+    		'supports' => array( 'title', 'editor', 'page-attributes'  ),
+    		'hierarchical' => true,
+    	);
+
+    	$books = new post_type('book','books', false,  $args );
+    	$courses = new post_type('course','courses', false,  $args );
+
+    	new tax('color', 'colors', true,  array($books));
+    	new tax('author', 'authors', true, array($books, $courses) );
+
+    }
 
 Together: Post Type, Meta Box, Form and Taxonomy
 ===
