@@ -1,5 +1,31 @@
 <?php
+/**
+  * Post Type
+  *
+  * This is the long description for a DocBlock. This text may contain
+  * multiple lines and even some _markdown_.
+  *
+  * * Markdown style lists function too
+  * * Just try this out once
+  *
+  * The section after the long description contains the tags; which provide
+  * structured meta-data concerning the given element.
+  *
+  * @author  Kevin Dees
+  *
+  * @since 0.6
+  * @version 0.6
+  *
+  * @global string $acpt_version
+  */
 class post_type extends acpt {
+
+	public $singular = null;
+	public $plural = null;
+
+	function __construct( $singular = null, $plural = null, $cap = false, $settings = array() ) {
+		if($singular !== null ) $this->make($singular, $plural, $cap, $settings);
+	}
 	
 	/**
 	 * Make Post Type. Do not use before init.
@@ -16,6 +42,10 @@ class post_type extends acpt {
 		// make lowercase
 		$singular = strtolower($singular);
 		$plural = strtolower($plural);
+
+		// setup object for later use
+		$this->plural = $plural;
+		$this->singular = $singular;
 		
 		// make uppercase
 		$upperSingular = ucwords($singular);

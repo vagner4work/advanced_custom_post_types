@@ -1,6 +1,33 @@
 <?php
+/**
+  * Taxonomy
+  *
+  * This is the long description for a DocBlock. This text may contain
+  * multiple lines and even some _markdown_.
+  *
+  * * Markdown style lists function too
+  * * Just try this out once
+  *
+  * The section after the long description contains the tags; which provide
+  * structured meta-data concerning the given element.
+  *
+  * @author  Kevin Dees
+  *
+  * @since 0.6
+  * @version 0.6
+  *
+  * @global string $acpt_version
+  */
 class tax extends acpt {
-	
+
+	public $singular = null;
+	public $plural = null;
+	public $args = array();
+
+	function __construct($singular = null, $plural = null, $hierarchical = false, $post_type = null, $cap = false, $settings = array() ) {
+		if($singular !== null ) $this->make($singular, $plural, $hierarchical, $post_type, $cap, $settings);
+	}
+
 	/**
 	* Make Taxonomy. Do not use before init.
 	*
@@ -17,6 +44,10 @@ class tax extends acpt {
 
 		$upperPlural = ucwords($plural);
 		$upperSingular = ucwords($singular);
+
+		// setup object for later use
+		$this->plural = $plural;
+		$this->singular = $singular;
 		
 		$labels = array(
 		    'name' => _x( $upperPlural, 'taxonomy general name' ),
@@ -65,8 +96,32 @@ class tax extends acpt {
 		    'rewrite' => array( 'slug' => $singular ),
 		);
 		
-		$args = array_merge($args, $hierarchical, $cap, $settings);
-			
-		register_taxonomy($singular, $post_type, $args);
+		$this->args = array_merge($args, $hierarchical, $cap, $settings);
+
+		// check post type
+		if(is_array($post_type)) :
+
+			$the_types = array();
+
+			foreach($post_type as $key => $type ) :
+
+				if(is_string($type)) :
+					array_push($the_types, $type);
+				elseif( $type instanceof post_type ) :
+					array_push($the_types, $type->singular);
+				endif;
+
+			endforeach;
+
+			$this->reg($the_types);
+
+		elseif( $post_type instanceof post_type ) :
+			$this->reg($post_type->singular);
+		endif;
+
+	}
+
+	function reg($post_type) {
+		register_taxonomy($this->singular, $post_type, $this->args);
 	}
 }

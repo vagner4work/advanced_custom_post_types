@@ -1,5 +1,24 @@
 <?php
 if(isset($acpt_version)) :
+/**
+  * Meta Box
+  *
+  * This is the long description for a DocBlock. This text may contain
+  * multiple lines and even some _markdown_.
+  *
+  * * Markdown style lists function too
+  * * Just try this out once
+  *
+  * The section after the long description contains the tags; which provide
+  * structured meta-data concerning the given element.
+  *
+  * @author  Kevin Dees
+  *
+  * @since 0.6
+  * @version 0.6
+  *
+  * @global string $acpt_version
+  */
 class meta_box extends acpt {
 
 	function __construct() {

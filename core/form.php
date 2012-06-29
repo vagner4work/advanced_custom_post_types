@@ -1,4 +1,23 @@
 <?php
+/**
+  * Form Builder
+  *
+  * This is the long description for a DocBlock. This text may contain
+  * multiple lines and even some _markdown_.
+  *
+  * * Markdown style lists function too
+  * * Just try this out once
+  *
+  * The section after the long description contains the tags; which provide
+  * structured meta-data concerning the given element.
+  *
+  * @author  Kevin Dees
+  *
+  * @since 0.6
+  * @version 0.6
+  *
+  * @global string $acpt_version
+  */
 class form extends acpt {
     public $formName = null;
 
@@ -24,26 +43,56 @@ class form extends acpt {
     }
     
     /**
-     * Form Input.
+     * Form Text.
      * 
      * @param string $singular singular name is required
      * @param array $opts args override and extend
      */
-    function input($name, $opts=array(), $label = true) {
+    function text($name, $opts=array(), $label = true) {
         if(!$this->formName) exit('Making Form: You need to make the form first.');
         if(!$name) exit('Making Input: You need to enter a singular name.');
         global $post;
 
-        $field = '';
-        if($label) $field .= '<label for="text_'.$this->formName.'_'.$name.'">'.$name.'</label>';
-        $field .= '<input type="text" id="text_'.$this->formName.'_'.$name.'" name="acpt_'.$this->formName.'_'.$name.'" ';
-        $field .= isset($opts['class']) ? 'class="'.$opts['class'].'" ' : 'class="text" ';
-        if(isset($opts['size'])) $field .= 'size="'.$opts['size'].'" ';
-        if(isset($opts['maxlength'])) $field .= 'maxlength="'.$opts['maxlength'].'" ';
-        if($value = get_post_meta($post->ID, 'acpt_'.$this->formName.'_'.$name, true)) $field .= 'value="'.$value.'"';
-        $field .= '/>';
+        $fieldName = 'acpt_text_'.$this->formName.'_'.$name;
+
+        // value
+        if($value = get_post_meta($post->ID, $fieldName, true)) : 
+            $value = 'value="'.$value.'"';
+        endif;
+
+         // class
+        if ( is_string($opts['class']) ) :
+            $class = $opts['class'];
+        endif;
         
-        echo $field;
+        // id 
+        if ( isset($opts['id']) ) :
+            $id = 'id="'.$opts['id'].'"';
+        endif;
+
+        // readonly
+        if ( isset($opts['readonly']) ) :
+            $readonly = 'readonly="readonly"';
+        endif;
+
+        // size
+        if ( is_integer($opts['size']) ) :
+            $size = 'size="'.$opts['size'].'"';
+        endif;
+
+        // name
+        if ( is_string($fieldName) ) :
+            $name = 'name="'.$fieldName.'"';
+        endif;
+
+        // label
+        if($label) :
+            $label = '<label for="'.$fieldName.'">'.$name.'</label>';
+        endif;
+
+        $field = "<input type=\"text\" class=\"text $fieldName $class\" $id $size $readonly $fieldName $name $value />";
+        
+        echo $label.$field;
     }
     
     /**
@@ -57,15 +106,46 @@ class form extends acpt {
         if(!$name) exit('Making Textarea: You need to enter a singular name.');
         global $post;
 
-        $field = '';
-        if($label) $field .= '<label for="text_'.$this->formName.'_'.$name.'">'.$name.'</label>';
-        $field .= '<textarea id="textarea_'.$this->formName.'_'.$name.'" name="acpt_'.$this->formName.'_'.$name.'"';
-        $field .= isset($opts['class']) ? ' class="'.$opts['class'].'"' : ' class="textarea"';
-        $field .= '>';
-        if($value = get_post_meta($post->ID, 'acpt_'.$this->formName.'_'.$name, true)) $field .= $value;
-        $field .= '</textarea>';
+        $fieldName = 'acpt_textarea_'.$this->formName.'_'.$name;
+
+        // value
+        if($value = get_post_meta($post->ID, $fieldName, true)) : 
+            $value;
+        endif;
+
+         // class
+        if ( is_string($opts['class']) ) :
+            $class = $opts['class'];
+        endif;
         
-        echo $field;
+        // id 
+        if ( isset($opts['id']) ) :
+            $id = 'id="'.$opts['id'].'"';
+        endif;
+
+        // readonly
+        if ( isset($opts['readonly']) ) :
+            $readonly = 'readonly="readonly"';
+        endif;
+
+        // size
+        if ( is_integer($opts['size']) ) :
+            $size = 'size="'.$opts['size'].'"';
+        endif;
+
+        // name
+        if ( is_string($fieldName) ) :
+            $name = 'name="'.$fieldName.'"';
+        endif;
+
+        // label
+        if($label) :
+            $label = '<label for="'.$fieldName.'">'.$name.'</label>';
+        endif;
+
+        $field = "<textarea class=\"textarea $fieldName $class\" $id $size $readonly $fieldName $name />$value</textarea>";
+
+        echo $label.$field;
     }
     
     /**
