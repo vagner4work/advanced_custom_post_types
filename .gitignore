@@ -39,3 +39,8 @@ Thumbs.db
 .settings
 .project
 .build
+
+#PHPStorm files #
+#################
+
+.idea
