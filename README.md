@@ -6,8 +6,8 @@ This is a framework for creating not only custom post types, roles and taxonomie
 by Kevin Dees at http://kevindees.cc or on twitter https://twitter.com/kevindees
 
 New to WordPress? Use Plugins!
-http://wordpress.org/extend/plugins/advanced-custom-fields/
-http://wordpress.org/extend/plugins/custom-post-type-ui/
+- http://wordpress.org/extend/plugins/advanced-custom-fields/
+- http://wordpress.org/extend/plugins/custom-post-type-ui/
 
 Usage
 ===
