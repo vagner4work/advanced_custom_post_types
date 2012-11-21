@@ -153,6 +153,18 @@ Advanced Users See: form.php
 
 You can now make Forms with ACPT. Please see the code for how to use this section. You will need to modify for best results. Plus I don't have time to document it right now. The meta box section has the code example you need.
 
+Forms API also come with a dev mode. Set third arg to true.
+
+'''php
+<?php
+function meta_details() {
+    // name, options, dev-mode
+	$form = new form('details', null, true);
+	$form->text('name');
+	$form->textarea('address');
+}
+```
+
 Together: Post Type and Taxonomy
 ===
 
