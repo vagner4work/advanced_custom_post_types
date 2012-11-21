@@ -153,6 +153,7 @@ function meta_details() {
 	$form->text('name');
 	$form->textarea('address');
 	$form->select('options', array('1', '2', '3'));
+	$form->radio('options', array('1', '2', '3'));
     $form->editor('custom');
 }
 ```

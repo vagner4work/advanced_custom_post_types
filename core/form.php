@@ -26,6 +26,27 @@ class form {
 			$this->make($name, $opts, $dev);
 		}
 
+		public function __get($property) {
+			if (property_exists($this, $property)) {
+				return $this->$property;
+			}
+		}
+
+		public function __set($property, $value) {
+			if (property_exists($this, $property)) {
+				$this->$property = $value;
+			}
+
+			return $this;
+		}
+
+		function make_computer_name($name) {
+			$pattern = '/(\s+)/';
+			$replacement = '_';
+			$computerName = preg_replace($pattern,$replacement,strtolower(trim($name)));
+			return $computerName;
+		}
+
     /**
      * Make Form.
      * 
@@ -280,6 +301,83 @@ class form {
 
 			echo apply_filters($fieldName . '_filter', $beforeLabel.$label.$afterLabel.$field.$dev_note.$afterField);
 		}
+
+		/**
+		 * Form Select.
+		 *
+		 * @param string $singular singular name is required
+		 * @param array $opts args override and extend
+		 */
+		function radio($name, $options=array('Key' => 'Value'), $opts=array(), $label = true) {
+			if(!$this->formName) exit('Making Form: You need to make the form first.');
+			if(!$name) exit('Making Textarea: You need to enter a singular name.');
+			global $post;
+
+			$dev_note = null;
+			$fieldName = 'acpt_'.$this->formName.'_radio_'.$name;
+
+			// name
+			if ( is_string($fieldName) ) :
+				$nameAttr = 'name="'.$fieldName.'"';
+			endif;
+
+			// get options HTML
+			if(isset($options)) :
+				$options;
+
+				$optionsList = '';
+				$value = get_post_meta($post->ID, $fieldName, true);
+
+				foreach( $options as $key => $option) :
+					if($option == $value)
+						$checked = 'checked="checked"';
+					else
+						$checked = null;
+
+					$optionsList .= "<label class=\"control\"><input type=\"radio\" $nameAttr $checked value=\"$option\" /><span>$option</span></label>";
+
+				endforeach;
+
+			endif;
+
+			// class
+			if ( is_string($opts['class']) ) :
+				$class = $opts['class'];
+			endif;
+
+			// id
+			$id = 'id="'.$fieldName.'"';
+
+			// size
+			if ( is_integer($opts['size']) ) :
+				$size = 'size="'.$opts['size'].'"';
+			endif;
+
+			// label
+			if(isset($label)) :
+				$label = '<label for="'.$fieldName.'">'.$name.'</label>';
+			endif;
+
+			// beforeLabel
+			if($opts['beforeLabel']) :
+				$beforeLabel = $opts['beforeLabel'];
+			endif;
+
+			// afterLabel
+			if($opts['afterLabel']) :
+				$afterLabel = $opts['afterLabel'];
+			endif;
+
+			// afterField
+			if($opts['afterField']) :
+				$afterField = $opts['afterField'];
+			endif;
+
+			$field = "<div class=\"radio $fieldName $class\" $id />$optionsList</select>";
+			if($this->dev == true) $dev_note = '<p class="dev_note">get_post_meta($post->ID, ' . $fieldName . ', true);</p>';
+
+			echo apply_filters($fieldName . '_filter', $beforeLabel.$label.$afterLabel.$field.$dev_note.$afterField);
+		}
     
     /**
      * Form WP Editor.
@@ -302,4 +400,4 @@ class form {
 				if($this->dev == true) echo '<p class="dev_note">get_post_meta($post->ID, ' . $fieldName . ', true);</p>';
     }
 
-}   
+}
