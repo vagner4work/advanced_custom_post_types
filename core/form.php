@@ -194,13 +194,15 @@ class form {
         if(!$this->formName) exit('Making Form: You need to make the form first.');
         if(!$name) exit('Making Editor: You need to enter a singular name.');
         global $post;
+	      $fieldName = 'acpt_'.$this->formName.'_editor_'.$name;
 
-        if($value = get_post_meta($post->ID, 'acpt_'.$this->formName.'_editor_'.$name, true)) $content = $value;
+        if($value = get_post_meta($post->ID, $fieldName, true)) $content = $value;
         wp_editor(
             $content,
             'wysisyg_'.$this->formName.'_'.$name,
             array_merge($opts,array('textarea_name' => 'acpt_'.$this->formName.'_editor_'.$name))
         );
+	      if($this->dev == true) echo '<p class="dev_note">get_post_meta($post->ID, ' . $fieldName . ', true);</p>';
     }
     
     /**
