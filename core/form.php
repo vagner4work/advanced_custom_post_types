@@ -18,8 +18,13 @@
   *
   * @global string $acpt_version
   */
-class form extends acpt {
+class form {
     public $formName = null;
+		public $dev = false;
+
+		function __construct($name, $opts=array(), $dev=false) {
+			$this->make($name, $opts, $dev);
+		}
 
     /**
      * Make Form.
@@ -27,7 +32,7 @@ class form extends acpt {
      * @param string $singular singular name is required
      * @param array $opts args override and extend
      */
-    function make($name, $opts=array()) {
+    function make($name, $opts=array(), $dev=false) {
         if(!$name) exit('Making Form: You need to enter a singular name.');
 
         if(isset($opts['method'])) :
@@ -38,6 +43,7 @@ class form extends acpt {
         endif;
 
         $this->formName = $name;
+	      $this->dev = $dev;
         
         if(isset($field)) echo $field;
     }
@@ -53,7 +59,8 @@ class form extends acpt {
         if(!$name) exit('Making Input: You need to enter a singular name.');
         global $post;
 
-        $fieldName = 'acpt_text_'.$this->formName.'_'.$name;
+	      $dev_note = null;
+        $fieldName = 'acpt_'.$this->formName.'_text_'.$name;
 
         // value
         if($value = get_post_meta($post->ID, $fieldName, true)) : 
@@ -65,10 +72,8 @@ class form extends acpt {
             $class = $opts['class'];
         endif;
         
-        // id 
-        if ( isset($opts['id']) ) :
-            $id = 'id="'.$opts['id'].'"';
-        endif;
+        // id
+        $id = 'id="'.$fieldName.'"';
 
         // readonly
         if ( isset($opts['readonly']) ) :
@@ -82,17 +87,18 @@ class form extends acpt {
 
         // name
         if ( is_string($fieldName) ) :
-            $name = 'name="'.$fieldName.'"';
+            $nameAttr = 'name="'.$fieldName.'"';
         endif;
 
         // label
         if($label) :
-            $label = '<label for="'.$fieldName.'">'.$name.'</label>';
+            $label = '<label for="'.$fieldName.'" for="'.$fieldName.'">'.$name.'</label>';
         endif;
 
-        $field = "<input type=\"text\" class=\"text $fieldName $class\" $id $size $readonly $fieldName $name $value />";
+        $field = "<input type=\"text\" class=\"text $fieldName $class\" $id $size $readonly $nameAttr $value />";
+	      if($this->dev == true) $dev_note = '<p class="dev_note">get_post_meta($post->ID, ' . $fieldName . ', true);</p>';
         
-        echo $label.$field;
+        echo $label.$field.$dev_note;
     }
     
     /**
@@ -106,6 +112,7 @@ class form extends acpt {
         if(!$name) exit('Making Textarea: You need to enter a singular name.');
         global $post;
 
+	      $dev_note = null;
         $fieldName = 'acpt_textarea_'.$this->formName.'_'.$name;
 
         // value
@@ -118,10 +125,8 @@ class form extends acpt {
             $class = $opts['class'];
         endif;
         
-        // id 
-        if ( isset($opts['id']) ) :
-            $id = 'id="'.$opts['id'].'"';
-        endif;
+        // id
+        $id = 'id="'.$fieldName.'"';
 
         // readonly
         if ( isset($opts['readonly']) ) :
@@ -135,15 +140,15 @@ class form extends acpt {
 
         // name
         if ( is_string($fieldName) ) :
-            $name = 'name="'.$fieldName.'"';
+            $nameAttr = 'name="'.$fieldName.'"';
         endif;
 
         // label
-        if($label) :
+        if(isset($label)) :
             $label = '<label for="'.$fieldName.'">'.$name.'</label>';
         endif;
 
-        $field = "<textarea class=\"textarea $fieldName $class\" $id $size $readonly $fieldName $name />$value</textarea>";
+        $field = "<textarea class=\"textarea $fieldName $class\" $id $size $readonly $nameAttr />$value</textarea>";
 
         echo $label.$field;
     }

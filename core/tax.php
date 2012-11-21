@@ -24,8 +24,8 @@ class tax extends acpt {
 	public $plural = null;
 	public $args = array();
 
-	function __construct($singular = null, $plural = null, $hierarchical = false, $post_type = null, $cap = false, $settings = array() ) {
-		if($singular !== null ) $this->make($singular, $plural, $hierarchical, $post_type, $cap, $settings);
+	function __construct($singular = null, $plural = null, $post_type = null, $hierarchical = false, $cap = false, $settings = array() ) {
+		if($singular !== null ) $this->make($singular, $plural, $post_type, $hierarchical, $cap, $settings);
 	}
 
 	/**
@@ -38,7 +38,7 @@ class tax extends acpt {
 	* @param string|array $post_type set the post types which to apply taxonomy (null is an option)
 	* @param array $settings args override and extend
 	*/
-	function make($singular = null, $plural = null, $hierarchical = false, $post_type = null, $cap = false, $settings = array() ) {
+	function make($singular = null, $plural = null, $post_type = null, $hierarchical = false, $cap = false, $settings = array() ) {
 		if(!$singular) exit('Making Taxonomy: You need to enter a singular name.');
 		if(!$plural) exit('Making Taxonomy: You need to enter a plural name.');
 
@@ -117,6 +117,8 @@ class tax extends acpt {
 
 		elseif( $post_type instanceof post_type ) :
 			$this->reg($post_type->singular);
+		elseif(is_string($post_type)) :
+			$this->reg($post_type);
 		endif;
 
 	}

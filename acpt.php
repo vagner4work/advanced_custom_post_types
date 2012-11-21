@@ -1,6 +1,6 @@
 <?php
 global $wp_version;
-if($wp_version < '3.3' || $wp_version == null ): exit('You need the 3.3 version of WordPress.');
+if($wp_version < '3.3' || $wp_version == null ): exit('You need the 3.3+ version of WordPress.');
 else: $acpt_version = '0.6';
 endif;
 
@@ -27,6 +27,20 @@ class acpt {
 	
 	function __construct() {
 	
+	}
+
+	public function __get($property) {
+		if (property_exists($this, $property)) {
+			return $this->$property;
+		}
+	}
+
+	public function __set($property, $value) {
+		if (property_exists($this, $property)) {
+			$this->$property = $value;
+		}
+
+		return $this;
 	}
 
 	function make_computer_name($name) {
@@ -58,9 +72,31 @@ class acpt {
 		);
 		return $messages;
 	}
+
+	static function save_form($postID) {
+		global $post;
+		// called after a post or page is saved
+		if($parent_id = wp_is_post_revision($postID)) $postID = $parent_id;
+		// Loop through custom fields
+		foreach($_POST as $cf_name => $cf_data) {
+			// only new meta
+			if( preg_match('/^acpt_.*/' , $cf_name) ) { // change to your prefix
+				// sanitize data from custom fields
+				$cf_data = trim($_POST[$cf_name]); $cf_data = esc_sql($cf_data);
+
+				$cf_meta = get_post_meta($postID, $cf_name, true);
+				if ($cf_data) { // add and update
+					if(!$cf_meta) { add_post_meta($postID, $cf_name, $cf_data); }
+					elseif($cf_data != $cf_meta) { update_post_meta($postID, $cf_name, $cf_data); }
+				} // delete
+				elseif($cf_data == "" && isset($cf_meta)) { delete_post_meta($postID, $cf_name); }
+			}
+		} // end foreach
+	}
 }
 
 add_filter('post_updated_messages', 'acpt::set_messages' );
+add_action('save_post','acpt::save_form');
 
 // Make Post Type
 include('core/post_type.php');
