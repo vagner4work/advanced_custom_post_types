@@ -155,7 +155,7 @@ You can now make Forms with ACPT. Please see the code for how to use this sectio
 
 Forms API also come with a dev mode. Set third arg to true.
 
-'''php
+```php
 <?php
 function meta_details() {
     // name, options, dev-mode
