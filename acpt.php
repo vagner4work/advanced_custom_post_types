@@ -1,7 +1,7 @@
 <?php
 global $wp_version;
 if($wp_version < '3.3' || $wp_version == null ): exit('You need the 3.3+ version of WordPress.');
-else: $acpt_version = '0.6';
+else: $acpt_version = '2.0';
 endif;
 
 /**
