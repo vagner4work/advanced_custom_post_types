@@ -90,7 +90,7 @@ class post_type extends acpt {
 		$args = array(
 			'labels' => $labels,
 			'description' => $plural,
-			'rewrite' => array( 'slug' => $plural),
+			'rewrite' => array( 'slug' => sanitize_title($plural)),
 			'public' => true,
 			'has_archive' => true,
 		);

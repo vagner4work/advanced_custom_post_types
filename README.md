@@ -52,7 +52,7 @@ Making a Taxonomy
 
 Advanced Users See: tax.php
 
-Making taxonomies with ACPT is fast and easy. The tax class takes up to 6 arguments (only the first 2 are required). First the singular name and then the plural name of your taxonomy (makes these lowercase). Third, you have hierarchy. Set hierarchy to true if you want to allow the taxonomy to have descendants (the default, false). Forth, is for the singular name of the post type you want the taxonomy to be used for (you can also set this in the post type itself, I recommend this way). The fifth is for capabilities. If you don’t know how capabilities work set this to false and everything should work expected (the default, false). Set capabilities to true to create custom capabilities using the taxonomies name (see roles for advanced usage). Last, you have the settings argument. This is used if you want to change the default settings or override them. Use the settings argument the same as you would for registering taxonomies using Wordpress building registration method.
+Making taxonomies with ACPT is fast and easy. The tax class takes up to 6 arguments (only the first 2 are required). First the singular name and then the plural name of your taxonomy (makes these lowercase). Third, you list have post types in an array (you can also set this in the post type itself, I recommend this way). Fourth, hierarchy. Set hierarchy to true if you want to allow the taxonomy to have descendants (the default, false). The last is for capabilities. If you don’t know how capabilities work set this to false and everything should work expected (the default, false). Set capabilities to true to create custom capabilities using the taxonomies name (see roles for advanced usage). Last, you have the settings argument. This is used if you want to change the default settings or override them. Use the settings argument the same as you would for registering taxonomies using Wordpress building registration method.
 
 Code Example
 ---
@@ -61,7 +61,7 @@ Code Example
 
 	add_action('init', 'makethem');
 	function makethem() {
-		$colors = new tax('color','colors', false );
+		$colors = new tax('color','colors', null, false );
 	}
 
 Roles
@@ -94,6 +94,52 @@ Bad Code Example
 		$r->make('Library Manager', array('read'), array('book', 'books'));
 		$r->update('Administrator', null, null, array('book','books'));
 	}
+
+Meta Boxes
+===
+
+You can now add Meta Boxes with ACPT. The meta_box class takes up to 3 arguments (only the first is required). First the name of the meta box. Second, the post types you want to use. Last any settings you want to override (priority for example). You can add custom meta boxes to you post types by adding the name of the meta box to the post types supports arg or by applying the post type within the make function. To add HTML/PHP to the meta box create a function beginning with "meta_" and append the name of the field to the end of it.
+
+Code
+---
+
+    include('acpt/acpt.php');
+
+    add_action('init', 'makeThem');
+    function makeThem() {
+
+        $argsCourse = array(
+            'supports' => array( 'title', 'editor', 'page-attributes', 'details' ),
+            'hierarchical' => true,
+        );
+
+        $argsBook = array(
+            'supports' => array( 'title', 'editor', 'page-attributes' ),
+            'hierarchical' => true,
+        );
+
+        $courses = new post_type('course','courses', false, $argsCourse );
+        $books = new post_type('book','books', false, $argsBook );
+
+    }
+
+    add_action( 'add_meta_boxes', 'addThem' );
+
+    function addThem() {
+        new meta_box('Details', array('book'));
+    }
+
+    // Note: forms API explained below
+    function meta_details() {
+        $form = new form('details', null);
+        $form->text('name');
+        $form->textarea('address');
+    }
+
+Forms
+===
+
+You can now make Forms with ACPT. Please see the code for how to use this section. You will need to modify for best results. Plus I don't have time to document it right now. The meta box section has the code example you need.
 
 Together: Post Type and Taxonomy
 ===
@@ -129,37 +175,32 @@ This is still not fully tested and needs a lot of security work. Use at your own
 Code
 ---
 
-	include('acpt/acpt.php');
-	add_action('admin_init', 'meta_boxes');
-	function meta_boxes() {
-		$m = new meta_box();
-		$m->make('New box');
-		$m->make('Details');
-	}
+    include('acpt/acpt.php');
 
-	add_action('init', 'makethem');
-	function makethem() {
-		$p = new post_type();
-		$t = new tax();
-		$t->make('color','colors', false);
-		$args = array(
-	        'taxonomies' => array('color'),
-	        'supports' => array( 'title', 'editor', 'page-attributes', 'new_box', 'details' ),
-	        'hierarchical' => true,
-	    );
-	    $p->make('book', 'books', false, $args);
-	}
+    add_action('init', 'makeThem');
+    function makeThem() {
 
-	function new_box() {
-		$f = new form();
-		$f->make('new');
-		$f->input('name');
-		$f->end();
-	}
+        $args = array(
+            'supports' => array( 'title', 'editor', 'page-attributes'  ),
+            'hierarchical' => true,
+        );
 
-	function details() {
-		$f = new form();
-		$f->make('details');
-		$f->editor('textbox');
-		$f->end();
-	}
+        $books = new post_type('book','books', false,  $args );
+        $courses = new post_type('course','courses', false,  $args );
+
+        new tax('color', 'colors', 'book', true);
+        new tax('author', 'authors', array($books, $courses), true );
+
+    }
+
+    add_action( 'add_meta_boxes', 'addThem' );
+
+    function addThem() {
+        new meta_box('Details', array('book', 'course'));
+    }
+
+    function meta_details() {
+        $form = new form('details', null);
+        $form->text('name');
+        $form->textarea('address');
+    }
