@@ -33,7 +33,7 @@ Making post types with ACPT is fast and easy. The post_type class takes up to 4 
 
 ```php
 <?php
-include('acpt/acpt.php');
+include('acpt/init.php');
 
 add_action('init', 'makethem');
 function makethem() {
@@ -57,7 +57,7 @@ Making taxonomies with ACPT is fast and easy. The tax class takes up to 6 argume
 
 ```php
 <?php
-include('acpt/acpt.php');
+include('acpt/init.php');
 
 add_action('init', 'makethem');
 function makethem() {
@@ -87,7 +87,7 @@ You can set the first argument with capital letters. Formatted name is suggested
 ```php
 <?php
 // Bad code, don't do this
-include('acpt/acpt.php');
+include('acpt/init.php');
 add_action('init', 'makethem');
 function makethem() {
     $r = new role();
@@ -107,7 +107,7 @@ If you need more options please see the gitHub project https://github.com/jareda
 
 ```php
 <?php
-include('acpt/acpt.php');
+include('acpt/init.php');
 
 add_action('init', 'makeThem');
 function makeThem() {
@@ -173,7 +173,7 @@ Here is an example of how to work with Post Types and Taxonomies together.
 
 ```php
 <?php
-include('acpt/acpt.php');
+include('acpt/init.php');
 
 add_action('init', 'makethem');
 function makethem() {
@@ -199,7 +199,7 @@ This is still not fully tested and needs a lot of security work. Use at your own
 
 ```php
 <?php
-include('acpt/acpt.php');
+include('acpt/init.php');
 
 add_action('init', 'makeThem');
 function makeThem() {
