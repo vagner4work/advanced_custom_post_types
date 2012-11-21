@@ -95,10 +95,25 @@ class form {
             $label = '<label for="'.$fieldName.'" for="'.$fieldName.'">'.$name.'</label>';
         endif;
 
+		    // beforeLabel
+		    if($opts['beforeLabel']) :
+			    $beforeLabel = $opts['beforeLabel'];
+		    endif;
+
+		    // afterLabel
+		    if($opts['afterLabel']) :
+			    $afterLabel = $opts['afterLabel'];
+		    endif;
+
+		    // afterField
+		    if($opts['afterField']) :
+			    $afterField = $opts['afterField'];
+		    endif;
+
         $field = "<input type=\"text\" class=\"text $fieldName $class\" $id $size $readonly $nameAttr $value />";
 	      if($this->dev == true) $dev_note = '<p class="dev_note">get_post_meta($post->ID, ' . $fieldName . ', true);</p>';
         
-        echo $label.$field.$dev_note;
+        echo apply_filters($fieldName . '_filter', $beforeLabel.$label.$afterLabel.$field.$dev_note.$afterField);
     }
     
     /**
@@ -107,7 +122,7 @@ class form {
      * @param string $singular singular name is required
      * @param array $opts args override and extend
      */
-    function textarea($name, $opts=array()) {
+    function textarea($name, $opts=array(), $label = true) {
         if(!$this->formName) exit('Making Form: You need to make the form first.');
         if(!$name) exit('Making Textarea: You need to enter a singular name.');
         global $post;
@@ -148,9 +163,25 @@ class form {
             $label = '<label for="'.$fieldName.'">'.$name.'</label>';
         endif;
 
-        $field = "<textarea class=\"textarea $fieldName $class\" $id $size $readonly $nameAttr />$value</textarea>";
+		    // beforeLabel
+		    if($opts['beforeLabel']) :
+			    $beforeLabel = $opts['beforeLabel'];
+		    endif;
 
-        echo $label.$field;
+		    // afterLabel
+		    if($opts['afterLabel']) :
+			    $afterLabel = $opts['afterLabel'];
+		    endif;
+
+		    // afterField
+		    if($opts['afterField']) :
+			    $afterField = $opts['afterField'];
+		    endif;
+
+        $field = "<textarea class=\"textarea $fieldName $class\" $id $size $readonly $nameAttr />$value</textarea>";
+	      if($this->dev == true) $dev_note = '<p class="dev_note">get_post_meta($post->ID, ' . $fieldName . ', true);</p>';
+
+	      echo apply_filters($fieldName . '_filter', $beforeLabel.$label.$afterLabel.$field.$dev_note.$afterField);
     }
     
     /**
@@ -164,7 +195,7 @@ class form {
         if(!$name) exit('Making Editor: You need to enter a singular name.');
         global $post;
 
-        if($value = get_post_meta($post->ID, 'acpt_'.$this->formName.'_'.$name, true)) $content = $value;
+        if($value = get_post_meta($post->ID, 'acpt_'.$this->formName.'_editor_'.$name, true)) $content = $value;
         wp_editor(
             $content,
             'wysisyg_'.$this->formName.'_'.$name,
@@ -184,8 +215,6 @@ class form {
             $field .= 'value="'.$name.'" />';
             $field .= '</form>';
         endif;
-
-        $this->formName = null;
         
         if(isset($field)) echo $field;
     }
