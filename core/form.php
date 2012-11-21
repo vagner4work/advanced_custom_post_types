@@ -127,10 +127,11 @@ class form {
             $nameAttr = 'name="'.$fieldName.'"';
         endif;
 
-        // label
-        if($label) :
-            $label = '<label for="'.$fieldName.'" for="'.$fieldName.'">'.$name.'</label>';
-        endif;
+		    // label
+		    if(isset($label)) :
+			    $labelName = (isset($opts['label']) ? $opts['label'] : $name);
+			    $label = '<label for="'.$fieldName.'">'.$labelName.'</label>';
+		    endif;
 
 		    // beforeLabel
 		    if($opts['beforeLabel']) :
@@ -195,10 +196,11 @@ class form {
             $nameAttr = 'name="'.$fieldName.'"';
         endif;
 
-        // label
-        if(isset($label)) :
-            $label = '<label for="'.$fieldName.'">'.$name.'</label>';
-        endif;
+		    // label
+		    if(isset($label)) :
+			    $labelName = (isset($opts['label']) ? $opts['label'] : $name);
+			    $label = '<label for="'.$fieldName.'">'.$labelName.'</label>';
+		    endif;
 
 		    // beforeLabel
 		    if($opts['beforeLabel']) :
@@ -278,7 +280,8 @@ class form {
 
 			// label
 			if(isset($label)) :
-				$label = '<label for="'.$fieldName.'">'.$name.'</label>';
+				$labelName = (isset($opts['label']) ? $opts['label'] : $name);
+				$label = '<label for="'.$fieldName.'">'.$labelName.'</label>';
 			endif;
 
 			// beforeLabel
@@ -355,7 +358,8 @@ class form {
 
 			// label
 			if(isset($label)) :
-				$label = '<label for="'.$fieldName.'">'.$name.'</label>';
+				$labelName = (isset($opts['label']) ? $opts['label'] : $name);
+				$label = '<label for="'.$fieldName.'">'.$labelName.'</label>';
 			endif;
 
 			// beforeLabel

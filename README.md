@@ -150,11 +150,15 @@ Forms API also come with a dev mode. Set third arg to true.
 function meta_details() {
     // name, options, dev-mode
 	$form = new form('details', null, true);
-	$form->text('name');
+
+	// name, opts (array)
+	$form->text('name', array('label' => 'First and Last Name'));
 	$form->textarea('address');
+	$form->editor('custom');
+
+	// name, options, opts
 	$form->select('options', array('1', '2', '3'));
-	$form->radio('options', array('1', '2', '3'));
-    $form->editor('custom');
+	$form->radio('options', array('1', '2', '3'), array('label' => 'Radio Buttons'));
 }
 ```
 
