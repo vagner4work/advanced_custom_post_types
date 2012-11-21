@@ -12,7 +12,9 @@ New to WordPress? Use Plugins!
 Usage
 ===
 
-Use a php include to add the file acpt.php to your plugin or functions.php theme file. For more advanced users look at the code comments for help on what args are avalible.
+Use a php include to add the file init.php to your plugin or functions.php theme file. For more advanced users look at the code comments for help on what args are available.
+
+For custom settings see the config.php file. Set DEV_MODE to true for forms API help.
 
 Troubleshooting
 ===
@@ -145,13 +147,13 @@ Advanced Users See: form.php
 
 You can now make Forms with ACPT. Please see the code for how to use this section. You will need to modify for best results. Plus I don't have time to document it right now. The meta box section has the code example you need.
 
-Forms API also come with a dev mode. Set third arg to true.
+Forms API also come with a dev mode, see config.php.
 
 ```php
 <?php
 function meta_details() {
-    // name, options, dev-mode
-	$form = new form('details', null, true);
+    // name, options
+	$form = new form('details', null);
 
 	// name, opts (array)
 	$form->text('name', array('label' => 'First and Last Name'));

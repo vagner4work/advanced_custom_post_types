@@ -20,10 +20,9 @@
   */
 class form {
     public $formName = null;
-		public $dev = false;
 
-		function __construct($name, $opts=array(), $dev=false) {
-			$this->make($name, $opts, $dev);
+		function __construct($name, $opts=array()) {
+			$this->make($name, $opts);
 		}
 
 		public function __get($property) {
@@ -53,7 +52,7 @@ class form {
      * @param string $singular singular name is required
      * @param array $opts args override and extend
      */
-    function make($name, $opts=array(), $dev=false) {
+    function make($name, $opts=array()) {
         if(!$name) exit('Making Form: You need to enter a singular name.');
 
         if(isset($opts['method'])) :
@@ -64,7 +63,6 @@ class form {
         endif;
 
         $this->formName = $name;
-	      $this->dev = $dev;
         
         if(isset($field)) echo $field;
     }
@@ -130,26 +128,32 @@ class form {
 		    // label
 		    if(isset($label)) :
 			    $labelName = (isset($opts['label']) ? $opts['label'] : $name);
-			    $label = '<label for="'.$fieldName.'">'.$labelName.'</label>';
+			    $label = '<label class="control-label" for="'.$fieldName.'">'.$labelName.'</label>';
 		    endif;
 
 		    // beforeLabel
 		    if($opts['beforeLabel']) :
 			    $beforeLabel = $opts['beforeLabel'];
+		    else :
+			    $beforeLabel = BEFORE_LABEL;
 		    endif;
 
 		    // afterLabel
 		    if($opts['afterLabel']) :
 			    $afterLabel = $opts['afterLabel'];
+		    else :
+			    $afterLabel = AFTER_LABEL;
 		    endif;
 
 		    // afterField
 		    if($opts['afterField']) :
 			    $afterField = $opts['afterField'];
+		    else :
+			    $afterField = AFTER_FIELD;
 		    endif;
 
         $field = "<input type=\"text\" class=\"text $fieldName $class\" $id $size $readonly $nameAttr $value />";
-	      if($this->dev == true) $dev_note = '<p class="dev_note">get_post_meta($post->ID, ' . $fieldName . ', true);</p>';
+	      if(DEV_MODE == true) $dev_note = '<p class="dev_note">get_post_meta($post->ID, ' . $fieldName . ', true);</p>';
         
         echo apply_filters($fieldName . '_filter', $beforeLabel.$label.$afterLabel.$field.$dev_note.$afterField);
     }
@@ -199,26 +203,32 @@ class form {
 		    // label
 		    if(isset($label)) :
 			    $labelName = (isset($opts['label']) ? $opts['label'] : $name);
-			    $label = '<label for="'.$fieldName.'">'.$labelName.'</label>';
+			    $label = '<label class="control-label" for="'.$fieldName.'">'.$labelName.'</label>';
 		    endif;
 
 		    // beforeLabel
 		    if($opts['beforeLabel']) :
 			    $beforeLabel = $opts['beforeLabel'];
+		    else :
+			    $beforeLabel = BEFORE_LABEL;
 		    endif;
 
 		    // afterLabel
 		    if($opts['afterLabel']) :
 			    $afterLabel = $opts['afterLabel'];
+		    else :
+			    $afterLabel = AFTER_LABEL;
 		    endif;
 
 		    // afterField
 		    if($opts['afterField']) :
 			    $afterField = $opts['afterField'];
+		    else :
+			    $afterField = AFTER_FIELD;
 		    endif;
 
         $field = "<textarea class=\"textarea $fieldName $class\" $id $size $readonly $nameAttr />$value</textarea>";
-	      if($this->dev == true) $dev_note = '<p class="dev_note">get_post_meta($post->ID, ' . $fieldName . ', true);</p>';
+	      if(DEV_MODE == true) $dev_note = '<p class="dev_note">get_post_meta($post->ID, ' . $fieldName . ', true);</p>';
 
 	      echo apply_filters($fieldName . '_filter', $beforeLabel.$label.$afterLabel.$field.$dev_note.$afterField);
     }
@@ -281,26 +291,32 @@ class form {
 			// label
 			if(isset($label)) :
 				$labelName = (isset($opts['label']) ? $opts['label'] : $name);
-				$label = '<label for="'.$fieldName.'">'.$labelName.'</label>';
+				$label = '<label class="control-label" for="'.$fieldName.'">'.$labelName.'</label>';
 			endif;
 
 			// beforeLabel
 			if($opts['beforeLabel']) :
 				$beforeLabel = $opts['beforeLabel'];
+			else :
+				$beforeLabel = BEFORE_LABEL;
 			endif;
 
 			// afterLabel
 			if($opts['afterLabel']) :
 				$afterLabel = $opts['afterLabel'];
+			else :
+				$afterLabel = AFTER_LABEL;
 			endif;
 
 			// afterField
 			if($opts['afterField']) :
 				$afterField = $opts['afterField'];
+			else :
+				$afterField = AFTER_FIELD;
 			endif;
 
 			$field = "<select class=\"select $fieldName $class\" $id $size $readonly $nameAttr />$optionsList</select>";
-			if($this->dev == true) $dev_note = '<p class="dev_note">get_post_meta($post->ID, ' . $fieldName . ', true);</p>';
+			if(DEV_MODE == true) $dev_note = '<p class="dev_note">get_post_meta($post->ID, ' . $fieldName . ', true);</p>';
 
 			echo apply_filters($fieldName . '_filter', $beforeLabel.$label.$afterLabel.$field.$dev_note.$afterField);
 		}
@@ -359,26 +375,32 @@ class form {
 			// label
 			if(isset($label)) :
 				$labelName = (isset($opts['label']) ? $opts['label'] : $name);
-				$label = '<label for="'.$fieldName.'">'.$labelName.'</label>';
+				$label = '<span class="control-label" for="'.$fieldName.'">'.$labelName.'</span>';
 			endif;
 
 			// beforeLabel
 			if($opts['beforeLabel']) :
 				$beforeLabel = $opts['beforeLabel'];
+			else :
+				$beforeLabel = BEFORE_LABEL;
 			endif;
 
 			// afterLabel
 			if($opts['afterLabel']) :
 				$afterLabel = $opts['afterLabel'];
+			else :
+				$afterLabel = AFTER_LABEL;
 			endif;
 
 			// afterField
 			if($opts['afterField']) :
 				$afterField = $opts['afterField'];
+			else :
+				$afterField = AFTER_FIELD;
 			endif;
 
 			$field = "<div class=\"radio $fieldName $class\" $id />$optionsList</select>";
-			if($this->dev == true) $dev_note = '<p class="dev_note">get_post_meta($post->ID, ' . $fieldName . ', true);</p>';
+			if(DEV_MODE == true) $dev_note = '<p class="dev_note">get_post_meta($post->ID, ' . $fieldName . ', true);</p>';
 
 			echo apply_filters($fieldName . '_filter', $beforeLabel.$label.$afterLabel.$field.$dev_note.$afterField);
 		}
@@ -401,7 +423,7 @@ class form {
             'wysisyg_'.$this->formName.'_'.$name,
             array_merge($opts,array('textarea_name' => 'acpt_'.$this->formName.'_editor_'.$name))
         );
-				if($this->dev == true) echo '<p class="dev_note">get_post_meta($post->ID, ' . $fieldName . ', true);</p>';
+				if(DEV_MODE == true) echo '<p class="dev_note">get_post_meta($post->ID, ' . $fieldName . ', true);</p>';
     }
 
 }

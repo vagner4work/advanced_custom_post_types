@@ -1,9 +1,4 @@
 <?php
-global $wp_version;
-if($wp_version < '3.3' || $wp_version == null ): exit('You need the 3.3+ version of WordPress.');
-else: $acpt_version = '2.0';
-endif;
-
 /**
   * Advanced Custom Post Types
   *
@@ -93,22 +88,10 @@ class acpt {
 			}
 		} // end foreach
 	}
+
+	static function apply_css() {
+		wp_register_style( 'acpt-styles', ACPT_LOCATION . '/acpt/core/css/style.css' );
+		wp_enqueue_style( 'acpt-styles' );
+	}
+
 }
-
-add_filter('post_updated_messages', 'acpt::set_messages' );
-add_action('save_post','acpt::save_form');
-
-// Make Post Type
-include('core/post_type.php');
-
-// Make Tax
-include('core/tax.php');
-
-// Make Role
-include('core/role.php');
-
-// Make Role
-include('core/form.php');
-
-// Make Role
-include('core/meta_box.php');
