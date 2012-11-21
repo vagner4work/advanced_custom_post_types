@@ -101,6 +101,8 @@ Advanced Users See: meta_box.php
 
 You can now add Meta Boxes with ACPT. The meta_box class takes up to 3 arguments (only the first is required). First the name of the meta box. Second, the post types you want to use. Last any settings you want to override (priority for example). You can add custom meta boxes to you post types by adding the name of the meta box to the post types supports arg or by applying the post type within the make function. To add HTML/PHP to the meta box create a function beginning with "meta_" and append the name of the field to the end of it.
 
+If you need more options please see the gitHub project https://github.com/jaredatch/Custom-Metaboxes-and-Fields-for-WordPress it has a lot of options to play with.
+
 ```php
 <?php
 include('acpt/acpt.php');
