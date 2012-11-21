@@ -32,20 +32,22 @@ Making post types with ACPT is fast and easy. The post_type class takes up to 4 
 
 Code Example
 ---
+```php
+<?php
+include('acpt/acpt.php');
 
-	include('acpt/acpt.php');
+add_action('init', 'makethem');
+function makethem() {
+    $args = array(
+        'taxonomies' => array('category', 'post_tag'),
+        'supports' => array( 'title', 'editor', 'page-attributes'  ),
+        'hierarchical' => true,
+    );
 
-	add_action('init', 'makethem');
-	function makethem() {
-        $args = array(
-            'taxonomies' => array('category', 'post_tag'),
-            'supports' => array( 'title', 'editor', 'page-attributes'  ),
-            'hierarchical' => true,
-        );
+    $books = new post_type('book','books', false,  $args );
 
-		$books = new post_type('book','books', false,  $args );
-
-	}
+}
+```
 
 Making a Taxonomy
 ===
@@ -56,13 +58,15 @@ Making taxonomies with ACPT is fast and easy. The tax class takes up to 6 argume
 
 Code Example
 ---
+```php
+<?php
+include('acpt/acpt.php');
 
-	include('acpt/acpt.php');
-
-	add_action('init', 'makethem');
-	function makethem() {
-		$colors = new tax('color','colors', null, false );
-	}
+add_action('init', 'makethem');
+function makethem() {
+    $colors = new tax('color','colors', null, false );
+}
+```
 
 Roles
 ===
@@ -86,58 +90,66 @@ You can set the first argument with capital letters. Formatted name is suggested
 
 Bad Code Example
 ---
-
-	include('acpt/acpt.php');
-	add_action('init', 'makethem');
-	function makethem() {
-		$r = new role();
-		$r->make('Library Manager', array('read'), array('book', 'books'));
-		$r->update('Administrator', null, null, array('book','books'));
-	}
+```php
+<?php
+include('acpt/acpt.php');
+add_action('init', 'makethem');
+function makethem() {
+    $r = new role();
+    $r->make('Library Manager', array('read'), array('book', 'books'));
+    $r->update('Administrator', null, null, array('book','books'));
+}
+```
 
 Meta Boxes
 ===
+
+Advanced Users See: meta_box.php
 
 You can now add Meta Boxes with ACPT. The meta_box class takes up to 3 arguments (only the first is required). First the name of the meta box. Second, the post types you want to use. Last any settings you want to override (priority for example). You can add custom meta boxes to you post types by adding the name of the meta box to the post types supports arg or by applying the post type within the make function. To add HTML/PHP to the meta box create a function beginning with "meta_" and append the name of the field to the end of it.
 
 Code
 ---
+```php
+<?php
+include('acpt/acpt.php');
 
-    include('acpt/acpt.php');
+add_action('init', 'makeThem');
+function makeThem() {
 
-    add_action('init', 'makeThem');
-    function makeThem() {
+    $argsCourse = array(
+        'supports' => array( 'title', 'editor', 'page-attributes', 'details' ),
+        'hierarchical' => true,
+    );
 
-        $argsCourse = array(
-            'supports' => array( 'title', 'editor', 'page-attributes', 'details' ),
-            'hierarchical' => true,
-        );
+    $argsBook = array(
+        'supports' => array( 'title', 'editor', 'page-attributes' ),
+        'hierarchical' => true,
+    );
 
-        $argsBook = array(
-            'supports' => array( 'title', 'editor', 'page-attributes' ),
-            'hierarchical' => true,
-        );
+    $courses = new post_type('course','courses', false, $argsCourse );
+    $books = new post_type('book','books', false, $argsBook );
 
-        $courses = new post_type('course','courses', false, $argsCourse );
-        $books = new post_type('book','books', false, $argsBook );
+}
 
-    }
+add_action( 'add_meta_boxes', 'addThem' );
 
-    add_action( 'add_meta_boxes', 'addThem' );
+function addThem() {
+    new meta_box('Details', array('book'));
+}
 
-    function addThem() {
-        new meta_box('Details', array('book'));
-    }
-
-    // Note: forms API explained below
-    function meta_details() {
-        $form = new form('details', null);
-        $form->text('name');
-        $form->textarea('address');
-    }
+// Note: forms API explained below
+function meta_details() {
+    $form = new form('details', null);
+    $form->text('name');
+    $form->textarea('address');
+}
+```
 
 Forms
 ===
+
+Advanced Users See: form.php
 
 You can now make Forms with ACPT. Please see the code for how to use this section. You will need to modify for best results. Plus I don't have time to document it right now. The meta box section has the code example you need.
 
@@ -148,24 +160,26 @@ Here is an example of how to work with Post Types and Taxonomies together.
 
 Code Example
 ---
+```php
+<?php
+include('acpt/acpt.php');
 
-	include('acpt/acpt.php');
+add_action('init', 'makethem');
+function makethem() {
 
-	add_action('init', 'makethem');
-    function makethem() {
+    $args = array(
+        'supports' => array( 'title', 'editor', 'page-attributes'  ),
+        'hierarchical' => true,
+    );
 
-    	$args = array(
-    		'supports' => array( 'title', 'editor', 'page-attributes'  ),
-    		'hierarchical' => true,
-    	);
+    $books = new post_type('book','books', false,  $args );
+    $courses = new post_type('course','courses', false,  $args );
 
-    	$books = new post_type('book','books', false,  $args );
-    	$courses = new post_type('course','courses', false,  $args );
+    new tax('color', 'colors', true,  array($books));
+    new tax('author', 'authors', true, array($books, $courses) );
 
-    	new tax('color', 'colors', true,  array($books));
-    	new tax('author', 'authors', true, array($books, $courses) );
-
-    }
+}
+```
 
 Together: Post Type, Meta Box, Form and Taxonomy
 ===
@@ -174,33 +188,35 @@ This is still not fully tested and needs a lot of security work. Use at your own
 
 Code
 ---
+```php
+<?php
+include('acpt/acpt.php');
 
-    include('acpt/acpt.php');
+add_action('init', 'makeThem');
+function makeThem() {
 
-    add_action('init', 'makeThem');
-    function makeThem() {
+    $args = array(
+        'supports' => array( 'title', 'editor', 'page-attributes'  ),
+        'hierarchical' => true,
+    );
 
-        $args = array(
-            'supports' => array( 'title', 'editor', 'page-attributes'  ),
-            'hierarchical' => true,
-        );
+    $books = new post_type('book','books', false,  $args );
+    $courses = new post_type('course','courses', false,  $args );
 
-        $books = new post_type('book','books', false,  $args );
-        $courses = new post_type('course','courses', false,  $args );
+    new tax('color', 'colors', 'book', true);
+    new tax('author', 'authors', array($books, $courses), true );
 
-        new tax('color', 'colors', 'book', true);
-        new tax('author', 'authors', array($books, $courses), true );
+}
 
-    }
+add_action( 'add_meta_boxes', 'addThem' );
 
-    add_action( 'add_meta_boxes', 'addThem' );
+function addThem() {
+    new meta_box('Details', array('book', 'course'));
+}
 
-    function addThem() {
-        new meta_box('Details', array('book', 'course'));
-    }
-
-    function meta_details() {
-        $form = new form('details', null);
-        $form->text('name');
-        $form->textarea('address');
-    }
+function meta_details() {
+    $form = new form('details', null);
+    $form->text('name');
+    $form->textarea('address');
+}
+```
