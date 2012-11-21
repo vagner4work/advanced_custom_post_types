@@ -131,9 +131,8 @@ function addThem() {
 
 // Note: forms API explained below
 function meta_details() {
-    $form = new form('details', null);
+    $form = new form('details');
     $form->text('name');
-    $form->textarea('address');
 }
 ```
 
@@ -153,6 +152,8 @@ function meta_details() {
 	$form = new form('details', null, true);
 	$form->text('name');
 	$form->textarea('address');
+	$form->select('options', array('1', '2', '3'));
+    $form->editor('custom');
 }
 ```
 

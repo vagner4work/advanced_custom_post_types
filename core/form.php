@@ -47,6 +47,22 @@ class form {
         
         if(isset($field)) echo $field;
     }
+
+		/**
+		 * End Form.
+		 *
+		 * @param string $singular singular name is required
+		 * @param array $opts args override and extend
+		 */
+		function end($name=null, $opts=array()) {
+			if($name) :
+				$field = $opts['type'] == 'button' ? '<input type="button"' : '<input type="submit"';
+				$field .= 'value="'.$name.'" />';
+				$field .= '</form>';
+			endif;
+
+			if(isset($field)) echo $field;
+		}
     
     /**
      * Form Text.
@@ -183,6 +199,87 @@ class form {
 
 	      echo apply_filters($fieldName . '_filter', $beforeLabel.$label.$afterLabel.$field.$dev_note.$afterField);
     }
+
+		/**
+		 * Form Select.
+		 *
+		 * @param string $singular singular name is required
+		 * @param array $opts args override and extend
+		 */
+		function select($name, $options=array('Key' => 'Value'), $opts=array(), $label = true) {
+			if(!$this->formName) exit('Making Form: You need to make the form first.');
+			if(!$name) exit('Making Textarea: You need to enter a singular name.');
+			global $post;
+
+			$dev_note = null;
+			$fieldName = 'acpt_'.$this->formName.'_select_'.$name;
+
+			// get options HTML
+			if(isset($options)) :
+				$options;
+
+				$optionsList = '';
+				$value = get_post_meta($post->ID, $fieldName, true);
+
+				foreach( $options as $key => $option) :
+					if($option == $value)
+						$selected = 'selected="selected"';
+					else
+						$selected = null;
+
+					$optionsList .= "<option $selected value=\"$option\">$option</option>";
+				endforeach;
+
+			endif;
+
+			// class
+			if ( is_string($opts['class']) ) :
+				$class = $opts['class'];
+			endif;
+
+			// id
+			$id = 'id="'.$fieldName.'"';
+
+			// readonly
+			if ( isset($opts['readonly']) ) :
+				$readonly = 'readonly="readonly"';
+			endif;
+
+			// size
+			if ( is_integer($opts['size']) ) :
+				$size = 'size="'.$opts['size'].'"';
+			endif;
+
+			// name
+			if ( is_string($fieldName) ) :
+				$nameAttr = 'name="'.$fieldName.'"';
+			endif;
+
+			// label
+			if(isset($label)) :
+				$label = '<label for="'.$fieldName.'">'.$name.'</label>';
+			endif;
+
+			// beforeLabel
+			if($opts['beforeLabel']) :
+				$beforeLabel = $opts['beforeLabel'];
+			endif;
+
+			// afterLabel
+			if($opts['afterLabel']) :
+				$afterLabel = $opts['afterLabel'];
+			endif;
+
+			// afterField
+			if($opts['afterField']) :
+				$afterField = $opts['afterField'];
+			endif;
+
+			$field = "<select class=\"select $fieldName $class\" $id $size $readonly $nameAttr />$optionsList</select>";
+			if($this->dev == true) $dev_note = '<p class="dev_note">get_post_meta($post->ID, ' . $fieldName . ', true);</p>';
+
+			echo apply_filters($fieldName . '_filter', $beforeLabel.$label.$afterLabel.$field.$dev_note.$afterField);
+		}
     
     /**
      * Form WP Editor.
@@ -202,22 +299,7 @@ class form {
             'wysisyg_'.$this->formName.'_'.$name,
             array_merge($opts,array('textarea_name' => 'acpt_'.$this->formName.'_editor_'.$name))
         );
-	      if($this->dev == true) echo '<p class="dev_note">get_post_meta($post->ID, ' . $fieldName . ', true);</p>';
+				if($this->dev == true) echo '<p class="dev_note">get_post_meta($post->ID, ' . $fieldName . ', true);</p>';
     }
-    
-    /**
-     * End Form.
-     * 
-     * @param string $singular singular name is required
-     * @param array $opts args override and extend
-     */
-    function end($name=null, $opts=array()) {
-        if($name) :
-            $field = $opts['type'] == 'button' ? '<input type="button"' : '<input type="submit"';
-            $field .= 'value="'.$name.'" />';
-            $field .= '</form>';
-        endif;
-        
-        if(isset($field)) echo $field;
-    }
+
 }   
