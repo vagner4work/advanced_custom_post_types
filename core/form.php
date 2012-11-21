@@ -128,7 +128,7 @@ class form {
         global $post;
 
 	      $dev_note = null;
-        $fieldName = 'acpt_textarea_'.$this->formName.'_'.$name;
+        $fieldName = 'acpt_'.$this->formName.'_textarea_'.$name;
 
         // value
         if($value = get_post_meta($post->ID, $fieldName, true)) : 
@@ -199,7 +199,7 @@ class form {
         wp_editor(
             $content,
             'wysisyg_'.$this->formName.'_'.$name,
-            array_merge($opts,array('textarea_name' => 'acpt_'.$this->formName.'_'.$name))
+            array_merge($opts,array('textarea_name' => 'acpt_'.$this->formName.'_editor_'.$name))
         );
     }
     
