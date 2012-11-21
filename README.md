@@ -30,8 +30,6 @@ Advanced Users See: post_type.php
 
 Making post types with ACPT is fast and easy. The post_type class takes up to 4 arguments (only the first two are required). First the singular name and then the plural name of your post type (makes these lowercase). The next is for capabilities. If you don’t know how capabilities work set this to false and everything should work expected (the default, false, is the same as posts capabilities). Set capabilities to true to create custom capabilities using the post types name (see roles for advanced usage). Last, you have the settings argument. This is used if you want to change the default settings or override them. Use the settings argument the same as you would for creating post types using Wordpress building registration method.
 
-Code Example
----
 ```php
 <?php
 include('acpt/acpt.php');
@@ -56,8 +54,6 @@ Advanced Users See: tax.php
 
 Making taxonomies with ACPT is fast and easy. The tax class takes up to 6 arguments (only the first 2 are required). First the singular name and then the plural name of your taxonomy (makes these lowercase). Third, you list have post types in an array (you can also set this in the post type itself, I recommend this way). Fourth, hierarchy. Set hierarchy to true if you want to allow the taxonomy to have descendants (the default, false). The last is for capabilities. If you don’t know how capabilities work set this to false and everything should work expected (the default, false). Set capabilities to true to create custom capabilities using the taxonomies name (see roles for advanced usage). Last, you have the settings argument. This is used if you want to change the default settings or override them. Use the settings argument the same as you would for registering taxonomies using Wordpress building registration method.
 
-Code Example
----
 ```php
 <?php
 include('acpt/acpt.php');
@@ -87,11 +83,9 @@ Make Arguments
 
 You can set the first argument with capital letters. Formatted name is suggested.
 
-
-Bad Code Example
----
 ```php
 <?php
+// Bad code, don't do this
 include('acpt/acpt.php');
 add_action('init', 'makethem');
 function makethem() {
@@ -108,8 +102,6 @@ Advanced Users See: meta_box.php
 
 You can now add Meta Boxes with ACPT. The meta_box class takes up to 3 arguments (only the first is required). First the name of the meta box. Second, the post types you want to use. Last any settings you want to override (priority for example). You can add custom meta boxes to you post types by adding the name of the meta box to the post types supports arg or by applying the post type within the make function. To add HTML/PHP to the meta box create a function beginning with "meta_" and append the name of the field to the end of it.
 
-Code
----
 ```php
 <?php
 include('acpt/acpt.php');
@@ -170,8 +162,6 @@ Together: Post Type and Taxonomy
 
 Here is an example of how to work with Post Types and Taxonomies together.
 
-Code Example
----
 ```php
 <?php
 include('acpt/acpt.php');
@@ -198,8 +188,6 @@ Together: Post Type, Meta Box, Form and Taxonomy
 
 This is still not fully tested and needs a lot of security work. Use at your own risk.
 
-Code
----
 ```php
 <?php
 include('acpt/acpt.php');
