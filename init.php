@@ -9,7 +9,7 @@ endif;
 require_once('config.php');
 
 // load classes
-require_once('acpt.php');
+require_once('core/acpt.php');
 include('core/post_type.php');
 include('core/tax.php');
 include('core/role.php');
