@@ -185,6 +185,7 @@ class form {
 		 * Form Select.
 		 *
 		 * @param string $singular singular name is required
+		 * @param array $options args for items
 		 * @param array $opts args override and extend
 		 */
 		function select($name, $options=array('Key' => 'Value'), $opts=array(), $label = true) {
@@ -222,9 +223,10 @@ class form {
 		}
 
 		/**
-		 * Form Select.
+		 * Form Radio.
 		 *
 		 * @param string $singular singular name is required
+		 * @param array $options args for items
 		 * @param array $opts args override and extend
 		 */
 		function radio($name, $options=array('Key' => 'Value'), $opts=array(), $label = true) {
