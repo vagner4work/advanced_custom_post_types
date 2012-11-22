@@ -1,37 +1,64 @@
-.control-group {
-  margin-bottom: 10px;
+.inside .control-group input[type="text"],
+.inside .control-group input[type="password"],
+.inside .control-group textarea {
+  width: 100%;
+  padding: 5px;
+  resize: none;
 }
+
+.inside .control-group select {
+  width: 100%;
+  padding: 2px;
+  resize: none;
+  height: 2em;
+}
+
+.inside .control-group .radio label {
+  float: left;
+  clear: left;
+  display: inline-block;
+  margin: 3px;
+}
+
+.inside .control-group .radio label input {
+  margin-right: 8px;
+}
+
+.inside .control-group textarea {
+  resize: vertical;
+  min-height: 150px;
+}
+
+.inside .control-group .wp-editor-wrap .mceIframeContainer {
+  background: #fff;
+}
+
 
 .inside .control-group {
-  margin-bottom: 20px;
-  *zoom: 1;
+  position: relative;
+  padding: 15px 10px;
+  margin: 0 -10px;
 }
 
-.inside .control-group:before,
-.inside .control-group:after {
-  display: table;
-  line-height: 0;
-  content: "";
-}
-
-.inside .control-group:after {
+.control-group:after {
+  content: ".";
+  display: block;
   clear: both;
+  visibility: hidden;
+  line-height: 0;
+  height: 0;
 }
 
-.inside .control-label {
-  float: left;
-  width: 160px;
-  padding-top: 5px;
-  text-align: right;
-}
+.inside .control-group + .control-group {
+  border-top: #E8E8E8 solid 1px; }
 
-.inside .controls {
-  *display: inline-block;
-  *padding-left: 20px;
-  margin-left: 180px;
-  *margin-left: 0;
-}
-
-.inside .controls:first-child {
-  *padding-left: 180px;
+.control-label {
+  color: #333;
+  font-size: 13px;
+  font-weight: bold;
+  padding: 0;
+  margin: 0 0 3px;
+  display: block;
+  vertical-align: text-bottom;
+  margin: 0 0 1em;
 }
