@@ -128,6 +128,10 @@ class form {
 
 		return $setup;
 	}
+
+	function dev_message($fieldName) {
+		if(DEV_MODE == true) return '<p class="dev_note">get_post_meta($post->ID, <span class="field_name">' . $fieldName . '</span>, true);</p>';
+	}
     
 	/**
 	 * Form Text.
@@ -151,7 +155,7 @@ class form {
 	  $setup = $this->get_opts($name, $opts, $fieldName, $label);
 
 	  $field = "<input type=\"text\" class=\"text $fieldName {$setup['class']}\" {$setup['id']} {$setup['size']} {$setup['readonly']} {$setup['nameAttr']} $value />";
-	  if(DEV_MODE == true) $dev_note = '<p class="dev_note">get_post_meta($post->ID, ' . $fieldName . ', true);</p>';
+		$dev_note = $this->dev_message($fieldName);
 
 	  echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$dev_note.$setup['afterField']);
 	}
@@ -178,7 +182,7 @@ class form {
 	  $setup = $this->get_opts($name, $opts, $fieldName, $label);
 
 	  $field = "<textarea class=\"textarea $fieldName {$setup['class']}\" {$setup['id']} {$setup['size']} {$setup['readonly']} {$setup['nameAttr']} />$value</textarea>";
-	  if(DEV_MODE == true) $dev_note = '<p class="dev_note">get_post_meta($post->ID, ' . $fieldName . ', true);</p>';
+		$dev_note = $this->dev_message($fieldName);
 
 	  echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$dev_note.$setup['afterField']);
 	}
@@ -219,7 +223,7 @@ class form {
 		$setup = $this->get_opts($name, $opts, $fieldName, $label);
 
 		$field = "<select class=\"select $fieldName {$setup['class']}\" {$setup['id']} {$setup['size']} {$setup['readonly']} {$setup['nameAttr']} />$optionsList</select>";
-		if(DEV_MODE == true) $dev_note = '<p class="dev_note">get_post_meta($post->ID, ' . $fieldName . ', true);</p>';
+		$dev_note = $this->dev_message($fieldName);
 
 		echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$dev_note.$setup['afterField']);
 	}
@@ -267,7 +271,7 @@ class form {
 		$setup = $this->get_opts($name, $opts, $fieldName, $label);
 
 		$field = "<div class=\"radio $fieldName {$setup['class']}\" {$setup['id']} />$optionsList</div>";
-		if(DEV_MODE == true) $dev_note = '<p class="dev_note">get_post_meta($post->ID, ' . $fieldName . ', true);</p>';
+		$dev_note = $this->dev_message($fieldName);
 
 		echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$dev_note.$setup['afterField']);
 	}
@@ -295,7 +299,7 @@ class form {
 	      'wysisyg_'.$this->formName.'_'.$name,
 	      array_merge($opts,array('textarea_name' => 'acpt_'.$this->formName.'_editor_'.$name))
 	  );
-		if(DEV_MODE == true) echo '<p class="dev_note">get_post_meta($post->ID, ' . $fieldName . ', true);</p>';
+		echo $this->dev_message($fieldName);
 		echo '</div>';
 	}
 

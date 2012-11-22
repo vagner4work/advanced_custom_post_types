@@ -4,6 +4,7 @@
   width: 100%;
   padding: 5px;
   resize: none;
+  box-sizing: border-box;
 }
 
 .inside .control-group select {
@@ -29,15 +30,28 @@
   min-height: 150px;
 }
 
+.inside .control-group textarea:focus {
+  border-color: #BBB;
+  outline: none;
+  box-shadow: none;
+}
+
 .inside .control-group .wp-editor-wrap .mceIframeContainer {
   background: #fff;
 }
-
 
 .inside .control-group {
   position: relative;
   padding: 15px 10px;
   margin: 0 -10px;
+}
+
+.inside .control-group:first-child {
+  padding-top: 0;
+}
+
+.inside .control-group:last-child {
+  padding-bottom: 0;
 }
 
 .control-group:after {
@@ -58,7 +72,20 @@
   font-weight: bold;
   padding: 0;
   margin: 0 0 3px;
-  display: block;
+  display: inline-block;
   vertical-align: text-bottom;
   margin: 0 0 1em;
+}
+
+.dev_note {
+  position: absolute;
+  top: 0px;
+  right: 10px;
+  color: #BBB;
+  font-size: 10px;
+}
+
+.dev_note .field_name {
+  color: #000;
+  font-size: 13px;
 }
