@@ -87,15 +87,15 @@ class form {
 
 	function get_opts($name, $opts, $fieldName, $label) {
 
-		if(!$opts['labelTag']) $opts['labelTag'] = 'label';
+		if(empty($opts['labelTag'])) $opts['labelTag'] = 'label';
 
-		if ( is_string($opts['class']) ) $setup['class'] = $opts['class'];
+		if ( is_string(isset($opts['class'])) ) $setup['class'] = $opts['class'];
 
 		$setup['id'] = 'id="'.$fieldName.'"';
 
 		if ( isset($opts['readonly']) ) $setup['readonly'] = 'readonly="readonly"';
 
-		if ( is_integer($opts['size']) ) $setup['size'] = 'size="'.$opts['size'].'"';
+		if ( is_integer(isset($opts['size'])) ) $setup['size'] = 'size="'.$opts['size'].'"';
 
 		if ( is_string($fieldName) ) $setup['nameAttr'] = 'name="'.$fieldName.'"';
 
@@ -106,21 +106,21 @@ class form {
 		endif;
 
 		// beforeLabel
-		if($opts['beforeLabel']) :
+		if(isset($opts['beforeLabel'])) :
 			$setup['beforeLabel'] = $opts['beforeLabel'];
 		else :
 			$setup['beforeLabel'] = BEFORE_LABEL;
 		endif;
 
 		// afterLabel
-		if($opts['afterLabel']) :
+		if(isset($opts['afterLabel'])) :
 			$setup['afterLabel'] = $opts['afterLabel'];
 		else :
 			$setup['afterLabel'] = AFTER_LABEL;
 		endif;
 
 		// afterField
-		if($opts['afterField']) :
+		if(isset($opts['afterField'])) :
 			$setup['afterField'] = $opts['afterField'];
 		else :
 			$setup['afterField'] = AFTER_FIELD;
@@ -154,7 +154,7 @@ class form {
 
 	  $setup = $this->get_opts($name, $opts, $fieldName, $label);
 
-	  $field = "<input type=\"text\" class=\"text $fieldName {$setup['class']}\" {$setup['id']} {$setup['size']} {$setup['readonly']} {$setup['nameAttr']} $value />";
+	  @$field = "<input type=\"text\" class=\"text $fieldName {$setup['class']}\" {$setup['id']} {$setup['size']} {$setup['readonly']} {$setup['nameAttr']} $value />";
 		$dev_note = $this->dev_message($fieldName);
 
 	  echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$dev_note.$setup['afterField']);
@@ -181,7 +181,7 @@ class form {
 
 	  $setup = $this->get_opts($name, $opts, $fieldName, $label);
 
-	  $field = "<textarea class=\"textarea $fieldName {$setup['class']}\" {$setup['id']} {$setup['size']} {$setup['readonly']} {$setup['nameAttr']} />$value</textarea>";
+	  @$field = "<textarea class=\"textarea $fieldName {$setup['class']}\" {$setup['id']} {$setup['size']} {$setup['readonly']} {$setup['nameAttr']} />$value</textarea>";
 		$dev_note = $this->dev_message($fieldName);
 
 	  echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$dev_note.$setup['afterField']);
@@ -222,7 +222,7 @@ class form {
 
 		$setup = $this->get_opts($name, $opts, $fieldName, $label);
 
-		$field = "<select class=\"select $fieldName {$setup['class']}\" {$setup['id']} {$setup['size']} {$setup['readonly']} {$setup['nameAttr']} />$optionsList</select>";
+		@$field = "<select class=\"select $fieldName {$setup['class']}\" {$setup['id']} {$setup['size']} {$setup['readonly']} {$setup['nameAttr']} />$optionsList</select>";
 		$dev_note = $this->dev_message($fieldName);
 
 		echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$dev_note.$setup['afterField']);
@@ -270,7 +270,7 @@ class form {
 
 		$setup = $this->get_opts($name, $opts, $fieldName, $label);
 
-		$field = "<div class=\"radio $fieldName {$setup['class']}\" {$setup['id']} />$optionsList</div>";
+		@$field = "<div class=\"radio $fieldName {$setup['class']}\" {$setup['id']} />$optionsList</div>";
 		$dev_note = $this->dev_message($fieldName);
 
 		echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$dev_note.$setup['afterField']);
@@ -288,7 +288,10 @@ class form {
 	  global $post;
 	  $fieldName = 'acpt_'.$this->formName.'_editor_'.$name;
 
-	  if($value = get_post_meta($post->ID, $fieldName, true)) $content = $value;
+	  if($value = get_post_meta($post->ID, $fieldName, true))
+		  $content = $value;
+		else
+			$content = '';
 
 		$setup = $this->get_opts($label, array('labelTag' => 'span'), $fieldName, true);
 
