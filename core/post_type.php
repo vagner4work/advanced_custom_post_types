@@ -95,7 +95,7 @@ class post_type extends acpt {
 			'has_archive' => true,
 		);
 		
-		$args = array_merge($args, $cap, $settings);
+		$args = array_merge($settings, $args, $cap);
 		
 		// Register post type
 		register_post_type($singular, $args);
