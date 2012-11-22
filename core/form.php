@@ -82,6 +82,50 @@ class form {
 
 			if(isset($field)) echo $field;
 		}
+
+		function get_opts($name, $opts, $fieldName, $label) {
+
+			if(!$opts['labelTag']) $opts['labelTag'] = 'label';
+
+			if ( is_string($opts['class']) ) $setup['class'] = $opts['class'];
+
+			$setup['id'] = 'id="'.$fieldName.'"';
+
+			if ( isset($opts['readonly']) ) $setup['readonly'] = 'readonly="readonly"';
+
+			if ( is_integer($opts['size']) ) $setup['size'] = 'size="'.$opts['size'].'"';
+
+			if ( is_string($fieldName) ) $setup['nameAttr'] = 'name="'.$fieldName.'"';
+
+			// label
+			if(isset($label)) :
+				$labelName = (isset($opts['label']) ? $opts['label'] : $name);
+				$setup['label'] = '<'.$opts['labelTag'].' class="control-label" for="'.$fieldName.'">'.$labelName.'</'.$opts['labelTag'].'>';
+			endif;
+
+			// beforeLabel
+			if($opts['beforeLabel']) :
+				$setup['beforeLabel'] = $opts['beforeLabel'];
+			else :
+				$setup['beforeLabel'] = BEFORE_LABEL;
+			endif;
+
+			// afterLabel
+			if($opts['afterLabel']) :
+				$setup['afterLabel'] = $opts['afterLabel'];
+			else :
+				$setup['afterLabel'] = AFTER_LABEL;
+			endif;
+
+			// afterField
+			if($opts['afterField']) :
+				$setup['afterField'] = $opts['afterField'];
+			else :
+				$setup['afterField'] = AFTER_FIELD;
+			endif;
+
+			return $setup;
+		}
     
     /**
      * Form Text.
@@ -90,147 +134,51 @@ class form {
      * @param array $opts args override and extend
      */
     function text($name, $opts=array(), $label = true) {
-        if(!$this->formName) exit('Making Form: You need to make the form first.');
-        if(!$name) exit('Making Input: You need to enter a singular name.');
-        global $post;
+      if(!$this->formName) exit('Making Form: You need to make the form first.');
+      if(!$name) exit('Making Input: You need to enter a singular name.');
+      global $post;
 
-	      $dev_note = null;
-        $fieldName = 'acpt_'.$this->formName.'_text_'.$name;
+      $dev_note = null;
+      $fieldName = 'acpt_'.$this->formName.'_text_'.$name;
 
-        // value
-        if($value = get_post_meta($post->ID, $fieldName, true)) : 
-            $value = 'value="'.$value.'"';
-        endif;
+      // value
+      if($value = get_post_meta($post->ID, $fieldName, true)) :
+          $value = 'value="'.$value.'"';
+      endif;
 
-         // class
-        if ( is_string($opts['class']) ) :
-            $class = $opts['class'];
-        endif;
-        
-        // id
-        $id = 'id="'.$fieldName.'"';
+	    $setup = $this->get_opts($name, $opts, $fieldName, $label);
 
-        // readonly
-        if ( isset($opts['readonly']) ) :
-            $readonly = 'readonly="readonly"';
-        endif;
+      $field = "<input type=\"text\" class=\"text $fieldName {$setup['class']}\" {$setup['id']} {$setup['size']} {$setup['readonly']} {$setup['nameAttr']} $value />";
+      if(DEV_MODE == true) $dev_note = '<p class="dev_note">get_post_meta($post->ID, ' . $fieldName . ', true);</p>';
 
-        // size
-        if ( is_integer($opts['size']) ) :
-            $size = 'size="'.$opts['size'].'"';
-        endif;
-
-        // name
-        if ( is_string($fieldName) ) :
-            $nameAttr = 'name="'.$fieldName.'"';
-        endif;
-
-		    // label
-		    if(isset($label)) :
-			    $labelName = (isset($opts['label']) ? $opts['label'] : $name);
-			    $label = '<label class="control-label" for="'.$fieldName.'">'.$labelName.'</label>';
-		    endif;
-
-		    // beforeLabel
-		    if($opts['beforeLabel']) :
-			    $beforeLabel = $opts['beforeLabel'];
-		    else :
-			    $beforeLabel = BEFORE_LABEL;
-		    endif;
-
-		    // afterLabel
-		    if($opts['afterLabel']) :
-			    $afterLabel = $opts['afterLabel'];
-		    else :
-			    $afterLabel = AFTER_LABEL;
-		    endif;
-
-		    // afterField
-		    if($opts['afterField']) :
-			    $afterField = $opts['afterField'];
-		    else :
-			    $afterField = AFTER_FIELD;
-		    endif;
-
-        $field = "<input type=\"text\" class=\"text $fieldName $class\" $id $size $readonly $nameAttr $value />";
-	      if(DEV_MODE == true) $dev_note = '<p class="dev_note">get_post_meta($post->ID, ' . $fieldName . ', true);</p>';
-        
-        echo apply_filters($fieldName . '_filter', $beforeLabel.$label.$afterLabel.$field.$dev_note.$afterField);
+	    echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$dev_note.$setup['afterField']);
     }
-    
+
     /**
      * Form Textarea.
-     * 
+     *
      * @param string $singular singular name is required
      * @param array $opts args override and extend
      */
     function textarea($name, $opts=array(), $label = true) {
-        if(!$this->formName) exit('Making Form: You need to make the form first.');
-        if(!$name) exit('Making Textarea: You need to enter a singular name.');
-        global $post;
+      if(!$this->formName) exit('Making Form: You need to make the form first.');
+      if(!$name) exit('Making Textarea: You need to enter a singular name.');
+      global $post;
 
-	      $dev_note = null;
-        $fieldName = 'acpt_'.$this->formName.'_textarea_'.$name;
+      $dev_note = null;
+      $fieldName = 'acpt_'.$this->formName.'_textarea_'.$name;
 
-        // value
-        if($value = get_post_meta($post->ID, $fieldName, true)) : 
-            $value;
-        endif;
+      // value
+      if($value = get_post_meta($post->ID, $fieldName, true)) :
+          $value;
+      endif;
 
-         // class
-        if ( is_string($opts['class']) ) :
-            $class = $opts['class'];
-        endif;
-        
-        // id
-        $id = 'id="'.$fieldName.'"';
+      $setup = $this->get_opts($name, $opts, $fieldName, $label);
 
-        // readonly
-        if ( isset($opts['readonly']) ) :
-            $readonly = 'readonly="readonly"';
-        endif;
+      $field = "<textarea class=\"textarea $fieldName {$setup['class']}\" {$setup['id']} {$setup['size']} {$setup['readonly']} {$setup['nameAttr']} />$value</textarea>";
+      if(DEV_MODE == true) $dev_note = '<p class="dev_note">get_post_meta($post->ID, ' . $fieldName . ', true);</p>';
 
-        // size
-        if ( is_integer($opts['size']) ) :
-            $size = 'size="'.$opts['size'].'"';
-        endif;
-
-        // name
-        if ( is_string($fieldName) ) :
-            $nameAttr = 'name="'.$fieldName.'"';
-        endif;
-
-		    // label
-		    if(isset($label)) :
-			    $labelName = (isset($opts['label']) ? $opts['label'] : $name);
-			    $label = '<label class="control-label" for="'.$fieldName.'">'.$labelName.'</label>';
-		    endif;
-
-		    // beforeLabel
-		    if($opts['beforeLabel']) :
-			    $beforeLabel = $opts['beforeLabel'];
-		    else :
-			    $beforeLabel = BEFORE_LABEL;
-		    endif;
-
-		    // afterLabel
-		    if($opts['afterLabel']) :
-			    $afterLabel = $opts['afterLabel'];
-		    else :
-			    $afterLabel = AFTER_LABEL;
-		    endif;
-
-		    // afterField
-		    if($opts['afterField']) :
-			    $afterField = $opts['afterField'];
-		    else :
-			    $afterField = AFTER_FIELD;
-		    endif;
-
-        $field = "<textarea class=\"textarea $fieldName $class\" $id $size $readonly $nameAttr />$value</textarea>";
-	      if(DEV_MODE == true) $dev_note = '<p class="dev_note">get_post_meta($post->ID, ' . $fieldName . ', true);</p>';
-
-	      echo apply_filters($fieldName . '_filter', $beforeLabel.$label.$afterLabel.$field.$dev_note.$afterField);
+	    echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$dev_note.$setup['afterField']);
     }
 
 		/**
@@ -265,60 +213,12 @@ class form {
 
 			endif;
 
-			// class
-			if ( is_string($opts['class']) ) :
-				$class = $opts['class'];
-			endif;
+			$setup = $this->get_opts($name, $opts, $fieldName, $label);
 
-			// id
-			$id = 'id="'.$fieldName.'"';
-
-			// readonly
-			if ( isset($opts['readonly']) ) :
-				$readonly = 'readonly="readonly"';
-			endif;
-
-			// size
-			if ( is_integer($opts['size']) ) :
-				$size = 'size="'.$opts['size'].'"';
-			endif;
-
-			// name
-			if ( is_string($fieldName) ) :
-				$nameAttr = 'name="'.$fieldName.'"';
-			endif;
-
-			// label
-			if(isset($label)) :
-				$labelName = (isset($opts['label']) ? $opts['label'] : $name);
-				$label = '<label class="control-label" for="'.$fieldName.'">'.$labelName.'</label>';
-			endif;
-
-			// beforeLabel
-			if($opts['beforeLabel']) :
-				$beforeLabel = $opts['beforeLabel'];
-			else :
-				$beforeLabel = BEFORE_LABEL;
-			endif;
-
-			// afterLabel
-			if($opts['afterLabel']) :
-				$afterLabel = $opts['afterLabel'];
-			else :
-				$afterLabel = AFTER_LABEL;
-			endif;
-
-			// afterField
-			if($opts['afterField']) :
-				$afterField = $opts['afterField'];
-			else :
-				$afterField = AFTER_FIELD;
-			endif;
-
-			$field = "<select class=\"select $fieldName $class\" $id $size $readonly $nameAttr />$optionsList</select>";
+			$field = "<select class=\"select $fieldName {$setup['class']}\" {$setup['id']} {$setup['size']} {$setup['readonly']} {$setup['nameAttr']} />$optionsList</select>";
 			if(DEV_MODE == true) $dev_note = '<p class="dev_note">get_post_meta($post->ID, ' . $fieldName . ', true);</p>';
 
-			echo apply_filters($fieldName . '_filter', $beforeLabel.$label.$afterLabel.$field.$dev_note.$afterField);
+			echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$dev_note.$setup['afterField']);
 		}
 
 		/**
@@ -333,6 +233,7 @@ class form {
 			global $post;
 
 			$dev_note = null;
+			$opts['labelTag'] = 'span';
 			$fieldName = 'acpt_'.$this->formName.'_radio_'.$name;
 
 			// name
@@ -359,50 +260,12 @@ class form {
 
 			endif;
 
-			// class
-			if ( is_string($opts['class']) ) :
-				$class = $opts['class'];
-			endif;
+			$setup = $this->get_opts($name, $opts, $fieldName, $label);
 
-			// id
-			$id = 'id="'.$fieldName.'"';
-
-			// size
-			if ( is_integer($opts['size']) ) :
-				$size = 'size="'.$opts['size'].'"';
-			endif;
-
-			// label
-			if(isset($label)) :
-				$labelName = (isset($opts['label']) ? $opts['label'] : $name);
-				$label = '<span class="control-label" for="'.$fieldName.'">'.$labelName.'</span>';
-			endif;
-
-			// beforeLabel
-			if($opts['beforeLabel']) :
-				$beforeLabel = $opts['beforeLabel'];
-			else :
-				$beforeLabel = BEFORE_LABEL;
-			endif;
-
-			// afterLabel
-			if($opts['afterLabel']) :
-				$afterLabel = $opts['afterLabel'];
-			else :
-				$afterLabel = AFTER_LABEL;
-			endif;
-
-			// afterField
-			if($opts['afterField']) :
-				$afterField = $opts['afterField'];
-			else :
-				$afterField = AFTER_FIELD;
-			endif;
-
-			$field = "<div class=\"radio $fieldName $class\" $id />$optionsList</select>";
+			$field = "<div class=\"radio $fieldName {$setup['class']}\" {$setup['id']} />$optionsList</select>";
 			if(DEV_MODE == true) $dev_note = '<p class="dev_note">get_post_meta($post->ID, ' . $fieldName . ', true);</p>';
 
-			echo apply_filters($fieldName . '_filter', $beforeLabel.$label.$afterLabel.$field.$dev_note.$afterField);
+			echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$dev_note.$setup['afterField']);
 		}
     
     /**
