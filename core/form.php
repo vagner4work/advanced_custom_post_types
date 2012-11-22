@@ -66,6 +66,7 @@ class form {
 
       if(isset($field)) echo $field;
 		  wp_nonce_field('actp_nonce_action','acpt_nonce_field');
+	    echo '<input type="hidden" name="acpt" value="true" />';
   }
 
 	/**

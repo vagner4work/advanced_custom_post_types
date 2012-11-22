@@ -69,7 +69,7 @@ class acpt {
 	}
 
 	static function save_form($postID) {
-		if(!empty($_POST) && check_admin_referer('actp_nonce_action','acpt_nonce_field')) :
+		if(!empty($_POST['acpt']) && check_admin_referer('actp_nonce_action','acpt_nonce_field')) :
 		global $post;
 		// called after a post or page is saved
 		if($parent_id = wp_is_post_revision($postID)) $postID = $parent_id;
