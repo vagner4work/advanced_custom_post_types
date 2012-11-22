@@ -65,6 +65,7 @@ class form {
       $this->formName = $name;
 
       if(isset($field)) echo $field;
+		  wp_nonce_field('actp_nonce_action','acpt_nonce_field');
   }
 
 	/**
@@ -256,7 +257,7 @@ class form {
 				else
 					$checked = null;
 
-				$optionsList .= "<label class=\"control\"><input type=\"radio\" $nameAttr $checked value=\"$option\" /><span>$option</span></label>";
+				$optionsList .= "<label><input type=\"radio\" $nameAttr $checked value=\"$option\" /><span>$option</span></label>";
 
 			endforeach;
 
@@ -264,7 +265,7 @@ class form {
 
 		$setup = $this->get_opts($name, $opts, $fieldName, $label);
 
-		$field = "<div class=\"radio $fieldName {$setup['class']}\" {$setup['id']} />$optionsList</select>";
+		$field = "<div class=\"radio $fieldName {$setup['class']}\" {$setup['id']} />$optionsList</div>";
 		if(DEV_MODE == true) $dev_note = '<p class="dev_note">get_post_meta($post->ID, ' . $fieldName . ', true);</p>';
 
 		echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$dev_note.$setup['afterField']);

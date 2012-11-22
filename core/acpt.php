@@ -69,6 +69,7 @@ class acpt {
 	}
 
 	static function save_form($postID) {
+		if(!empty($_POST) && check_admin_referer('actp_nonce_action','acpt_nonce_field')) :
 		global $post;
 		// called after a post or page is saved
 		if($parent_id = wp_is_post_revision($postID)) $postID = $parent_id;
@@ -87,6 +88,7 @@ class acpt {
 				elseif($cf_data == "" && isset($cf_meta)) { delete_post_meta($postID, $cf_name); }
 			}
 		} // end foreach
+		endif; // end nonce
 	}
 
 	static function apply_css() {

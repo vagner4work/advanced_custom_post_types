@@ -42,17 +42,10 @@ class meta_box extends acpt {
 		$this->post_type = $post_type;
 		$this->settings = $settings;
 
-		foreach ( (array)get_post_types( array( 'public' => true ) ) as $type ) {
-			if ( post_type_supports( $type, $computerName ) ) {
-				add_meta_box(
-					$this->name, // id
-					$settings['label'],
-					$settings['callback'],
-					$type,
-					$settings['context'],
-					$settings['priority']
-				);
-			}
+		global $post;
+		$type = get_post_type( $post->ID );
+		if ( post_type_supports( $type, $computerName ) ) {
+			$this->reg($type);
 		}
 
 		if(isset($post_type)) $this->add_post_type_support($post_type);
