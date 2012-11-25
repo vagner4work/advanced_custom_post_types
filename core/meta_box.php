@@ -24,8 +24,9 @@ class meta_box extends acpt {
 	public $name = null;
 	public $post_type = null;
 	public $settings = null;
+	public $label = null;
 
-	function __construct($name=null, $post_type = null, $settings=array('context' => 'normal', 'priority' => 'high', 'label' => null, 'callback' => null )) {
+	function __construct($name=null, $post_type = null, $settings=array()) {
 		if($name) $this->make($name, $post_type, $settings);
 	}
 	
@@ -35,6 +36,15 @@ class meta_box extends acpt {
 		$computerName = $this->make_computer_name($name);
 
 		$this->name = $computerName;
+		if(isset($settings['label'])) $this->label = $settings['label'];
+
+		$default_settings = array(
+			'context' => 'normal',
+			'priority' => 'high',
+			'label' => null,
+			'callback' => null );
+
+		$settings = array_merge($default_settings, $settings);
 
 		if(!$settings['label']) $settings['label'] = $name;
 		if(!$settings['callback']) $settings['callback'] = 'meta_' . $computerName;

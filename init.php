@@ -20,3 +20,16 @@ include('core/meta_box.php');
 if(ACPT_MESSAGES) add_filter('post_updated_messages', 'acpt::set_messages' );
 add_action('save_post','acpt::save_form');
 if(ACPT_STYLES) add_action('admin_init', 'acpt::apply_css');
+
+// load plugins
+if(ACPT_LOAD_PLUGINS == true) :
+	foreach($acptPlugins as $plugin) {
+		$pluginFile = '';
+		if (file_exists(ACPT_FILE_PATH . '/acpt/plugins/' . $plugin . '/index.php')) {
+			$pluginFile = 'plugins/' . $plugin . '/index.php';
+		} else {
+			$pluginFile = 'plugins/' . $plugin . '.php';
+		}
+		include_once($pluginFile);
+	}
+endif;

@@ -96,7 +96,7 @@ class tax extends acpt {
 		    'rewrite' => array( 'slug' => $singular ),
 		);
 		
-		$this->args = array_merge($settings, $args, $hierarchical, $cap);
+		$this->args = array_merge($args, $hierarchical, $cap, $settings);
 
 		// check post type
 		if(is_array($post_type)) :
