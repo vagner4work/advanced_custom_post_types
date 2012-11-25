@@ -12,7 +12,7 @@ New to WordPress? Use Plugins!
 Usage
 ===
 
-Use a php include to add the file init.php to your plugin or functions.php theme file. For more advanced users look at the code comments for help on what args are available.
+Use a php include to add the file init.php to your plugin or functions.php theme file. For more advanced users look at the code comments for help on what args are available. ACPT also comes with its own plugin system so you don't have to muck up your functions.php file and can import others work with ease.
 
 For custom settings see the config.php file. Set DEV_MODE to true for forms API help.
 
@@ -40,7 +40,9 @@ By default the "sample" plugin is loaded. ACPT plugins are not the same as WordP
 $acptPlugins = array('sample');
 ```
 
-The name of your plugin is the folders name or the php files name unless it is the index.php file.
+The name of your plugin is the folders name or the php files name.
+
+Plugins are loaded in this manner so you can decide how and when they are loaded. I'm sure I'll add more option in the future.
 
 Troubleshooting
 ===
@@ -58,7 +60,6 @@ Advanced Users See: post_type.php
 Making post types with ACPT is fast and easy. The post_type class takes up to 4 arguments (only the first two are required). First the singular name and then the plural name of your post type (makes these lowercase). The next is for capabilities. If you don’t know how capabilities work set this to false and everything should work expected (the default, false, is the same as posts capabilities). Set capabilities to true to create custom capabilities using the post types name (see roles for advanced usage). Last, you have the settings argument. This is used if you want to change the default settings or override them. Use the settings argument the same as you would for creating post types using Wordpress building registration method.
 
 ```php
-<?php
 include('acpt/init.php');
 
 add_action('init', 'makethem');
@@ -82,7 +83,6 @@ Advanced Users See: tax.php
 Making taxonomies with ACPT is fast and easy. The tax class takes up to 6 arguments (only the first 2 are required). First the singular name and then the plural name of your taxonomy (makes these lowercase). Third, you list have post types in an array (you can also set this in the post type itself, I recommend this way). Fourth, hierarchy. Set hierarchy to true if you want to allow the taxonomy to have descendants (the default, false). The last is for capabilities. If you don’t know how capabilities work set this to false and everything should work expected (the default, false). Set capabilities to true to create custom capabilities using the taxonomies name (see roles for advanced usage). Last, you have the settings argument. This is used if you want to change the default settings or override them. Use the settings argument the same as you would for registering taxonomies using Wordpress building registration method.
 
 ```php
-<?php
 include('acpt/init.php');
 
 add_action('init', 'makethem');
@@ -111,7 +111,6 @@ Make Arguments
 You can set the first argument with capital letters. Formatted name is suggested.
 
 ```php
-<?php
 // Bad code, don't do this
 include('acpt/init.php');
 add_action('init', 'makethem');
@@ -132,7 +131,6 @@ You can now add Meta Boxes with ACPT. The meta_box class takes up to 3 arguments
 If you need more options please see the gitHub project https://github.com/jaredatch/Custom-Metaboxes-and-Fields-for-WordPress it has a lot of options to play with.
 
 ```php
-<?php
 include('acpt/init.php');
 
 add_action('init', 'makeThem');
@@ -176,7 +174,6 @@ You can now make Forms with ACPT. Please see the code for how to use this sectio
 Forms API also come with a dev mode, see config.php.
 
 ```php
-<?php
 function meta_details() {
     // name, options
 	$form = new form('details', null);
@@ -198,7 +195,6 @@ Together: Post Type and Taxonomy
 Here is an example of how to work with Post Types and Taxonomies together.
 
 ```php
-<?php
 include('acpt/init.php');
 
 add_action('init', 'makethem');
@@ -224,7 +220,6 @@ Together: Post Type, Meta Box, Form and Taxonomy
 This is still not fully tested and needs a lot of security work. Use at your own risk.
 
 ```php
-<?php
 include('acpt/init.php');
 
 add_action('init', 'makeThem');
