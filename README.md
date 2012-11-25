@@ -27,7 +27,7 @@ define('DEV_MODE', true);
 Plugins System
 ===
 
-You do not need to use the plugin system for ACPT to work. However, you wil need to disable it in the config file.
+You do not need to use the plugin system for ACPT to work. However, you will need to disable it in the config file if you don't want it to run.
 
 ```php
 // load plugins
