@@ -1,5 +1,5 @@
 <?php
-if(!function_exists('wpseo_admin_init')) {
+if( !defined('WPSEO_URL') && !defined('AIOSEOP_VERSION') ) {
 	add_action( 'add_meta_boxes', 'acpt_seo_meta' );
 	add_filter( 'wp_title', 'acpt_seo_title' );
 	add_action( 'wp_head' , 'acpt_seo_description');

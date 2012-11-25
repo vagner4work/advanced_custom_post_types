@@ -17,7 +17,7 @@ new tax('color', 'colors', $sample, true, false);
 add_action( 'add_meta_boxes', 'addThem' );
 
 function addThem() {
-	new meta_box('custom', array('sample', 'page'), array('label' => 'Custom Meta Box'));
+	new meta_box('custom', array('sample'), array('label' => 'Custom Meta Box'));
 }
 
 function meta_custom() {

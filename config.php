@@ -21,4 +21,4 @@ define('AFTER_FIELD', '</div></div>');
 define('ACPT_LOAD_PLUGINS', true);
 
 // plugins list
-$acptPlugins = array('sample');
+$acptPlugins = array('sample', 'seo');
