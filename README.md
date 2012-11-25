@@ -21,7 +21,7 @@ include('acpt/init.php');
 For custom settings see the config.php file. Set DEV_MODE to true for forms API help.
 
 ```php
-define('DEV_MODE', false);
+define('DEV_MODE', true);
 ```
 
 Plugins System
