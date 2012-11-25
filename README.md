@@ -14,6 +14,10 @@ Usage
 
 Use a php include to add the file init.php to your plugin or functions.php theme file. For more advanced users look at the code comments for help on what args are available. ACPT also comes with its own plugin system so you don't have to muck up your functions.php file and can import others work with ease.
 
+```php
+include('acpt/init.php');
+```
+
 For custom settings see the config.php file. Set DEV_MODE to true for forms API help.
 
 ```php
