@@ -96,4 +96,13 @@ class acpt {
 		wp_enqueue_style( 'acpt-styles' );
 	}
 
+	static function upload_scripts() {
+		wp_enqueue_script('plupload');
+		wp_enqueue_script('media-upload');
+		wp_enqueue_style('thickbox');
+		wp_enqueue_script('thickbox');
+		wp_register_script('upload', ACPT_LOCATION .'/acpt/core/js/upload.js', array('jquery','media-upload','thickbox'));
+		wp_enqueue_script('upload');
+	}
+
 }

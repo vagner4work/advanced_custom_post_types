@@ -20,6 +20,7 @@ include('core/meta_box.php');
 if(ACPT_MESSAGES) add_filter('post_updated_messages', 'acpt::set_messages' );
 add_action('save_post','acpt::save_form');
 if(ACPT_STYLES) add_action('admin_init', 'acpt::apply_css');
+if( is_admin() ) add_action('admin_enqueue_scripts', 'acpt::upload_scripts');
 
 // load plugins
 if(ACPT_LOAD_PLUGINS == true) :

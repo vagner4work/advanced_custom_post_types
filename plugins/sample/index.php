@@ -23,6 +23,9 @@ function addThem() {
 function meta_custom() {
 	$form = new form('details', null);
 	$form->text('name', array('label' => 'Text Field'));
+	$form->image('image', array('label' => 'Image Field'));
+	$form->image('image2', array('label' => 'Image2 Field'));
+	$form->file('file', array('label' => 'File Field'));
 	$form->textarea('address',array('label' => 'Textarea'));
 	$form->select('rooms', array('one', 'two', 'three'), array('label' => 'Select List'));
 	$form->radio('baths', array('blue', 'green', 'red'), array('label' => 'Radio Buttons'));

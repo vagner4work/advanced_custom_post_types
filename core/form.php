@@ -333,4 +333,65 @@ class form {
 		echo '</div>';
 	}
 
+	/**
+	 * Form Image
+	 *
+	 * @param string $singular singular name is required
+	 * @param array $opts args override and extend
+	 */
+	function image($name, $opts=array(), $label = true) {
+		if(!$this->formName) exit('Making Form: You need to make the form first.');
+		if(!$name) exit('Making Input: You need to enter a singular name.');
+		global $post;
+
+		$dev_note = null;
+		$fieldName = 'acpt_'.$this->formName.'_image_'.$name;
+		$placeHolderImage = null;
+
+		// value
+		if($value = get_post_meta($post->ID, $fieldName, true)) :
+			$placeHolderImage = '<img class="uplaod-img" src="'.$value.'" />';
+			$value = 'value="'.esc_url($value).'"';
+		endif;
+
+		$setup = $this->get_opts($name, $opts, $fieldName, $label);
+
+		$placeHolder = '<div class="image-placeholder"><a class="remove-image">remove</a>' . $placeHolderImage . '</div>';
+
+		@$field = "<input type=\"text\" class=\"image upload-url $fieldName {$setup['class']}\" {$setup['id']} {$setup['size']} {$setup['readonly']} {$setup['nameAttr']} $value />";
+		$button = '<input type="button" class="button-primary upload-button" value="Insert Image">';
+		$dev_note = $this->dev_message($fieldName);
+
+		echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$button.$placeHolder.$dev_note.$setup['afterField']);
+	}
+
+	/**
+	 * Form File
+	 *
+	 * @param string $singular singular name is required
+	 * @param array $opts args override and extend
+	 */
+	function file($name, $opts=array(), $label = true) {
+		if(!$this->formName) exit('Making Form: You need to make the form first.');
+		if(!$name) exit('Making Input: You need to enter a singular name.');
+		global $post;
+
+		$dev_note = null;
+		$fieldName = 'acpt_'.$this->formName.'_image_'.$name;
+		$placeHolderImage = null;
+
+		// value
+		if($value = get_post_meta($post->ID, $fieldName, true)) :
+			$value = 'value="'.esc_url($value).'"';
+		endif;
+
+		$setup = $this->get_opts($name, $opts, $fieldName, $label);
+
+		@$field = "<input type=\"text\" class=\"image upload-url $fieldName {$setup['class']}\" {$setup['id']} {$setup['size']} {$setup['readonly']} {$setup['nameAttr']} $value />";
+		$button = '<input type="button" class="button-primary upload-button" value="Insert File">';
+		$dev_note = $this->dev_message($fieldName);
+
+		echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$button.$dev_note.$setup['afterField']);
+	}
+
 }
