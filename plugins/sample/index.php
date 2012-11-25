@@ -10,7 +10,7 @@ $args = array(
 
 $sample = new post_type('sample','samples', false,  $args );
 
-new tax('color', 'colors', $sample, true, false, array('show_ui' => false));
+new tax('color', 'colors', $sample, true, false);
 
 }
 
