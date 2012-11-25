@@ -130,7 +130,7 @@ class form {
 	}
 
 	function dev_message($fieldName) {
-		if(DEV_MODE == true) return '<p class="dev_note">get_post_meta($post->ID, <span class="field_name">' . $fieldName . '</span>, true);</p>';
+		if(DEV_MODE == true) return '<p class="dev_note">get_post_meta($post->ID, <span class="field_name">"' . $fieldName . '"</span>, true);</p>';
 	}
     
 	/**
@@ -158,6 +158,33 @@ class form {
 		$dev_note = $this->dev_message($fieldName);
 
 	  echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$dev_note.$setup['afterField']);
+	}
+
+	/**
+	 * Form URL.
+	 *
+	 * @param string $singular singular name is required
+	 * @param array $opts args override and extend
+	 */
+	function url($name, $opts=array(), $label = true) {
+		if(!$this->formName) exit('Making Form: You need to make the form first.');
+		if(!$name) exit('Making Input: You need to enter a singular name.');
+		global $post;
+
+		$dev_note = null;
+		$fieldName = 'acpt_'.$this->formName.'_url_'.$name;
+
+		// value
+		if($value = get_post_meta($post->ID, $fieldName, true)) :
+			$value = 'value="'.esc_url($value).'"';
+		endif;
+
+		$setup = $this->get_opts($name, $opts, $fieldName, $label);
+
+		@$field = "<input type=\"text\" class=\"text $fieldName {$setup['class']}\" {$setup['id']} {$setup['size']} {$setup['readonly']} {$setup['nameAttr']} $value />";
+		$dev_note = $this->dev_message($fieldName);
+
+		echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$dev_note.$setup['afterField']);
 	}
 
 	/**
