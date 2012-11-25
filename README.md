@@ -16,6 +16,32 @@ Use a php include to add the file init.php to your plugin or functions.php theme
 
 For custom settings see the config.php file. Set DEV_MODE to true for forms API help.
 
+```php
+define('DEV_MODE', false);
+```
+
+Plugins System
+===
+
+You do not need to use the plugin system for ACPT to work. However, you wil need to disable it in the config file.
+
+```php
+// load plugins
+define('ACPT_LOAD_PLUGINS', true);
+```
+
+By default the "sample" plugin is loaded. ACPT plugins are not the same as WordPress plugins. To load your own ACPT plugins you need to do the following:
+
+ - Make a php file or folder with a custom name. If you use a folder your main plugin file must be called index.php
+ - In the config.php file add the name of your plugin to the plugin list array
+
+```php
+// plugins list
+$acptPlugins = array('sample');
+```
+
+The name of your plugin is the folders name or the php files name unless it is the index.php file.
+
 Troubleshooting
 ===
 
