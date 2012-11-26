@@ -182,14 +182,13 @@ function meta_details() {
     // name, options
 	$form = new form('details', null);
 
-	// name, opts (array)
-	$form->text('name', array('label' => 'First and Last Name'));
-	$form->textarea('address');
-	$form->editor('custom');
-
-	// name, options, opts
-	$form->select('options', array('1', '2', '3'));
-	$form->radio('options', array('1', '2', '3'), array('label' => 'Radio Buttons'));
+	$form->text('name', array('label' => 'Text Field'));
+	$form->image('image', array('label' => 'Image Field'));
+	$form->file('file', array('label' => 'File Field'));
+	$form->textarea('address',array('label' => 'Textarea'));
+	$form->select('rooms', array('one', 'two', 'three'), array('label' => 'Select List'));
+	$form->radio('baths', array('blue', 'green', 'red'), array('label' => 'Radio Buttons'));
+	$form->editor('baths', 'WYSIWYG Editor');
 }
 ```
 
