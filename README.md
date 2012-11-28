@@ -220,8 +220,6 @@ function makethem() {
 Together: Post Type, Meta Box, Form and Taxonomy
 ===
 
-This is still not fully tested and needs a lot of security work. Use at your own risk.
-
 ```php
 include('acpt/init.php');
 
