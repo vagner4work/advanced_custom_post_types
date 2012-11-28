@@ -36,9 +36,10 @@ jQuery(document).ready(function() {
         var button = jQuery(el).find('.upload-button')[0];
         if(button){ set_uploader(button, jQuery(el).find('.upload-url')[0], el);}
 
-        jQuery(el).find('.image-placeholder .remove-image').click(function(){
-            jQuery(this).next('img').remove();
+        jQuery(el).on('click', '.image-placeholder .remove-image', function(){
             jQuery(this).parent().parent().find('.upload-url').attr('value', '');
+            jQuery(this).parent().remove();
+            jQuery(el).append('<div class="image-placeholder"><div class="remove-image"></div></div>');
         });
     });
 
