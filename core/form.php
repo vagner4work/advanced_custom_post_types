@@ -354,12 +354,19 @@ class form {
 			$value = 'value="'.esc_url($value).'"';
 		endif;
 
+		// button
+		if(isset($opts['button'])) :
+			$button = $opts['button'];
+		else :
+			$button = "Insert File";
+		endif;
+
 		$setup = $this->get_opts($name, $opts, $fieldName, $label);
 
 		$placeHolder = '<div class="image-placeholder"><a class="remove-image">remove</a>' . $placeHolderImage . '</div>';
 
 		@$field = "<input type=\"text\" class=\"image upload-url $fieldName {$setup['class']}\" {$setup['id']} {$setup['size']} {$setup['readonly']} {$setup['nameAttr']} $value />";
-		$button = '<input type="button" class="button-primary upload-button" value="Insert Image">';
+		$button = '<input type="button" class="button-primary upload-button" value="'.$button.'">';
 		$dev_note = $this->dev_message($fieldName);
 
 		echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$button.$placeHolder.$dev_note.$setup['afterField']);
@@ -385,10 +392,17 @@ class form {
 			$value = 'value="'.esc_url($value).'"';
 		endif;
 
+		// button
+		if(isset($opts['button'])) :
+			$button = $opts['button'];
+		else :
+			$button = "Insert File";
+		endif;
+
 		$setup = $this->get_opts($name, $opts, $fieldName, $label);
 
 		@$field = "<input type=\"text\" class=\"image upload-url $fieldName {$setup['class']}\" {$setup['id']} {$setup['size']} {$setup['readonly']} {$setup['nameAttr']} $value />";
-		$button = '<input type="button" class="button-primary upload-button" value="Insert File">';
+		$button = '<input type="button" class="button-primary upload-button" value="'.$button.'">';
 		$dev_note = $this->dev_message($fieldName);
 
 		echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$button.$dev_note.$setup['afterField']);
