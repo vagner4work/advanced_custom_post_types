@@ -401,7 +401,7 @@ class form {
 
 		$setup = $this->get_opts($name, $opts, $fieldName, $label);
 
-		@$field = "<input type=\"text\" class=\"image upload-url $fieldName {$setup['class']}\" {$setup['id']} {$setup['size']} {$setup['readonly']} {$setup['nameAttr']} $value />";
+		@$field = "<input type=\"text\" class=\"file upload-url $fieldName {$setup['class']}\" {$setup['id']} {$setup['size']} {$setup['readonly']} {$setup['nameAttr']} $value />";
 		$button = '<input type="button" class="button-primary upload-button" value="'.$button.'">';
 		$dev_note = $this->dev_message($fieldName);
 
