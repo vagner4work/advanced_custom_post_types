@@ -4,7 +4,7 @@ jQuery(document).ready(function() {
         if(jQuery(button) && jQuery(field)) {
             // when button is clicked show thick box
             jQuery(button).click(function() {
-                tb_show('', 'media-upload.php?type='+type+'&amp;TB_iframe=true');
+                tb_show('', 'media-upload.php?type='+type+'&TB_iframe=true&post_id=0');
                 jQuery('#media-items .savesend .button').addClass('button-primary');
                 // when the thick box is opened set send to editor button
                 var placeHolder = jQuery(el).find('.image-placeholder') || null;

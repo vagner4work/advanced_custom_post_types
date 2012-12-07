@@ -105,6 +105,13 @@ class form {
 			$setup['label'] = '<'.$opts['labelTag'].' class="control-label" for="'.$fieldName.'">'.$labelName.'</'.$opts['labelTag'].'>';
 		endif;
 
+		// help text
+		if(isset($opts['help'])) :
+			$setup['help'] = '<p class="help-text">'.$opts['help'].'</p>';
+		else :
+			$setup['help'] = '';
+		endif;
+
 		// beforeLabel
 		if(isset($opts['beforeLabel'])) :
 			$setup['beforeLabel'] = $opts['beforeLabel'];
@@ -157,7 +164,7 @@ class form {
 	  @$field = "<input type=\"text\" class=\"text $fieldName {$setup['class']}\" {$setup['id']} {$setup['size']} {$setup['readonly']} {$setup['nameAttr']} $value />";
 		$dev_note = $this->dev_message($fieldName);
 
-	  echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$dev_note.$setup['afterField']);
+	  echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$dev_note.$setup['help'].$setup['afterField']);
 	}
 
 	/**
@@ -184,7 +191,7 @@ class form {
 		@$field = "<input type=\"text\" class=\"text $fieldName {$setup['class']}\" {$setup['id']} {$setup['size']} {$setup['readonly']} {$setup['nameAttr']} $value />";
 		$dev_note = $this->dev_message($fieldName);
 
-		echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$dev_note.$setup['afterField']);
+		echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$dev_note.$setup['help'].$setup['afterField']);
 	}
 
 	/**
@@ -211,7 +218,7 @@ class form {
 	  @$field = "<textarea class=\"textarea $fieldName {$setup['class']}\" {$setup['id']} {$setup['size']} {$setup['readonly']} {$setup['nameAttr']} />$value</textarea>";
 		$dev_note = $this->dev_message($fieldName);
 
-	  echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$dev_note.$setup['afterField']);
+	  echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$dev_note.$setup['help'].$setup['afterField']);
 	}
 
 	/**
@@ -252,7 +259,7 @@ class form {
 		@$field = "<select class=\"select $fieldName {$setup['class']}\" {$setup['id']} {$setup['size']} {$setup['readonly']} {$setup['nameAttr']} />$optionsList</select>";
 		$dev_note = $this->dev_message($fieldName);
 
-		echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$dev_note.$setup['afterField']);
+		echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$dev_note.$setup['help'].$setup['afterField']);
 	}
 
 	/**
@@ -300,7 +307,7 @@ class form {
 		@$field = "<div class=\"radio $fieldName {$setup['class']}\" {$setup['id']} />$optionsList</div>";
 		$dev_note = $this->dev_message($fieldName);
 
-		echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$dev_note.$setup['afterField']);
+		echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$dev_note.$setup['help'].$setup['afterField']);
 	}
     
 	/**
@@ -369,7 +376,7 @@ class form {
 		$button = '<input type="button" class="button-primary upload-button" value="'.$button.'">';
 		$dev_note = $this->dev_message($fieldName);
 
-		echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$button.$placeHolder.$dev_note.$setup['afterField']);
+		echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$button.$placeHolder.$dev_note.$setup['help'].$setup['afterField']);
 	}
 
 	/**
@@ -405,7 +412,7 @@ class form {
 		$button = '<input type="button" class="button-primary upload-button" value="'.$button.'">';
 		$dev_note = $this->dev_message($fieldName);
 
-		echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$button.$dev_note.$setup['afterField']);
+		echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$button.$dev_note.$setup['help'].$setup['afterField']);
 	}
 
 }
