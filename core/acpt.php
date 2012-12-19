@@ -77,8 +77,9 @@ class acpt {
 		foreach($_POST as $cf_name => $cf_data) {
 			// only new meta
 			if( preg_match('/^acpt_.*/' , $cf_name) ) { // change to your prefix
-				// sanitize data from custom fields
-				$cf_data = trim($_POST[$cf_name]); $cf_data = esc_sql($cf_data);
+				// validate data from custom fields
+				$cf_data = trim($_POST[$cf_name]);
+				$cf_data = acpt::validate($cf_name, $cf_data);
 
 				$cf_meta = get_post_meta($postID, $cf_name, true);
 				if ($cf_data) { // add and update
@@ -89,6 +90,40 @@ class acpt {
 			}
 		} // end foreach
 		endif; // end nonce
+	}
+
+	/*
+	 * Validate Types
+	 *
+	 * 0 -> sql
+	 * 1 -> text
+	 * 2 -> html
+	 * 3 -> url
+	 * 4 -> img
+	 * default - > none
+	 * */
+	static function validate($key, $value) {
+
+		if( preg_match('/^acpt_validate0.*/' , $key) ) {
+			$value = esc_sql($value);
+		}
+		else if( preg_match('/^acpt_validate1.*/' , $key) ) {
+			$value = sanitize_text_field($value);
+		}
+		else if( preg_match('/^acpt_validate2.*/' , $key) ) {
+			$html = force_balance_tags($value);
+			$value = $html;
+		}
+		else if( preg_match('/^acpt_validate3.*/' , $key) ) {
+			$value = esc_url($value);
+		}
+		else if( preg_match('/^acpt_validate4.*/' , $key) ) {
+			$value = esc_url($value);
+		}
+		else {
+			$value = $value;
+		}
+		return $value;
 	}
 
 	static function apply_css() {

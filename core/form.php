@@ -85,6 +85,35 @@ class form {
 		if(isset($field)) echo $field;
 	}
 
+	function get_field_name($name, $opts, $type) {
+		$san = '';
+
+		if( isset($opts['validate'])) {
+			$sanType = $opts['validate'];
+			switch($sanType) {
+				case 'text' :
+					$san = 'validate1_';
+					break;
+				case 'html' :
+					$san = 'validate2_';
+					break;
+				case 'url' :
+					$san = 'validate3_';
+					break;
+				case 'img' :
+					$san = 'validate4_';
+					break;
+				case 'sql' :
+					$san = 'validate0_';
+					break;
+				default :
+					$san = '';
+			}
+		}
+
+		return 'acpt_'.$san.$this->formName.'_'.$type.'_'.$name;
+	}
+
 	function get_opts($name, $opts, $fieldName, $label) {
 
 		if(empty($opts['labelTag'])) $opts['labelTag'] = 'label';
@@ -152,7 +181,8 @@ class form {
 	  global $post;
 
 	  $dev_note = null;
-	  $fieldName = 'acpt_'.$this->formName.'_text_'.$name;
+		$fieldName = $this->get_field_name($name, $opts, 'text');
+	  //$fieldName = 'acpt_'.$this->formName.'_text_'.$name;
 
 	  // value
 	  if($value = get_post_meta($post->ID, $fieldName, true)) :
@@ -179,7 +209,8 @@ class form {
 		global $post;
 
 		$dev_note = null;
-		$fieldName = 'acpt_'.$this->formName.'_url_'.$name;
+		$fieldName = $this->get_field_name($name, $opts, 'url');
+		//$fieldName = 'acpt_'.$this->formName.'_url_'.$name;
 
 		// value
 		if($value = get_post_meta($post->ID, $fieldName, true)) :
@@ -206,7 +237,8 @@ class form {
 	  global $post;
 
 	  $dev_note = null;
-	  $fieldName = 'acpt_'.$this->formName.'_textarea_'.$name;
+		$fieldName = $this->get_field_name($name, $opts, 'textarea');
+	  // $fieldName = 'acpt_'.$this->formName.'_textarea_'.$name;
 
 	  // value
 	  if($value = get_post_meta($post->ID, $fieldName, true)) :
@@ -234,7 +266,8 @@ class form {
 		global $post;
 
 		$dev_note = null;
-		$fieldName = 'acpt_'.$this->formName.'_select_'.$name;
+		$fieldName = $this->get_field_name($name, $opts, 'select');
+		//$fieldName = 'acpt_'.$this->formName.'_select_'.$name;
 
 		// get options HTML
 		if(isset($options)) :
@@ -276,7 +309,8 @@ class form {
 
 		$dev_note = null;
 		$opts['labelTag'] = 'span';
-		$fieldName = 'acpt_'.$this->formName.'_radio_'.$name;
+		$fieldName = $this->get_field_name($name, $opts, 'radio');
+		//$fieldName = 'acpt_'.$this->formName.'_radio_'.$name;
 
 		// name
 		if ( is_string($fieldName) ) :
@@ -316,11 +350,12 @@ class form {
 	 * @param string $singular singular name is required
 	 * @param array $opts args override and extend
 	 */
-	function editor($name, $label=null, $opts=array()) {
+	function editor($name, $label=null, $opts=array(), $settings=array('validate'=>'none')) {
 	  if(!$this->formName) exit('Making Form: You need to make the form first.');
 	  if(!$name) exit('Making Editor: You need to enter a singular name.');
 	  global $post;
-	  $fieldName = 'acpt_'.$this->formName.'_editor_'.$name;
+		$fieldName = $this->get_field_name($name, $settings, 'editor');
+	  //$fieldName = 'acpt_'.$this->formName.'_editor_'.$name;
 
 	  if($value = get_post_meta($post->ID, $fieldName, true))
 		  $content = $value;
@@ -334,7 +369,7 @@ class form {
 	  wp_editor(
 	      $content,
 	      'wysisyg_'.$this->formName.'_'.$name,
-	      array_merge($opts,array('textarea_name' => 'acpt_'.$this->formName.'_editor_'.$name))
+	      array_merge($opts,array('textarea_name' => $fieldName))
 	  );
 		echo $this->dev_message($fieldName);
 		echo '</div>';
@@ -352,7 +387,8 @@ class form {
 		global $post;
 
 		$dev_note = null;
-		$fieldName = 'acpt_'.$this->formName.'_image_'.$name;
+		$fieldName = $this->get_field_name($name, $opts, 'image');
+		//$fieldName = 'acpt_'.$this->formName.'_image_'.$name;
 		$placeHolderImage = null;
 
 		// value
@@ -391,7 +427,8 @@ class form {
 		global $post;
 
 		$dev_note = null;
-		$fieldName = 'acpt_'.$this->formName.'_image_'.$name;
+		$fieldName = $this->get_field_name($name, $opts, 'file');
+		//$fieldName = 'acpt_'.$this->formName.'_file_'.$name;
 		$placeHolderImage = null;
 
 		// value
