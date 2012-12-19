@@ -1,6 +1,7 @@
 <?php
 add_action('init', 'acpt_slider');
 function acpt_slider() {
+include('shortcodes.php');
 
 $args = array(
 'supports' => array( 'title', 'page-attributes', 'acpt_slide_options'  ),
@@ -18,7 +19,7 @@ new tax('group','groups', $slide, true);
 add_action( 'add_meta_boxes', 'acpt_slider_meta' );
 
 function acpt_slider_meta() {
-	new meta_box('acpt_slide_options', array('sample'), array('label' => 'Slide'));
+	new meta_box('acpt_slide_options', array('slide'), array('label' => 'Slide'));
 }
 
 function meta_acpt_slide_options() {

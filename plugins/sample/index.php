@@ -25,7 +25,7 @@ function meta_custom() {
 	$form->text('name', array('label' => 'Text Field'));
 	$form->image('image', array('label' => 'Image Field', 'button' => 'Add Your Image'));
 	$form->file('file', array('label' => 'File Field', 'button' => 'Select a File'));
-	$form->textarea('address',array('label' => 'Textarea'));
+	$form->textarea('address',array('label' => 'Textarea', 'validate' => 'html'));
 	$form->select('rooms', array('one', 'two', 'three'), array('label' => 'Select List'));
 	$form->radio('baths', array('blue', 'green', 'red'), array('label' => 'Radio Buttons'));
 	$form->editor('baths', 'WYSIWYG Editor');
