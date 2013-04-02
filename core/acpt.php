@@ -19,9 +19,9 @@
   * @global string $acpt_version
   */
 class acpt {
-	
+
 	function __construct() {
-	
+
 	}
 
 	public function __get($property) {
@@ -48,10 +48,10 @@ class acpt {
 	static function set_messages($messages) {
 		global $post, $post_ID;
 		$post_type = get_post_type( $post_ID );
-		
+
 		$obj = get_post_type_object($post_type);
 		$singular = $obj->labels->singular_name;
-		
+
 		$messages[$post_type] = array(
 		0 => '', // Unused. Messages start at index 1.
 		1 => sprintf( __($singular.' updated. <a href="%s">View '.strtolower($singular).'</a>'), esc_url( get_permalink($post_ID) ) ),
@@ -105,7 +105,7 @@ class acpt {
 	static function validate($key, $value) {
 
 		if( preg_match('/^acpt_validate0.*/' , $key) ) {
-			$value = esc_sql($value);
+			$value = $value;
 		}
 		else if( preg_match('/^acpt_validate1.*/' , $key) ) {
 			$value = sanitize_text_field($value);
