@@ -132,12 +132,23 @@ class acpt {
 	}
 
 	static function upload_scripts() {
-		wp_enqueue_script('plupload');
-		wp_enqueue_script('media-upload');
-		wp_enqueue_style('thickbox');
-		wp_enqueue_script('thickbox');
-		wp_register_script('upload', ACPT_LOCATION .'/acpt/core/js/upload.js', array('jquery','media-upload','thickbox'));
-		wp_enqueue_script('upload');
+		if(function_exists( 'wp_enqueue_media' )){
+		    wp_enqueue_media();
+		    wp_register_script('upload', ACPT_LOCATION .'/acpt/core/js/upload-3.5.js', array('jquery'));
+				wp_enqueue_script('upload');
+				wp_enqueue_script('plupload');
+				wp_enqueue_script('media-upload');
+				wp_enqueue_style('thickbox');
+				wp_enqueue_script('thickbox');
+		}
+		else {
+			wp_enqueue_script('plupload');
+			wp_enqueue_script('media-upload');
+			wp_enqueue_style('thickbox');
+			wp_enqueue_script('thickbox');
+			wp_register_script('upload', ACPT_LOCATION .'/acpt/core/js/upload.js', array('jquery','media-upload','thickbox'));
+			wp_enqueue_script('upload');
+		}
 	}
 
 }

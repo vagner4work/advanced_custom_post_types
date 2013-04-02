@@ -1,7 +1,7 @@
 <?php
 add_action('init', 'acpt_slider');
 function acpt_slider() {
-include('shortcodes.php');
+//include('shortcodes.php');
 
 $args = array(
 'supports' => array( 'title', 'page-attributes', 'acpt_slide_options'  ),
