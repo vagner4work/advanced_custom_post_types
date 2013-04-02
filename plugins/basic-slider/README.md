@@ -7,7 +7,7 @@ However, "Basic Slider" has a templating function 'list_slides()'. Lets look at 
 
 ```php
 <?php list_slides(); ?>
-'''
+```
 
 This basic function will spit out an unordered list of slides. If a slide has its headline and description enabled it will put them in a div next to the image within an li and add the class 'caption' to it.
 
