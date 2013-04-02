@@ -190,6 +190,10 @@ function meta_details() {
 	$form->textarea('address',array('label' => 'Textarea'));
 	$form->select('rooms', array('one', 'two', 'three'), array('label' => 'Select List'));
 	$form->radio('baths', array('blue', 'green', 'red'), array('label' => 'Radio Buttons'));
+
+    // When outputting editor data you may want to apply "the_content" filter
+    // apply_filters('the_content', $content_var)
+    // note that $content_var must be set to the content by you manually
 	$form->editor('baths', 'WYSIWYG Editor');
 }
 ```
