@@ -61,7 +61,7 @@ class post_type extends acpt {
 	}
 
 	function icon($name) {
-		if(!$singular) exit('Adding Icon: You need to enter an icon name.');
+		if(!$name) exit('Adding Icon: You need to enter an icon name.');
 
 		$this->icon = $name;
 
