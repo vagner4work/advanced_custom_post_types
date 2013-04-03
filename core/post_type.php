@@ -61,7 +61,7 @@ class post_type extends acpt {
 	}
 
 	function icon($name) {
-		if(array_key_exists($name)) exit('Adding Icon: You need to enter a valid icon name.');
+		if(array_key_exists($name, $this->icon_pos)) exit('Adding Icon: You need to enter a valid icon name.');
 
 		$this->icon = $name;
 
