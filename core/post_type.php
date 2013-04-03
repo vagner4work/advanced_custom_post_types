@@ -65,7 +65,7 @@ class post_type extends acpt {
 
 		$this->icon = $name;
 
-		add_action( 'admin_head', 'set_icon_css');
+		add_action( 'admin_head', array($this, 'set_icon_css') );
 
 	}
 
