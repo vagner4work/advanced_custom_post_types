@@ -13,6 +13,8 @@ $args = array(
 
 $slide = new post_type('slide','slides', false,  $args );
 
+$slide->icon('refresh');
+
 new tax('group','groups', $slide, true);
 }
 
