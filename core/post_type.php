@@ -61,7 +61,7 @@ class post_type extends acpt {
 	}
 
 	function icon($name) {
-		if(!$name) exit('Adding Icon: You need to enter an icon name.');
+		if(array_key_exists($name)) exit('Adding Icon: You need to enter a valid icon name.');
 
 		$this->icon = $name;
 
@@ -83,7 +83,7 @@ class post_type extends acpt {
 			#adminmenu #menu-posts-<?php echo $this->singular; ?>:hover div.wp-menu-image,
 			#adminmenu #menu-posts-<?php echo $this->singular; ?>.wp-has-current-submenu div.wp-menu-image,
 			#adminmenu #menu-posts-<?php echo $this->singular; ?>.current div.wp-menu-image {
-			  background-position: <?php echo $this->icon_pos[$this->icon][a]; ?>;
+			  background-position: <?php echo $this->icon_pos[$this->icon]['a']; ?>;
 			}
 		</style>
 
