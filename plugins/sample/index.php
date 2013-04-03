@@ -10,7 +10,7 @@ $args = array(
 
 $sample = new post_type('sample','samples', false,  $args );
 
-$sample->icon('cake');
+$sample->icon('person');
 
 new tax('color', 'colors', $sample, true, false);
 
