@@ -24,36 +24,36 @@ class post_type extends acpt {
 	public $plural = null;
 	public $icon = null;
 	public $icon_pos = array(
-		'notebook' => array('a' => '-7px -8px'),
-		'refresh' => array('a' => '-37px -9px'),
-		'thumbs-up' => array('a' => '-67px -8px'),
-		'box' => array('a' => '-93px -9px'),
-		'bug' => array('a' => '-144px -10px'),
-		'cake' => array('a' => '-167px -11px'),
-		'calendar' => array('a' => '-188px -8px'),
-		'card-biz' => array('a' => '-237px -10px'),
-		'task' => array('a' => '-262px -8px'),
-		'clock' => array('a' => '-286px -8px'),
-		'color' => array('a' => '-310px -9px'),
-		'compass' => array('a' => '-333px -9px'),
-		'dine' => array('a' => '-357px -8px'),
-		'ipad' => array('a' => '-378px -8px'),
-		'ticket' => array('a' => '-399px -8px'),
-		'shirt' => array('a' => '-427px -9px'),
-		'pulse' => array('a' => '-449px -9px'),
-		'card-play' => array('a' => '-471px -8px'),
-		'dine-plate' => array('a' => '-492px -8px'),
-		'pill' => array('a' => '-517px -10px'),
-		'plane' => array('a' => '-538px -11px'),
-		'paint' => array('a' => '-564px -9px'),
-		'mic' => array('a' => '-588px -8px'),
-		'location' => array('a' => '-612px -8px'),
-		'leaf' => array('a' => '-629px -10px'),
-		'music' => array('a' => '-650px -9px'),
-		'wine' => array('a' => '-672px -8px'),
-		'dashboard' => array('a' => '-695px -11px'),
-		'person' => array('a' => '-719px -9px'),
-		'weather' => array('a' => '-742px -10px')
+		'notebook' => array('a' => '-7px -8px', 'i' => '-7px -8px'),
+		'refresh' => array('a' => '-37px -9px', 'i' => '-37px -9px'),
+		'thumbs-up' => array('a' => '-67px -8px', 'i' => '-67px -8px'),
+		'box' => array('a' => '-93px -9px', 'i' => '-93px -9px'),
+		'bug' => array('a' => '-144px -10px', 'i' => '-144px -10px'),
+		'cake' => array('a' => '-167px -11px', 'i' => '-167px -11px'),
+		'calendar' => array('a' => '-188px -8px', 'i' => '-188px -8px'),
+		'card-biz' => array('a' => '-237px -10px', 'i' => '-237px -10px'),
+		'task' => array('a' => '-254px -3px', 'i' => '-254px -35px'),
+		'clock' => array('a' => '-286px -8px', 'i' => '-286px -8px'),
+		'color' => array('a' => '-310px -9px', 'i' => '-310px -9px'),
+		'compass' => array('a' => '-333px -9px', 'i' => '-333px -9px'),
+		'dine' => array('a' => '-357px -8px', 'i' => '-357px -8px'),
+		'ipad' => array('a' => '-378px -8px', 'i' => '-378px -8px'),
+		'ticket' => array('a' => '-399px -8px', 'i' => '-399px -8px'),
+		'shirt' => array('a' => '-427px -9px', 'i' => '-427px -9px'),
+		'pulse' => array('a' => '-449px -9px', 'i' => '-449px -9px'),
+		'card-play' => array('a' => '-471px -8px', 'i' => '-471px -8px'),
+		'dine-plate' => array('a' => '-492px -8px', 'i' => '-492px -8px'),
+		'pill' => array('a' => '-517px -10px', 'i' => '-517px -10px'),
+		'plane' => array('a' => '-538px -11px', 'i' => '-538px -11px'),
+		'paint' => array('a' => '-564px -9px', 'i' => '-564px -9px'),
+		'mic' => array('a' => '-588px -8px', 'i' => '-588px -8px'),
+		'location' => array('a' => '-612px -8px', 'i' => '-612px -8px'),
+		'leaf' => array('a' => '-629px -10px', 'i' => '-629px -10px'),
+		'music' => array('a' => '-650px -9px', 'i' => '-650px -9px'),
+		'wine' => array('a' => '-672px -8px', 'i' => '-672px -8px'),
+		'dashboard' => array('a' => '-695px -11px', 'i' => '-695px -11px'),
+		'person' => array('a' => '-719px -9px', 'i' => '-719px -9px'),
+		'weather' => array('a' => '-742px -10px', 'i' => '-742px -10px')
 	);
 
 	function __construct( $singular = null, $plural = null, $cap = false, $settings = array(), $icon = null ) {
@@ -73,11 +73,11 @@ class post_type extends acpt {
 
 		<style type="text/css">
 			#adminmenu #menu-posts-<?php echo $this->singular; ?> .wp-menu-image {
-			  background-image: url(<?php echo ACPT_LOCATION; ?>/acpt/img/menu.png);
+			  background-image: url('<?php echo ACPT_LOCATION; ?>/<?php echo ACPT_FOLDER_NAME; ?>/core/img/menu.png');
 			}
 
 			#adminmenu #menu-posts-<?php echo $this->singular; ?> .wp-menu-image {
-			  background-position: -29px -33px;
+			  background-position: <?php echo $this->icon_pos[$this->icon]['i']; ?>;
 			}
 
 			#adminmenu #menu-posts-<?php echo $this->singular; ?>:hover div.wp-menu-image,

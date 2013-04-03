@@ -2,6 +2,7 @@
 // location of acpt class
 define('ACPT_LOCATION', get_stylesheet_directory_uri());
 define('ACPT_FILE_PATH', get_stylesheet_directory());
+define('ACPT_FOLDER_NAME', 'acpt');
 
 // turn on styles
 define('ACPT_STYLES', true);
