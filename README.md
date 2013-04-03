@@ -65,6 +65,11 @@ Advanced Users See: post_type.php
 
 Making post types with ACPT is fast and easy. The post_type class takes up to 4 arguments (only the first two are required). First the singular name and then the plural name of your post type (makes these lowercase). The next is for capabilities. If you don’t know how capabilities work set this to false and everything should work expected (the default, false, is the same as posts capabilities). Set capabilities to true to create custom capabilities using the post types name (see roles for advanced usage). Last, you have the settings argument. This is used if you want to change the default settings or override them. Use the settings argument the same as you would for creating post types using Wordpress building registration method.
 
+Icons:
+=
+
+You can also add icons using the 'icon' method as in the example. Icons include: notebook, refresh, thumbs-up, box, bug, cake, calendar. Use these names as the parameters for the icon method.
+
 ```php
 include('acpt/init.php');
 
@@ -77,6 +82,8 @@ function makethem() {
     );
 
     $books = new post_type('book','books', false,  $args );
+
+    $books->icon('notebook');
 
 }
 ```
@@ -239,6 +246,8 @@ function makeThem() {
 
     $books = new post_type('book','books', false,  $args );
     $courses = new post_type('course','courses', false,  $args );
+
+    $books->icon('notebook');
 
     new tax('color', 'colors', 'book', true);
     new tax('author', 'authors', array($books, $courses), true );
