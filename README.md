@@ -233,6 +233,10 @@ function meta_details() {
     // apply_filters('the_content', $content_var)
     // note that $content_var must be set to the content by you manually
 	$form->editor('baths', 'WYSIWYG Editor');
+
+    // Advanced Fields
+    $form->google_map('address', array('label' => 'Address Field'));
+    $form->date('date', array('label' => 'Date Field'));
 }
 ```
 

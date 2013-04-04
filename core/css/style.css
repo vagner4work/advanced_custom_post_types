@@ -141,3 +141,13 @@
 .image-placeholder:hover .remove-image {
   display: block;
 }
+
+.map-image {
+  display: block;
+  max-width: 98%;
+}
+
+.auto-fold #adminmenu div.wp-menu-image {
+  width: 27px;
+  margin-right: 1px;
+}

@@ -134,14 +134,23 @@ class acpt {
 	}
 
 	static function apply_css() {
-		wp_register_style( 'acpt-styles', ACPT_LOCATION . '/acpt/core/css/style.css' );
+		wp_register_style( 'acpt-styles', ACPT_LOCATION . '/'.ACPT_FOLDER_NAME.'/core/css/style.css' );
 		wp_enqueue_style( 'acpt-styles' );
 	}
 
 	static function upload_scripts() {
+
+		wp_register_script('fields', ACPT_LOCATION .'/'.ACPT_FOLDER_NAME.'/core/js/fields.js', array('jquery'));
+		wp_enqueue_script('fields');
+
+		wp_enqueue_script( 'jquery-ui-datepicker', array( 'jquery' ) );
+
+		wp_register_style('jquery-ui', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css');
+		wp_enqueue_style( 'jquery-ui' );
+
 		if(function_exists( 'wp_enqueue_media' )){
 		    wp_enqueue_media();
-		    wp_register_script('upload', ACPT_LOCATION .'/acpt/core/js/upload-3.5.js', array('jquery'));
+		    wp_register_script('upload', ACPT_LOCATION .'/'.ACPT_FOLDER_NAME.'/core/js/upload-3.5.js', array('jquery'));
 				wp_enqueue_script('upload');
 				wp_enqueue_script('plupload');
 				wp_enqueue_script('media-upload');
@@ -153,7 +162,7 @@ class acpt {
 			wp_enqueue_script('media-upload');
 			wp_enqueue_style('thickbox');
 			wp_enqueue_script('thickbox');
-			wp_register_script('upload', ACPT_LOCATION .'/acpt/core/js/upload.js', array('jquery','media-upload','thickbox'));
+			wp_register_script('upload', ACPT_LOCATION .'/'.ACPT_FOLDER_NAME.'/core/js/upload.js', array('jquery','media-upload','thickbox'));
 			wp_enqueue_script('upload');
 		}
 	}

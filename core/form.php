@@ -168,7 +168,7 @@ class form {
 	function dev_message($fieldName) {
 		if(DEV_MODE == true) return '<p class="dev_note">get_post_meta($post->ID, <span class="field_name">"' . $fieldName . '"</span>, true);</p>';
 	}
-    
+
 	/**
 	 * Form Text.
 	 *
@@ -282,7 +282,12 @@ class form {
 				else
 					$selected = null;
 
-				$optionsList .= "<option $selected value=\"$option\">$option</option>";
+				if(array_key_exists('select_key', $opts) && $opts['select_key'] == true)
+					$key = $key;
+				else
+					$key = $option;
+
+				$optionsList .= "<option $selected value=\"$option\">$key</option>";
 			endforeach;
 
 		endif;
@@ -343,7 +348,7 @@ class form {
 
 		echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$dev_note.$setup['help'].$setup['afterField']);
 	}
-    
+
 	/**
 	 * Form WP Editor.
 	 *
@@ -450,6 +455,76 @@ class form {
 		$dev_note = $this->dev_message($fieldName);
 
 		echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$button.$dev_note.$setup['help'].$setup['afterField']);
+	}
+
+	/**
+	 * Google Maps.
+	 *
+	 * @param string $singular singular name is required
+	 * @param array $opts args override and extend
+	 */
+	function google_map($name, $opts=array(), $label = true) {
+		if(!$this->formName) exit('Making Form: You need to make the form first.');
+		if(!$name) exit('Making Input: You need to enter a singular name.');
+		global $post;
+
+		$dev_note = null;
+		$fieldName = $this->get_field_name($name, $opts, 'googleMap');
+		//$fieldName = 'acpt_'.$this->formName.'_text_'.$name;
+
+		if (is_ssl()) {
+			$http = 'https://';
+		} else {
+			$http = 'http://';
+		}
+
+		// value
+		if($value = get_post_meta($post->ID, $fieldName, true)) :
+			$value = 'value="'.$value.'"';
+			$loc = urlencode($value);
+			$zoom = 15;
+		else :
+			$value = 'value=""';
+			$zoom = 1;
+			$loc = 'New+York,NY';
+		endif;
+
+		$setup = $this->get_opts($name, $opts, $fieldName, $label);
+
+		@$field = "<input type=\"text\" class=\"googleMap $fieldName {$setup['class']}\" {$setup['id']} {$setup['size']} {$setup['readonly']} {$setup['nameAttr']} $value />";
+		$hidden = "<input type=\"hidden\" value=\"$loc\" name=\"{$fieldName}_encoded\" />";
+		$map = '<p class="map"><img src="'.$http.'maps.googleapis.com/maps/api/staticmap?center='.$loc.'&zoom='.$zoom.'&size=1200x140&sensor=true&markers='.$loc.'" class="map-image" alt="Map Image" /></p>';
+		$dev_note = $this->dev_message($fieldName);
+
+		echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$hidden.$dev_note.$map.$setup['help'].$setup['afterField']);
+	}
+
+	/**
+	 * Date.
+	 *
+	 * @param string $singular singular name is required
+	 * @param array $opts args override and extend
+	 */
+	function date($name, $opts=array(), $label = true) {
+		if(!$this->formName) exit('Making Form: You need to make the form first.');
+		if(!$name) exit('Making Input: You need to enter a singular name.');
+		global $post;
+
+		$dev_note = null;
+		$fieldName = $this->get_field_name($name, $opts, 'date');
+		//$fieldName = 'acpt_'.$this->formName.'_text_'.$name;
+
+		// value
+		if($value = get_post_meta($post->ID, $fieldName, true)) :
+			$value = 'value="'.$value.'"';
+		endif;
+
+		$setup = $this->get_opts($name, $opts, $fieldName, $label);
+
+		@$field = "<input type=\"text\" class=\"date date-picker $fieldName {$setup['class']}\" {$setup['id']} {$setup['size']} {$setup['readonly']} {$setup['nameAttr']} $value />";
+		$dev_note = $this->dev_message($fieldName);
+
+		echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$dev_note.$setup['help'].$setup['afterField']);
 	}
 
 }
