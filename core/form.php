@@ -65,8 +65,8 @@ class form {
       $this->formName = $name;
 
       if(isset($field)) echo $field;
-		  wp_nonce_field('actp_nonce_action','acpt_nonce_field');
-	    echo '<input type="hidden" name="acpt" value="true" />';
+		  wp_nonce_field('nonce_actp_nonce_action','nonce_acpt_nonce_field');
+	    echo '<input type="hidden" name="save_acpt" value="true" />';
   }
 
 	/**
@@ -85,48 +85,79 @@ class form {
 		if(isset($field)) echo $field;
 	}
 
-	function get_field_name($name, $opts, $type) {
-		$san = '';
-
-		if( isset($opts['validate'])) {
-			$sanType = $opts['validate'];
-			switch($sanType) {
+	function get_validate_field($validate, $fieldName) {
+		if( isset($validate)) {
+			switch($validate) {
 				case 'text' :
-					$san = 'validate1_';
+					$validate = 'text';
 					break;
-				case 'html' :
-					$san = 'validate2_';
+				case 'date' :
+					$validate = 'date';
 					break;
 				case 'url' :
-					$san = 'validate3_';
+					$validate = 'url';
 					break;
 				case 'img' :
-					$san = 'validate4_';
+					$validate = 'img';
 					break;
-				case 'sql' :
-					$san = 'validate0_';
+				case 'number' :
+					$validate = 'number';
 					break;
 				default :
-					$san = '';
+					$validate = '';
 			}
 		}
 
-		return 'acpt_'.$san.$this->formName.'_'.$type.'_'.$name;
+		return "<input type=\"hidden\" name=\"validate_{$$fieldName}\" value=\"{$validate}\" />";
+	}
+
+	function get_required_field($required, $fieldName) {
+		if(is_bool($required) && $required == true) {
+			return "<input type=\"hidden\" name=\"required_{$$fieldName}\" value=\"{$required}\" />";
+		} else {
+			return '';
+		}
+	}
+
+	function get_field_name($name, $type) {
+		return 'acpt_'.$this->formName.'_'.$type.'_'.$name;
 	}
 
 	function get_opts($name, $opts, $fieldName, $label) {
 
+		$setup['attr'] = '';
+
+		// label
 		if(empty($opts['labelTag'])) $opts['labelTag'] = 'label';
 
+		// classes
 		if ( is_string(isset($opts['class'])) ) $setup['class'] = $opts['class'];
+		else $setup['class'] = '';
 
-		$setup['id'] = 'id="'.$fieldName.'"';
+		// readonly
+		if ( isset($opts['readonly']) ) {
+			$setup['readonly'] = 'readonly="readonly"';
+			$setup['attr'] .= ' '. $setup['readonly'];
+		} else {
+			$setup['readonly'] = '';
+		}
 
-		if ( isset($opts['readonly']) ) $setup['readonly'] = 'readonly="readonly"';
+		// size
+		if ( array_key_exists('size', $opts) && is_integer($opts['size']) ) {
+			$setup['size'] = 'size="'.$opts['size'].'"';
+			$setup['attr'] .= ' '. $setup['size'];
+		} else {
+			$setup['size'] = '';
+		}
 
-		if ( is_integer(isset($opts['size'])) ) $setup['size'] = 'size="'.$opts['size'].'"';
+		// name and id
+		if ( isset($fieldName) ) {
+			$setup['nameAttr'] = 'name="'.$fieldName.'"';
+			$setup['attr'] .= ' '. $setup['nameAttr'];
 
-		if ( is_string($fieldName) ) $setup['nameAttr'] = 'name="'.$fieldName.'"';
+			$setup['id'] = 'id="'.$fieldName.'"';
+			$setup['attr'] .= ' '. $setup['id'];
+		}
 
 		// label
 		if(isset($label)) :
@@ -167,6 +198,40 @@ class form {
 
 	function dev_message($fieldName) {
 		if(DEV_MODE == true) return '<p class="dev_note">get_post_meta($post->ID, <span class="field_name">"' . $fieldName . '"</span>, true);</p>';
+		else return '';
+	}
+
+	function get_text_form($name, $opts, $classes, $fieldName, $label, $type, $html) {
+		global $post;
+
+		// setup
+		$setup = $this->get_opts($name, $opts, $fieldName, $label);
+
+		// value
+		if($value = get_post_meta($post->ID, $fieldName, true)) :
+			$value = 'value="'.$value.'"';
+		endif;
+
+		// required
+		if(isset($opts['required'])) {
+			$required = $this->get_required_field($opts['required'], $fieldName);
+		} else {
+			$required = '';
+		}
+
+		// validate
+		if(isset($opts['validate'])) {
+			$validate = $this->get_validate_field($opts['validate'], $fieldName);
+		} else {
+			$validate = '';
+		}
+
+		$classes = $classes . ' ' . $fieldName . ' ' . $setup['class'];
+
+		$field = "<input type=\"text\" class=\"{$classes}\" {$setup['attr']} $value />";
+		$dev_note = $this->dev_message($fieldName);
+
+		return $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$html.$required.$validate.$dev_note.$setup['help'].$setup['afterField'];
 	}
 
 	/**
@@ -178,23 +243,15 @@ class form {
 	function text($name, $opts=array(), $label = true) {
 	  if(!$this->formName) exit('Making Form: You need to make the form first.');
 	  if(!$name) exit('Making Input: You need to enter a singular name.');
-	  global $post;
 
-	  $dev_note = null;
-		$fieldName = $this->get_field_name($name, $opts, 'text');
-	  //$fieldName = 'acpt_'.$this->formName.'_text_'.$name;
+		$type = 'text';
+		$fieldName = $this->get_field_name($name, $type);
+		$html = '';
 
-	  // value
-	  if($value = get_post_meta($post->ID, $fieldName, true)) :
-	      $value = 'value="'.$value.'"';
-	  endif;
+		// $name, $opts, $classes, $fieldName, $label, $type
+		$input_fields = $this->get_text_form($name, $opts, "$type", $fieldName, $label, $type, $html);
 
-	  $setup = $this->get_opts($name, $opts, $fieldName, $label);
-
-	  @$field = "<input type=\"text\" class=\"text $fieldName {$setup['class']}\" {$setup['id']} {$setup['size']} {$setup['readonly']} {$setup['nameAttr']} $value />";
-		$dev_note = $this->dev_message($fieldName);
-
-	  echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$dev_note.$setup['help'].$setup['afterField']);
+	  echo apply_filters($fieldName . '_filter', $input_fields);
 	}
 
 	/**
@@ -206,23 +263,15 @@ class form {
 	function url($name, $opts=array(), $label = true) {
 		if(!$this->formName) exit('Making Form: You need to make the form first.');
 		if(!$name) exit('Making Input: You need to enter a singular name.');
-		global $post;
 
-		$dev_note = null;
-		$fieldName = $this->get_field_name($name, $opts, 'url');
-		//$fieldName = 'acpt_'.$this->formName.'_url_'.$name;
+		$type = 'url';
+		$fieldName = $this->get_field_name($name, $type);
+		$html = '';
 
-		// value
-		if($value = get_post_meta($post->ID, $fieldName, true)) :
-			$value = 'value="'.esc_url($value).'"';
-		endif;
+		// $name, $opts, $classes, $fieldName, $label, $type
+		$input_fields = $this->get_text_form($name, $opts, "$type", $fieldName, $label, $type, $html);
 
-		$setup = $this->get_opts($name, $opts, $fieldName, $label);
-
-		@$field = "<input type=\"text\" class=\"text $fieldName {$setup['class']}\" {$setup['id']} {$setup['size']} {$setup['readonly']} {$setup['nameAttr']} $value />";
-		$dev_note = $this->dev_message($fieldName);
-
-		echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$dev_note.$setup['help'].$setup['afterField']);
+		echo apply_filters($fieldName . '_filter', $input_fields);
 	}
 
 	/**
@@ -266,7 +315,7 @@ class form {
 		global $post;
 
 		$dev_note = null;
-		$fieldName = $this->get_field_name($name, $opts, 'select');
+		$fieldName = $this->get_field_name($name, 'select');
 		//$fieldName = 'acpt_'.$this->formName.'_select_'.$name;
 
 		// get options HTML
@@ -314,7 +363,7 @@ class form {
 
 		$dev_note = null;
 		$opts['labelTag'] = 'span';
-		$fieldName = $this->get_field_name($name, $opts, 'radio');
+		$fieldName = $this->get_field_name($name, 'radio');
 		//$fieldName = 'acpt_'.$this->formName.'_radio_'.$name;
 
 		// name
@@ -359,7 +408,7 @@ class form {
 	  if(!$this->formName) exit('Making Form: You need to make the form first.');
 	  if(!$name) exit('Making Editor: You need to enter a singular name.');
 	  global $post;
-		$fieldName = $this->get_field_name($name, $settings, 'editor');
+		$fieldName = $this->get_field_name($name, 'editor');
 	  //$fieldName = 'acpt_'.$this->formName.'_editor_'.$name;
 
 	  if($value = get_post_meta($post->ID, $fieldName, true))
@@ -391,33 +440,31 @@ class form {
 		if(!$name) exit('Making Input: You need to enter a singular name.');
 		global $post;
 
-		$dev_note = null;
-		$fieldName = $this->get_field_name($name, $opts, 'image');
-		//$fieldName = 'acpt_'.$this->formName.'_image_'.$name;
-		$placeHolderImage = null;
+		$type = 'image';
+		$fieldName = $this->get_field_name($name, $type);
+		$html = '';
 
-		// value
-		if($value = get_post_meta($post->ID, $fieldName, true)) :
-			$placeHolderImage = '<img class="uplaod-img" src="'.$value.'" />';
-			$value = 'value="'.esc_url($value).'"';
-		endif;
+		$placeHolderImage = '';
 
 		// button
 		if(isset($opts['button'])) :
 			$button = $opts['button'];
 		else :
-			$button = "Insert File";
+			$button = "Insert Image";
 		endif;
 
-		$setup = $this->get_opts($name, $opts, $fieldName, $label);
+		// placeholder image
+		if($value = get_post_meta($post->ID, $fieldName, true)) :
+			$placeHolderImage = '<img class="uplaod-img" src="'.$value.'" />';
+		endif;
 
-		$placeHolder = '<div class="image-placeholder"><a class="remove-image">remove</a>' . $placeHolderImage . '</div>';
+		$html .= '<input type="button" class="button-primary upload-button" value="'.$button.'">';
+		$html .= '<div class="image-placeholder"><a class="remove-image">remove</a>' . $placeHolderImage . '</div>';
 
-		@$field = "<input type=\"text\" class=\"image upload-url $fieldName {$setup['class']}\" {$setup['id']} {$setup['size']} {$setup['readonly']} {$setup['nameAttr']} $value />";
-		$button = '<input type="button" class="button-primary upload-button" value="'.$button.'">';
-		$dev_note = $this->dev_message($fieldName);
+		// $name, $opts, $classes, $fieldName, $label, $type
+		$input_fields = $this->get_text_form($name, $opts, "$type upload-url", $fieldName, $label, $type, $html);
 
-		echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$button.$placeHolder.$dev_note.$setup['help'].$setup['afterField']);
+		echo apply_filters($fieldName . '_filter', $input_fields);
 	}
 
 	/**
@@ -431,15 +478,9 @@ class form {
 		if(!$name) exit('Making Input: You need to enter a singular name.');
 		global $post;
 
-		$dev_note = null;
-		$fieldName = $this->get_field_name($name, $opts, 'file');
-		//$fieldName = 'acpt_'.$this->formName.'_file_'.$name;
-		$placeHolderImage = null;
-
-		// value
-		if($value = get_post_meta($post->ID, $fieldName, true)) :
-			$value = 'value="'.esc_url($value).'"';
-		endif;
+		$type = 'file';
+		$fieldName = $this->get_field_name($name, $type);
+		$html = '';
 
 		// button
 		if(isset($opts['button'])) :
@@ -448,13 +489,12 @@ class form {
 			$button = "Insert File";
 		endif;
 
-		$setup = $this->get_opts($name, $opts, $fieldName, $label);
+		$html .= '<input type="button" class="button-primary upload-button" value="'.$button.'">';
 
-		@$field = "<input type=\"text\" class=\"file upload-url $fieldName {$setup['class']}\" {$setup['id']} {$setup['size']} {$setup['readonly']} {$setup['nameAttr']} $value />";
-		$button = '<input type="button" class="button-primary upload-button" value="'.$button.'">';
-		$dev_note = $this->dev_message($fieldName);
+		// $name, $opts, $classes, $fieldName, $label, $type
+		$input_fields = $this->get_text_form($name, $opts, "$type upload-url", $fieldName, $label, $type, $html);
 
-		echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$button.$dev_note.$setup['help'].$setup['afterField']);
+		echo apply_filters($fieldName . '_filter', $input_fields);
 	}
 
 	/**
@@ -468,10 +508,11 @@ class form {
 		if(!$name) exit('Making Input: You need to enter a singular name.');
 		global $post;
 
-		$dev_note = null;
-		$fieldName = $this->get_field_name($name, $opts, 'googleMap');
-		//$fieldName = 'acpt_'.$this->formName.'_text_'.$name;
+		$type = 'googleMap';
+		$fieldName = $this->get_field_name($name, $type);
+		$html = '';
 
+		// set http
 		if (is_ssl()) {
 			$http = 'https://';
 		} else {
@@ -480,23 +521,20 @@ class form {
 
 		// value
 		if($value = get_post_meta($post->ID, $fieldName, true)) :
-			$value = 'value="'.$value.'"';
 			$loc = urlencode($value);
 			$zoom = 15;
 		else :
-			$value = 'value=""';
 			$zoom = 1;
 			$loc = 'New+York,NY';
 		endif;
 
-		$setup = $this->get_opts($name, $opts, $fieldName, $label);
+		$html .= "<input type=\"hidden\" value=\"$loc\" name=\"{$fieldName}_encoded\" />";
+		$html .= '<p class="map"><img src="'.$http.'maps.googleapis.com/maps/api/staticmap?center='.$loc.'&zoom='.$zoom.'&size=1200x140&sensor=true&markers='.$loc.'" class="map-image" alt="Map Image" /></p>';
 
-		@$field = "<input type=\"text\" class=\"googleMap $fieldName {$setup['class']}\" {$setup['id']} {$setup['size']} {$setup['readonly']} {$setup['nameAttr']} $value />";
-		$hidden = "<input type=\"hidden\" value=\"$loc\" name=\"{$fieldName}_encoded\" />";
-		$map = '<p class="map"><img src="'.$http.'maps.googleapis.com/maps/api/staticmap?center='.$loc.'&zoom='.$zoom.'&size=1200x140&sensor=true&markers='.$loc.'" class="map-image" alt="Map Image" /></p>';
-		$dev_note = $this->dev_message($fieldName);
+		// $name, $opts, $classes, $fieldName, $label, $type
+		$input_fields = $this->get_text_form($name, $opts, "$type", $fieldName, $label, $type, $html);
 
-		echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$hidden.$dev_note.$map.$setup['help'].$setup['afterField']);
+		echo apply_filters($fieldName . '_filter', $input_fields);
 	}
 
 	/**
@@ -510,21 +548,14 @@ class form {
 		if(!$name) exit('Making Input: You need to enter a singular name.');
 		global $post;
 
-		$dev_note = null;
-		$fieldName = $this->get_field_name($name, $opts, 'date');
-		//$fieldName = 'acpt_'.$this->formName.'_text_'.$name;
+		$type = 'date';
+		$fieldName = $this->get_field_name($name, $type);
+		$html = '';
 
-		// value
-		if($value = get_post_meta($post->ID, $fieldName, true)) :
-			$value = 'value="'.$value.'"';
-		endif;
+		// $name, $opts, $classes, $fieldName, $label, $type
+		$input_fields = $this->get_text_form($name, $opts, "$type date-picker", $fieldName, $label, $type, $html);
 
-		$setup = $this->get_opts($name, $opts, $fieldName, $label);
-
-		@$field = "<input type=\"text\" class=\"date date-picker $fieldName {$setup['class']}\" {$setup['id']} {$setup['size']} {$setup['readonly']} {$setup['nameAttr']} $value />";
-		$dev_note = $this->dev_message($fieldName);
-
-		echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$dev_note.$setup['help'].$setup['afterField']);
+		echo apply_filters($fieldName . '_filter', $input_fields);
 	}
 
 }

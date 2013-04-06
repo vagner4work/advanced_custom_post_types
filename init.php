@@ -10,11 +10,13 @@ require_once('config.php');
 
 // load classes
 require_once('core/acpt.php');
+include('core/validate.php');
 include('core/post_type.php');
 include('core/tax.php');
 include('core/role.php');
 include('core/form.php');
 include('core/meta_box.php');
+
 
 // setup
 if(ACPT_MESSAGES) add_filter('post_updated_messages', 'acpt::set_messages' );

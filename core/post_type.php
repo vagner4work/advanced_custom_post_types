@@ -47,7 +47,7 @@ class post_type extends acpt {
 		'plane' => array('a' => '-531px -3px', 'i' => '-531px -35px'),
 		'paint' => array('a' => '-557px -3px', 'i' => '-557px -35px'),
 		'mic' => array('a' => '-580px -3px', 'i' => '-580px -35px'),
-		'location' => array('a' => '-600px -3px', 'i' => '-600px -35px'),
+		'location' => array('a' => '-601px -3px', 'i' => '-601px -35px'),
 		'leaf' => array('a' => '-622px -3px', 'i' => '-622px -35px'),
 		'music' => array('a' => '-643px -3px', 'i' => '-643px -35px'),
 		'wine' => array('a' => '-665px -3px', 'i' => '-665px -35px'),

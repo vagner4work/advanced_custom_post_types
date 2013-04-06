@@ -52,12 +52,13 @@ class acpt {
 		$obj = get_post_type_object($post_type);
 		$singular = $obj->labels->singular_name;
 
-		// if($obj->public == false) {
-		// 	$link = false;
-		// } else {
+		if($obj->public == false) {
+			$link_view = '';
+			$link_pre = '';
+		} else {
 			$link_view = '<a href="%s">View '.strtolower($singular).'</a>';
 			$link_pre = '<a target="_blank" href="%s">Preview '.strtolower($singular).'</a>';
-		// }
+		}
 
 		$messages[$post_type] = array(
 		0 => '', // Unused. Messages start at index 1.
@@ -76,8 +77,9 @@ class acpt {
 	}
 
 	static function save_form($postID) {
-		if(!empty($_POST['acpt']) && check_admin_referer('actp_nonce_action','acpt_nonce_field')) :
+		if(!empty($_POST['save_acpt']) && check_admin_referer('nonce_actp_nonce_action','nonce_acpt_nonce_field')) :
 		global $post;
+
 		// called after a post or page is saved
 		if($parent_id = wp_is_post_revision($postID)) $postID = $parent_id;
 		// Loop through custom fields
@@ -104,27 +106,27 @@ class acpt {
 	 *
 	 * 0 -> sql
 	 * 1 -> text
-	 * 2 -> html
+	 * 2 -> date
 	 * 3 -> url
 	 * 4 -> img
 	 * default - > none
 	 * */
 	static function validate($key, $value) {
 
-		if( preg_match('/^acpt_validate0.*/' , $key) ) {
+		if( preg_match('/^acpt_v0.*/' , $key) ) {
 			$value = $value;
 		}
-		else if( preg_match('/^acpt_validate1.*/' , $key) ) {
+		else if( preg_match('/^acpt_v1.*/' , $key) ) {
 			$value = sanitize_text_field($value);
 		}
-		else if( preg_match('/^acpt_validate2.*/' , $key) ) {
+		else if( preg_match('/^acpt_v2.*/' , $key) ) {
 			$html = force_balance_tags($value);
 			$value = $html;
 		}
-		else if( preg_match('/^acpt_validate3.*/' , $key) ) {
+		else if( preg_match('/^acpt_v3.*/' , $key) ) {
 			$value = esc_url($value);
 		}
-		else if( preg_match('/^acpt_validate4.*/' , $key) ) {
+		else if( preg_match('/^acpt_v4.*/' , $key) ) {
 			$value = esc_url($value);
 		}
 		else {
