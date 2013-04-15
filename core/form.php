@@ -285,6 +285,8 @@ class form {
 		$fieldName = $this->get_field_name($name, $type);
 		$html = '';
 
+		if(empty($opts['readonly'])) $opts['readonly'] = true;
+
 		$placeHolderImage = '';
 
 		// button
