@@ -39,13 +39,6 @@ class form {
 		return $this;
 	}
 
-	function make_computer_name($name) {
-		$pattern = '/(\s+)/';
-		$replacement = '_';
-		$computerName = preg_replace($pattern,$replacement,strtolower(trim($name)));
-		return $computerName;
-	}
-
   /**
    * Make Form.
    *
@@ -84,6 +77,331 @@ class form {
 
 		if(isset($field)) echo $field;
 	}
+
+	/**
+	 * Form Text.
+	 *
+	 * @param string $singular singular name is required
+	 * @param array $opts args override and extend
+	 */
+	function text($name, $opts=array(), $label = true) {
+	  if(!$this->formName) exit('Making Form: You need to make the form first.');
+	  if(!$name) exit('Making Input: You need to enter a singular name.');
+
+		$type = 'text';
+		$fieldName = $this->get_field_name($name, $type);
+		$html = '';
+
+		// $name, $opts, $classes, $fieldName, $label, $type
+		$input_fields = $this->get_text_form($name, $opts, "$type", $fieldName, $label, $type, $html);
+
+	  echo apply_filters($fieldName . '_filter', $input_fields);
+	}
+
+	/**
+	 * Form URL.
+	 *
+	 * @param string $singular singular name is required
+	 * @param array $opts args override and extend
+	 */
+	function url($name, $opts=array(), $label = true) {
+		if(!$this->formName) exit('Making Form: You need to make the form first.');
+		if(!$name) exit('Making Input: You need to enter a singular name.');
+
+		$type = 'url';
+		$fieldName = $this->get_field_name($name, $type);
+		$html = '';
+
+		// $name, $opts, $classes, $fieldName, $label, $type
+		$input_fields = $this->get_text_form($name, $opts, "$type", $fieldName, $label, $type, $html);
+
+		echo apply_filters($fieldName . '_filter', $input_fields);
+	}
+
+	/**
+	 * Form Textarea.
+	 *
+	 * @param string $singular singular name is required
+	 * @param array $opts args override and extend
+	 */
+	function textarea($name, $opts=array(), $label = true) {
+	  if(!$this->formName) exit('Making Form: You need to make the form first.');
+	  if(!$name) exit('Making Textarea: You need to enter a singular name.');
+	  global $post;
+
+	  $dev_note = null;
+		$fieldName = $this->get_field_name($name, $opts, 'textarea');
+
+	  // value
+	  if($value = get_post_meta($post->ID, $fieldName, true)) :
+	      $value;
+	  endif;
+
+	  $setup = $this->get_opts($name, $opts, $fieldName, $label);
+
+	  @$field = "<textarea class=\"textarea $fieldName {$setup['class']}\" {$setup['id']} {$setup['size']} {$setup['readonly']} {$setup['nameAttr']} />$value</textarea>";
+		$dev_note = $this->dev_message($fieldName);
+
+	  echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$dev_note.$setup['help'].$setup['afterField']);
+	}
+
+	/**
+	 * Form Select.
+	 *
+	 * @param string $singular singular name is required
+	 * @param array $options args for items
+	 * @param array $opts args override and extend
+	 */
+	function select($name, $options=array('Key' => 'Value'), $opts=array(), $label = true) {
+		if(!$this->formName) exit('Making Form: You need to make the form first.');
+		if(!$name) exit('Making Textarea: You need to enter a singular name.');
+		global $post;
+
+		$dev_note = null;
+		$fieldName = $this->get_field_name($name, 'select');
+
+		// get options HTML
+		if(isset($options)) :
+			$options;
+
+			$optionsList = '';
+			$value = get_post_meta($post->ID, $fieldName, true);
+
+			foreach( $options as $key => $option) :
+				if($option == $value)
+					$selected = 'selected="selected"';
+				else
+					$selected = null;
+
+				if(array_key_exists('select_key', $opts) && $opts['select_key'] == true)
+					$key = $key;
+				else
+					$key = $option;
+
+				$optionsList .= "<option $selected value=\"$option\">$key</option>";
+			endforeach;
+
+		endif;
+
+		$setup = $this->get_opts($name, $opts, $fieldName, $label);
+
+		@$field = "<select class=\"select $fieldName {$setup['class']}\" {$setup['id']} {$setup['size']} {$setup['readonly']} {$setup['nameAttr']} />$optionsList</select>";
+		$dev_note = $this->dev_message($fieldName);
+
+		echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$dev_note.$setup['help'].$setup['afterField']);
+	}
+
+	/**
+	 * Form Radio.
+	 *
+	 * @param string $singular singular name is required
+	 * @param array $options args for items
+	 * @param array $opts args override and extend
+	 */
+	function radio($name, $options=array('Key' => 'Value'), $opts=array(), $label = true) {
+		if(!$this->formName) exit('Making Form: You need to make the form first.');
+		if(!$name) exit('Making Textarea: You need to enter a singular name.');
+		global $post;
+
+		$dev_note = null;
+		$opts['labelTag'] = 'span';
+		$fieldName = $this->get_field_name($name, 'radio');
+
+		// name
+		if ( is_string($fieldName) ) :
+			$nameAttr = 'name="'.$fieldName.'"';
+		endif;
+
+		// get options HTML
+		if(isset($options)) :
+			$options;
+
+			$optionsList = '';
+			$value = get_post_meta($post->ID, $fieldName, true);
+
+			foreach( $options as $key => $option) :
+				if($option == $value)
+					$checked = 'checked="checked"';
+				else
+					$checked = null;
+
+				$optionsList .= "<label><input type=\"radio\" $nameAttr $checked value=\"$option\" /><span>$option</span></label>";
+
+			endforeach;
+
+		endif;
+
+		$setup = $this->get_opts($name, $opts, $fieldName, $label);
+
+		@$field = "<div class=\"radio $fieldName {$setup['class']}\" {$setup['id']} />$optionsList</div>";
+		$dev_note = $this->dev_message($fieldName);
+
+		echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$dev_note.$setup['help'].$setup['afterField']);
+	}
+
+	/**
+	 * Form WP Editor.
+	 *
+	 * @param string $singular singular name is required
+	 * @param array $opts args override and extend
+	 */
+	function editor($name, $label=null, $opts=array(), $settings=array('validate'=>'none')) {
+	  if(!$this->formName) exit('Making Form: You need to make the form first.');
+	  if(!$name) exit('Making Editor: You need to enter a singular name.');
+	  global $post;
+
+		$fieldName = $this->get_field_name($name, 'editor');
+
+	  if($value = get_post_meta($post->ID, $fieldName, true))
+		  $content = $value;
+		else
+			$content = '';
+
+		$setup = $this->get_opts($label, array('labelTag' => 'span'), $fieldName, true);
+
+		echo '<div class="control-group">';
+		echo $setup['label'];
+	  wp_editor(
+	      $content,
+	      'wysisyg_'.$this->formName.'_'.$name,
+	      array_merge($opts,array('textarea_name' => $fieldName))
+	  );
+		echo $this->dev_message($fieldName);
+		echo '</div>';
+	}
+
+	/**
+	 * Form Image
+	 *
+	 * @param string $singular singular name is required
+	 * @param array $opts args override and extend
+	 */
+	function image($name, $opts=array(), $label = true) {
+		if(!$this->formName) exit('Making Form: You need to make the form first.');
+		if(!$name) exit('Making Input: You need to enter a singular name.');
+		global $post;
+
+		$type = 'image';
+		$fieldName = $this->get_field_name($name, $type);
+		$html = '';
+
+		$placeHolderImage = '';
+
+		// button
+		if(isset($opts['button'])) :
+			$button = $opts['button'];
+		else :
+			$button = "Insert Image";
+		endif;
+
+		// placeholder image
+		if($value = get_post_meta($post->ID, $fieldName, true)) :
+			$placeHolderImage = '<img class="uplaod-img" src="'.$value.'" />';
+		endif;
+
+		$html .= $hidden = "<input type=\"hidden\" class=\"image-id-hidden\" name=\"{$fieldName}_id\">";
+		$html .= '<input type="button" class="button-primary upload-button" value="'.$button.'">';
+		$html .= '<div class="image-placeholder"><a class="remove-image">remove</a>' . $placeHolderImage . '</div>';
+
+		// $name, $opts, $classes, $fieldName, $label, $type
+		$input_fields = $this->get_text_form($name, $opts, "$type upload-url", $fieldName, $label, $type, $html);
+
+		echo apply_filters($fieldName . '_filter', $input_fields);
+	}
+
+	/**
+	 * Form File
+	 *
+	 * @param string $singular singular name is required
+	 * @param array $opts args override and extend
+	 */
+	function file($name, $opts=array(), $label = true) {
+		if(!$this->formName) exit('Making Form: You need to make the form first.');
+		if(!$name) exit('Making Input: You need to enter a singular name.');
+		global $post;
+
+		$type = 'file';
+		$fieldName = $this->get_field_name($name, $type);
+		$html = '';
+
+		// button
+		if(isset($opts['button'])) :
+			$button = $opts['button'];
+		else :
+			$button = "Insert File";
+		endif;
+
+		$html .= '<input type="button" class="button-primary upload-button" value="'.$button.'">';
+
+		// $name, $opts, $classes, $fieldName, $label, $type
+		$input_fields = $this->get_text_form($name, $opts, "$type upload-url", $fieldName, $label, $type, $html);
+
+		echo apply_filters($fieldName . '_filter', $input_fields);
+	}
+
+	/**
+	 * Google Maps.
+	 *
+	 * @param string $singular singular name is required
+	 * @param array $opts args override and extend
+	 */
+	function google_map($name, $opts=array(), $label = true) {
+		if(!$this->formName) exit('Making Form: You need to make the form first.');
+		if(!$name) exit('Making Input: You need to enter a singular name.');
+		global $post;
+
+		$type = 'googleMap';
+		$fieldName = $this->get_field_name($name, $type);
+		$html = '';
+
+		// set http
+		if (is_ssl()) {
+			$http = 'https://';
+		} else {
+			$http = 'http://';
+		}
+
+		// value
+		if($value = get_post_meta($post->ID, $fieldName, true)) :
+			$loc = urlencode($value);
+			$zoom = 15;
+		else :
+			$zoom = 1;
+			$loc = 'New+York,NY';
+		endif;
+
+		$html .= "<input type=\"hidden\" value=\"$loc\" name=\"{$fieldName}_encoded\" />";
+		$html .= '<p class="map"><img src="'.$http.'maps.googleapis.com/maps/api/staticmap?center='.$loc.'&zoom='.$zoom.'&size=1200x140&sensor=true&markers='.$loc.'" class="map-image" alt="Map Image" /></p>';
+
+		// $name, $opts, $classes, $fieldName, $label, $type
+		$input_fields = $this->get_text_form($name, $opts, "$type", $fieldName, $label, $type, $html);
+
+		echo apply_filters($fieldName . '_filter', $input_fields);
+	}
+
+	/**
+	 * Date.
+	 *
+	 * @param string $singular singular name is required
+	 * @param array $opts args override and extend
+	 */
+	function date($name, $opts=array(), $label = true) {
+		if(!$this->formName) exit('Making Form: You need to make the form first.');
+		if(!$name) exit('Making Input: You need to enter a singular name.');
+		global $post;
+
+		$type = 'date';
+		$fieldName = $this->get_field_name($name, $type);
+		$html = '';
+
+		// $name, $opts, $classes, $fieldName, $label, $type
+		$input_fields = $this->get_text_form($name, $opts, "$type date-picker", $fieldName, $label, $type, $html);
+
+		echo apply_filters($fieldName . '_filter', $input_fields);
+	}
+
+	/* Helper Functions
+	--------------------------------------------------------------------------- */
 
 	function get_validate_field($validate, $fieldName) {
 		if( isset($validate)) {
@@ -234,328 +552,11 @@ class form {
 		return $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$html.$required.$validate.$dev_note.$setup['help'].$setup['afterField'];
 	}
 
-	/**
-	 * Form Text.
-	 *
-	 * @param string $singular singular name is required
-	 * @param array $opts args override and extend
-	 */
-	function text($name, $opts=array(), $label = true) {
-	  if(!$this->formName) exit('Making Form: You need to make the form first.');
-	  if(!$name) exit('Making Input: You need to enter a singular name.');
-
-		$type = 'text';
-		$fieldName = $this->get_field_name($name, $type);
-		$html = '';
-
-		// $name, $opts, $classes, $fieldName, $label, $type
-		$input_fields = $this->get_text_form($name, $opts, "$type", $fieldName, $label, $type, $html);
-
-	  echo apply_filters($fieldName . '_filter', $input_fields);
-	}
-
-	/**
-	 * Form URL.
-	 *
-	 * @param string $singular singular name is required
-	 * @param array $opts args override and extend
-	 */
-	function url($name, $opts=array(), $label = true) {
-		if(!$this->formName) exit('Making Form: You need to make the form first.');
-		if(!$name) exit('Making Input: You need to enter a singular name.');
-
-		$type = 'url';
-		$fieldName = $this->get_field_name($name, $type);
-		$html = '';
-
-		// $name, $opts, $classes, $fieldName, $label, $type
-		$input_fields = $this->get_text_form($name, $opts, "$type", $fieldName, $label, $type, $html);
-
-		echo apply_filters($fieldName . '_filter', $input_fields);
-	}
-
-	/**
-	 * Form Textarea.
-	 *
-	 * @param string $singular singular name is required
-	 * @param array $opts args override and extend
-	 */
-	function textarea($name, $opts=array(), $label = true) {
-	  if(!$this->formName) exit('Making Form: You need to make the form first.');
-	  if(!$name) exit('Making Textarea: You need to enter a singular name.');
-	  global $post;
-
-	  $dev_note = null;
-		$fieldName = $this->get_field_name($name, $opts, 'textarea');
-	  // $fieldName = 'acpt_'.$this->formName.'_textarea_'.$name;
-
-	  // value
-	  if($value = get_post_meta($post->ID, $fieldName, true)) :
-	      $value;
-	  endif;
-
-	  $setup = $this->get_opts($name, $opts, $fieldName, $label);
-
-	  @$field = "<textarea class=\"textarea $fieldName {$setup['class']}\" {$setup['id']} {$setup['size']} {$setup['readonly']} {$setup['nameAttr']} />$value</textarea>";
-		$dev_note = $this->dev_message($fieldName);
-
-	  echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$dev_note.$setup['help'].$setup['afterField']);
-	}
-
-	/**
-	 * Form Select.
-	 *
-	 * @param string $singular singular name is required
-	 * @param array $options args for items
-	 * @param array $opts args override and extend
-	 */
-	function select($name, $options=array('Key' => 'Value'), $opts=array(), $label = true) {
-		if(!$this->formName) exit('Making Form: You need to make the form first.');
-		if(!$name) exit('Making Textarea: You need to enter a singular name.');
-		global $post;
-
-		$dev_note = null;
-		$fieldName = $this->get_field_name($name, 'select');
-		//$fieldName = 'acpt_'.$this->formName.'_select_'.$name;
-
-		// get options HTML
-		if(isset($options)) :
-			$options;
-
-			$optionsList = '';
-			$value = get_post_meta($post->ID, $fieldName, true);
-
-			foreach( $options as $key => $option) :
-				if($option == $value)
-					$selected = 'selected="selected"';
-				else
-					$selected = null;
-
-				if(array_key_exists('select_key', $opts) && $opts['select_key'] == true)
-					$key = $key;
-				else
-					$key = $option;
-
-				$optionsList .= "<option $selected value=\"$option\">$key</option>";
-			endforeach;
-
-		endif;
-
-		$setup = $this->get_opts($name, $opts, $fieldName, $label);
-
-		@$field = "<select class=\"select $fieldName {$setup['class']}\" {$setup['id']} {$setup['size']} {$setup['readonly']} {$setup['nameAttr']} />$optionsList</select>";
-		$dev_note = $this->dev_message($fieldName);
-
-		echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$dev_note.$setup['help'].$setup['afterField']);
-	}
-
-	/**
-	 * Form Radio.
-	 *
-	 * @param string $singular singular name is required
-	 * @param array $options args for items
-	 * @param array $opts args override and extend
-	 */
-	function radio($name, $options=array('Key' => 'Value'), $opts=array(), $label = true) {
-		if(!$this->formName) exit('Making Form: You need to make the form first.');
-		if(!$name) exit('Making Textarea: You need to enter a singular name.');
-		global $post;
-
-		$dev_note = null;
-		$opts['labelTag'] = 'span';
-		$fieldName = $this->get_field_name($name, 'radio');
-		//$fieldName = 'acpt_'.$this->formName.'_radio_'.$name;
-
-		// name
-		if ( is_string($fieldName) ) :
-			$nameAttr = 'name="'.$fieldName.'"';
-		endif;
-
-		// get options HTML
-		if(isset($options)) :
-			$options;
-
-			$optionsList = '';
-			$value = get_post_meta($post->ID, $fieldName, true);
-
-			foreach( $options as $key => $option) :
-				if($option == $value)
-					$checked = 'checked="checked"';
-				else
-					$checked = null;
-
-				$optionsList .= "<label><input type=\"radio\" $nameAttr $checked value=\"$option\" /><span>$option</span></label>";
-
-			endforeach;
-
-		endif;
-
-		$setup = $this->get_opts($name, $opts, $fieldName, $label);
-
-		@$field = "<div class=\"radio $fieldName {$setup['class']}\" {$setup['id']} />$optionsList</div>";
-		$dev_note = $this->dev_message($fieldName);
-
-		echo apply_filters($fieldName . '_filter', $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$dev_note.$setup['help'].$setup['afterField']);
-	}
-
-	/**
-	 * Form WP Editor.
-	 *
-	 * @param string $singular singular name is required
-	 * @param array $opts args override and extend
-	 */
-	function editor($name, $label=null, $opts=array(), $settings=array('validate'=>'none')) {
-	  if(!$this->formName) exit('Making Form: You need to make the form first.');
-	  if(!$name) exit('Making Editor: You need to enter a singular name.');
-	  global $post;
-		$fieldName = $this->get_field_name($name, 'editor');
-	  //$fieldName = 'acpt_'.$this->formName.'_editor_'.$name;
-
-	  if($value = get_post_meta($post->ID, $fieldName, true))
-		  $content = $value;
-		else
-			$content = '';
-
-		$setup = $this->get_opts($label, array('labelTag' => 'span'), $fieldName, true);
-
-		echo '<div class="control-group">';
-		echo $setup['label'];
-	  wp_editor(
-	      $content,
-	      'wysisyg_'.$this->formName.'_'.$name,
-	      array_merge($opts,array('textarea_name' => $fieldName))
-	  );
-		echo $this->dev_message($fieldName);
-		echo '</div>';
-	}
-
-	/**
-	 * Form Image
-	 *
-	 * @param string $singular singular name is required
-	 * @param array $opts args override and extend
-	 */
-	function image($name, $opts=array(), $label = true) {
-		if(!$this->formName) exit('Making Form: You need to make the form first.');
-		if(!$name) exit('Making Input: You need to enter a singular name.');
-		global $post;
-
-		$type = 'image';
-		$fieldName = $this->get_field_name($name, $type);
-		$html = '';
-
-		$placeHolderImage = '';
-
-		// button
-		if(isset($opts['button'])) :
-			$button = $opts['button'];
-		else :
-			$button = "Insert Image";
-		endif;
-
-		// placeholder image
-		if($value = get_post_meta($post->ID, $fieldName, true)) :
-			$placeHolderImage = '<img class="uplaod-img" src="'.$value.'" />';
-		endif;
-
-		$html .= '<input type="button" class="button-primary upload-button" value="'.$button.'">';
-		$html .= '<div class="image-placeholder"><a class="remove-image">remove</a>' . $placeHolderImage . '</div>';
-
-		// $name, $opts, $classes, $fieldName, $label, $type
-		$input_fields = $this->get_text_form($name, $opts, "$type upload-url", $fieldName, $label, $type, $html);
-
-		echo apply_filters($fieldName . '_filter', $input_fields);
-	}
-
-	/**
-	 * Form File
-	 *
-	 * @param string $singular singular name is required
-	 * @param array $opts args override and extend
-	 */
-	function file($name, $opts=array(), $label = true) {
-		if(!$this->formName) exit('Making Form: You need to make the form first.');
-		if(!$name) exit('Making Input: You need to enter a singular name.');
-		global $post;
-
-		$type = 'file';
-		$fieldName = $this->get_field_name($name, $type);
-		$html = '';
-
-		// button
-		if(isset($opts['button'])) :
-			$button = $opts['button'];
-		else :
-			$button = "Insert File";
-		endif;
-
-		$html .= '<input type="button" class="button-primary upload-button" value="'.$button.'">';
-
-		// $name, $opts, $classes, $fieldName, $label, $type
-		$input_fields = $this->get_text_form($name, $opts, "$type upload-url", $fieldName, $label, $type, $html);
-
-		echo apply_filters($fieldName . '_filter', $input_fields);
-	}
-
-	/**
-	 * Google Maps.
-	 *
-	 * @param string $singular singular name is required
-	 * @param array $opts args override and extend
-	 */
-	function google_map($name, $opts=array(), $label = true) {
-		if(!$this->formName) exit('Making Form: You need to make the form first.');
-		if(!$name) exit('Making Input: You need to enter a singular name.');
-		global $post;
-
-		$type = 'googleMap';
-		$fieldName = $this->get_field_name($name, $type);
-		$html = '';
-
-		// set http
-		if (is_ssl()) {
-			$http = 'https://';
-		} else {
-			$http = 'http://';
-		}
-
-		// value
-		if($value = get_post_meta($post->ID, $fieldName, true)) :
-			$loc = urlencode($value);
-			$zoom = 15;
-		else :
-			$zoom = 1;
-			$loc = 'New+York,NY';
-		endif;
-
-		$html .= "<input type=\"hidden\" value=\"$loc\" name=\"{$fieldName}_encoded\" />";
-		$html .= '<p class="map"><img src="'.$http.'maps.googleapis.com/maps/api/staticmap?center='.$loc.'&zoom='.$zoom.'&size=1200x140&sensor=true&markers='.$loc.'" class="map-image" alt="Map Image" /></p>';
-
-		// $name, $opts, $classes, $fieldName, $label, $type
-		$input_fields = $this->get_text_form($name, $opts, "$type", $fieldName, $label, $type, $html);
-
-		echo apply_filters($fieldName . '_filter', $input_fields);
-	}
-
-	/**
-	 * Date.
-	 *
-	 * @param string $singular singular name is required
-	 * @param array $opts args override and extend
-	 */
-	function date($name, $opts=array(), $label = true) {
-		if(!$this->formName) exit('Making Form: You need to make the form first.');
-		if(!$name) exit('Making Input: You need to enter a singular name.');
-		global $post;
-
-		$type = 'date';
-		$fieldName = $this->get_field_name($name, $type);
-		$html = '';
-
-		// $name, $opts, $classes, $fieldName, $label, $type
-		$input_fields = $this->get_text_form($name, $opts, "$type date-picker", $fieldName, $label, $type, $html);
-
-		echo apply_filters($fieldName . '_filter', $input_fields);
+	function make_computer_name($name) {
+		$pattern = '/(\s+)/';
+		$replacement = '_';
+		$computerName = preg_replace($pattern,$replacement,strtolower(trim($name)));
+		return $computerName;
 	}
 
 }
