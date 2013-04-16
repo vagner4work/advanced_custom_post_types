@@ -32,14 +32,14 @@ function addThem() {
 
 function meta_custom() {
 	$form = new form('details', null);
-	$form->text('name', array('label' => 'Text Field'));
+	$form->text('text', array('label' => 'Text Field'));
 	$form->image('image', array('label' => 'Image Field', 'button' => 'Add Your Image'));
 	$form->file('file', array('label' => 'File Field', 'button' => 'Select a File'));
 	$form->google_map('address', array('label' => 'Address Field'));
 	$form->date('date', array('label' => 'Date Field', 'button' => 'Enter a Date'));
-	$form->textarea('textarea',array('label' => 'Textarea'));
-	$form->select('rooms', array('one', 'two', 'three'), array('label' => 'Select List'));
-	$form->select('rooms', array('One' => '1', 'Two' => '2', 'Three' => '3'), array('label' => 'Select List Key', 'select_key' =>  true));
-	$form->radio('baths', array('blue', 'green', 'red'), array('label' => 'Radio Buttons'));
-	$form->editor('baths', 'WYSIWYG Editor');
+	$form->textarea('textarea', array('label' => 'Textarea'));
+	$form->select('select', array('one', 'two', 'three'), array('label' => 'Select List'));
+	$form->select('select_key', array('One' => '1', 'Two' => '2', 'Three' => '3'), array('label' => 'Select List Key', 'select_key' =>  true));
+	$form->radio('radio', array('blue', 'green', 'red'), array('label' => 'Radio Buttons'));
+	$form->editor('editor', 'WYSIWYG Editor');
 }

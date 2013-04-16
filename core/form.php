@@ -440,7 +440,7 @@ class form {
 	}
 
 	function get_field_name($name, $type) {
-		return 'acpt_'.$this->formName.'_'.$type.'_'.$name;
+		return 'acpt_'.$this->formName.'_'.$name;
 	}
 
 	function get_opts($name, $opts, $fieldName, $label) {
