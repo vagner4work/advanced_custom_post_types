@@ -41,12 +41,7 @@ jQuery(document).ready(function($){
                 $(img).attr('src', fullUrl);
             }, 1000);
 
-
-
         });
-
-
-
 
 
     });

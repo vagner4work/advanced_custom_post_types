@@ -17,7 +17,6 @@ include('core/role.php');
 include('core/form.php');
 include('core/meta_box.php');
 
-
 // setup
 if(ACPT_MESSAGES) add_filter('post_updated_messages', 'acpt::set_messages' );
 add_action('save_post','acpt::save_form');

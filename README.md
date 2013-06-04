@@ -1,4 +1,4 @@
-Advanced Custom Post Types: 2.0
+Advanced Custom Post Types: 3.0
 ===
 
 This is a framework for creating not only custom post types, roles and taxonomies in WordPress but it will also give you the ability to rapidly create custom fields (post types only).

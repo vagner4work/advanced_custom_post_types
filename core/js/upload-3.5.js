@@ -18,7 +18,7 @@ jQuery(document).ready(function($) {
                 $(container).find('.image-id-hidden').val(attachment.id);
 
                 wp.media.editor.send.attachment = send_attachment_bkp;
-            }
+            };
 
             wp.media.editor.open();
 
