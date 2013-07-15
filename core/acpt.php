@@ -46,33 +46,37 @@ class acpt {
 	}
 
 	static function set_messages($messages) {
-		global $post, $post_ID;
-		$post_type = get_post_type( $post_ID );
+		global $post;
 
-		$obj = get_post_type_object($post_type);
-		$singular = $obj->labels->singular_name;
+		$pt = get_post_type( $post->ID );
 
-		if($obj->public == false) {
-			$link_view = '';
-			$link_pre = '';
-		} else {
-			$link_view = '<a href="%s">View '.strtolower($singular).'</a>';
-			$link_pre = '<a target="_blank" href="%s">Preview '.strtolower($singular).'</a>';
-		}
+		if($pt != 'attachment' && $pt != 'page' && $pt != 'post') :
 
-		$messages[$post_type] = array(
-		0 => '', // Unused. Messages start at index 1.
-		1 => sprintf( __($singular.' updated. ' . $link_view ), esc_url( get_permalink($post_ID) ) ),
-		2 => __('Custom field updated.'),
-		3 => __('Custom field deleted.'),
-		4 => __($singular.' updated.'),
-		5 => isset($_GET['revision']) ? sprintf( __($singular.' restored to revision from %s'), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
-		6 => sprintf( __($singular.' published. ' . $link_view ), esc_url( get_permalink($post_ID) ) ),
-		7 => __('Page saved.'),
-		8 => sprintf( __($singular.' submitted. ' . $link_pre ), esc_url( add_query_arg( 'preview', 'true', get_permalink($post_ID) ) ) ),
-		9 => sprintf( __($singular.' scheduled for: <strong>%1$s</strong>. ' . $link_pre ), date_i18n( __( 'M j, Y @ G:i' ), strtotime( $post->post_date ) ), esc_url( get_permalink($post_ID) ) ),
-		10 => sprintf( __($singular.' draft updated. ' . $link_pre ), esc_url( add_query_arg( 'preview', 'true', get_permalink($post_ID) ) ) ),
-		);
+			$obj = get_post_type_object($pt);
+			$singular = $obj->labels->singular_name;
+
+			if($obj->public == true) :
+				$view = sprintf( __('<a href="%s">View %s</a>'), esc_url( get_permalink($post->ID)), $singular);
+				$preview = sprintf( __('<a target="_blank" href="%s">Preview %s</a>'), esc_url( add_query_arg( 'preview', 'true', get_permalink($post->ID) ) ), $singular);
+			else :
+				$view = $preview = '';
+			endif;
+
+			$messages[$pt] = array(
+				1 => sprintf( __('%s updated. %s'), $singular , $view),
+				2 => __('Custom field updated.'),
+				3 => __('Custom field deleted.'),
+				4 => sprintf( __('%s updated.'), $singular),
+				5 => isset($_GET['revision']) ? sprintf( __('%s restored to revision from %s'), $singular, wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
+				6 => sprintf( __('%s published. %s'), $singular, $view ),
+				7 => sprintf( __('%s saved.'), $singular),
+				8 => sprintf( __('%s submitted. %s'), $singular, $preview ),
+				9 => sprintf( __('%s scheduled for: <strong>%1$s</strong>. %s'), $singular, date_i18n( 'M j, Y @ G:i', strtotime( $post->post_date ) ), $preview ),
+				10 => sprintf( __('%s draft updated. '), $singular),
+			);
+
+		endif;
+
 		return $messages;
 	}
 
