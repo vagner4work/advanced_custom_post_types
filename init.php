@@ -8,6 +8,21 @@ endif;
 // load config
 require_once('config.php');
 
+// advanced custom post types
+function acpt_meta($name = '', $fallBack = '', $theID = null) {
+    global $post;
+    empty($theID) ? $theID = $post->ID : true;
+    $data = get_post_meta($theID, $name, true);
+    empty($data) ? $data = $fallBack : true;
+    return $data;
+}
+
+function e_acpt_meta($name = '', $fallBack = '', $theID = null) {
+    $data = acpt_meta($name, $fallBack, $theID);
+    is_string($data) ? true : $data = 'Data need to be a string.';
+    echo $data;
+}
+
 // load classes
 require_once('core/acpt.php');
 include('core/validate.php');

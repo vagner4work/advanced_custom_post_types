@@ -283,7 +283,7 @@ class form {
 
 		$type = 'image';
 		$fieldName = $this->get_field_name($name, $type);
-		$html = '';
+    $valueID = $html = '';
 
 		if(empty($opts['readonly'])) $opts['readonly'] = true;
 
@@ -296,12 +296,14 @@ class form {
 			$button = "Insert Image";
 		endif;
 
-		// placeholder image
+		// placeholder image and image id value
 		if($value = get_post_meta($post->ID, $fieldName, true)) :
-			$placeHolderImage = '<img class="uplaod-img" src="'.$value.'" />';
+      $value = esc_url($value);
+			$placeHolderImage = '<img class="upload-img" src="'.$value.'" />';
+      $valueID = 'value="'.get_post_meta($post->ID, $fieldName."_id", true).'"';
 		endif;
 
-		$html .= $hidden = "<input type=\"hidden\" class=\"image-id-hidden\" name=\"{$fieldName}_id\">";
+		$html .= "<input type=\"hidden\" class=\"attachment-id-hidden\" name=\"{$fieldName}_id\" {$valueID}>";
 		$html .= '<input type="button" class="button-primary upload-button" value="'.$button.'">';
 		$html .= '<div class="image-placeholder"><a class="remove-image">remove</a>' . $placeHolderImage . '</div>';
 
@@ -324,7 +326,9 @@ class form {
 
 		$type = 'file';
 		$fieldName = $this->get_field_name($name, $type);
-		$html = '';
+    $valueID = $html = '';
+
+    if(empty($opts['readonly'])) $opts['readonly'] = true;
 
 		// button
 		if(isset($opts['button'])) :
@@ -333,7 +337,13 @@ class form {
 			$button = "Insert File";
 		endif;
 
-		$html .= '<input type="button" class="button-primary upload-button" value="'.$button.'">';
+    // placeholder image and image id value
+    if(get_post_meta($post->ID, $fieldName."_id", true)) :
+      $valueID = 'value="'.get_post_meta($post->ID, $fieldName."_id", true).'"';
+    endif;
+
+    $html .= "<input type=\"hidden\" class=\"attachment-id-hidden\" name=\"{$fieldName}_id\" {$valueID}>";
+		$html .= '<input type="button" class="button-primary upload-button" value="'.$button.'"> <span class="clear-attachment">clear file</span>';
 
 		// $name, $opts, $classes, $fieldName, $label, $type
 		$input_fields = $this->get_text_form($name, $opts, "$type upload-url", $fieldName, $label, $type, $html);

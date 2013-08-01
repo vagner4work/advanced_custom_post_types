@@ -71,7 +71,6 @@
   font-size: 13px;
   font-weight: bold;
   padding: 0;
-  margin: 0 0 3px;
   display: inline-block;
   vertical-align: text-bottom;
   margin: 0 0 1em;
@@ -79,7 +78,7 @@
 
 .dev_note {
   position: absolute;
-  top: 0px;
+  top: 0;
   right: 10px;
   color: #BBB;
   font-size: 10px;
@@ -111,7 +110,6 @@
 
 .image-placeholder img {
   display: block;
-  padding: 0;
   margin: 15px 0 0;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
   padding: 5px;
@@ -120,6 +118,18 @@
   float: left;
   clear: both;
   background: #fff;
+}
+
+.clear-attachment {
+  display: inline-block;
+  margin: 10px;
+  line-height: 24px;
+  color: #999;
+  cursor: pointer;
+}
+
+.clear-attachment:hover, .clear-attachment:active {
+  color: red;
 }
 
 .image-placeholder .remove-image {
