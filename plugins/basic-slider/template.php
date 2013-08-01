@@ -1,9 +1,9 @@
 <?php
 // list functions
 function list_slides($tax = false, $opts = array(), $settings = array()) {
-global $post;
-
 // get slides
+$width = $height = '';
+
 $args = array(
 'numberposts' => 10,
 'order'=> 'ASC',
@@ -17,7 +17,7 @@ $force = array(
 
 if(!is_array($opts)) $opts = array();
 if(is_string($tax) && isset($tax)) :
-$tax = array('group' => $tax);
+$tax = array('tax_query' => array( array('taxonomy' => 'kind', 'field' => 'slug', 'terms' => $tax ) ) );
 else :
 $tax = array();
 endif;
@@ -35,7 +35,6 @@ $settings = array_merge($setup, $settings);
 
 if(isset($settings['width'])) $width = " width=\"{$settings['width']}\" ";
 if(isset($settings['height'])) $height = " height=\"{$settings['height']}\" ";
-if(isset($settings['alt'])) $alt = ' alt="'.get_the_title().'" ';
 if(isset($settings['caption_classes'])) :
 $classCaption = $settings['caption_classes'];
 else :
@@ -49,20 +48,57 @@ $classes = '';
 endif;
 
 // query and template
-$slides = get_posts( $args ); ?>
+wp_reset_postdata();
+$slides = new WP_Query($args); ?>
 <ul class="<?php echo $classes; ?>">
-	<?php foreach ($slides as $post) :  setup_postdata($post); ?>
+<?php if ( $slides->have_posts() ) : while ( $slides->have_posts() ) : $slides->the_post(); ?>
     <li>
-        <img src="<?php echo get_post_meta($post->ID, "acpt_slide_image_image", true); ?>" <?php echo $width.$height.$alt; ?>>
+        <img src="<?php e_acpt_meta("acpt_slide_image"); ?>" <?php echo $width.$height ?> alt="<?php the_title(); ?>">
 
-			<?php if (get_post_meta($post->ID, "acpt_slide_select_showText", true) == 'Yes') : ?>
+			<?php if (acpt_meta("acpt_slide_showText") == 'Yes') : ?>
         <div class="<?php echo $classCaption; ?>">
-            <h2><?php echo get_post_meta($post->ID, "acpt_slide_text_headline", true); ?></h2>
-            <p><?php echo get_post_meta($post->ID, "acpt_slide_textarea_description", true); ?></p>
+            <h2><?php e_acpt_meta("acpt_slide_headline"); ?></h2>
+            <p><?php e_acpt_meta("acpt_slide_description"); ?></p>
         </div>
 			<?php endif; ?>
     </li>
-	<?php endforeach; ?>
+	<?php endwhile; endif; ?>
 </ul>
 <?php
+wp_reset_postdata();
+
 }
+
+// short code [acpt_slider]
+function acpt_slider_code( $attr ) {
+    $group = false;
+    $height = null;
+    $width = null;
+    $alt = null;
+    $caption_classes = null;
+    $classes = null;
+
+    extract( shortcode_atts( array(
+                'group' => false,
+                'height' => '350',
+                'width' => '940',
+                'alt' => true,
+                'caption_classes' => 'caption',
+                'classes' => 'slides'
+            ), $attr ) );
+
+    $settings = array(
+        'height' => $height,
+        'width' => $width,
+        'alt' => $alt,
+        'caption_classes' => $caption_classes,
+        'classes' => $classes);
+
+    ob_start();
+    list_slides($group, array(), $settings);
+    $output = ob_get_clean( );
+
+    return $output;
+}
+
+add_shortcode( 'acpt_slider', 'acpt_slider_code' );

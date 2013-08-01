@@ -65,3 +65,8 @@ $settings = array(
 - alt: defines if the alt attr should be used (slide title is always the alt)
 - caption_classes: sets the caption html classes
 - classes: sets the ul elements classess
+
+Short Code
+==
+
+[acpt_slider]

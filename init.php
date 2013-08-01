@@ -2,18 +2,20 @@
 // Include this file in functions.php or plugin
 global $wp_version;
 if($wp_version < '3.3' || $wp_version == null ): exit('You need the 3.3+ version of WordPress.');
-else: $acpt_version = '2.0';
+else: $acpt_version = '3.0';
 endif;
 
 // load config
 require_once('config.php');
 
-// advanced custom post types
+// getting the meta
 function acpt_meta($name = '', $fallBack = '', $theID = null) {
     global $post;
+    do_action('start_acpt_meta', $name, $fallBack, $theID);
     empty($theID) ? $theID = $post->ID : true;
     $data = get_post_meta($theID, $name, true);
     empty($data) ? $data = $fallBack : true;
+    do_action('end_acpt_meta', $data);
     return $data;
 }
 
