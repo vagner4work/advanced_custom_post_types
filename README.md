@@ -240,6 +240,14 @@ function meta_details() {
 }
 ```
 
+Output
+===
+To get data out of the forms API use the functions: e_acpt_meta('your_field_name') and acpt_meta('your_field_name').
+
+e_acpt_meta() will echo the data. The function acpt_meta() will simply get the data.
+
+To know what 'your_field_name' is turn on dev mode and view the fields. Or out put all of the post meta and it will be available from there. You can also you use get_post_meta() from WordPress if needed.
+
 Together: Post Type and Taxonomy
 ===
 
@@ -301,6 +309,17 @@ function meta_details() {
     $form->textarea('address');
 }
 ```
+
+Actions
+===
+
+- end_acpt_meta
+- start_acpt_meta
+
+Filters
+===
+
+- filter_{your_field_name} : This for the admin screens
 
 Contributors
 ===
