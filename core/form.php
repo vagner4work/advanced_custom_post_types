@@ -527,7 +527,7 @@ class form {
 	}
 
 	function dev_message($fieldName) {
-		if(DEV_MODE == true) return '<p class="dev_note">get_post_meta($post->ID, <span class="field_name">"' . $fieldName . '"</span>, true);</p>';
+		if(DEV_MODE == true) return "<input class=\"dev_note\" readonly value=\"acpt_meta('{$fieldName}');\" />";
 		else return '';
 	}
 
