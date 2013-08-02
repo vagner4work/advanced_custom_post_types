@@ -1,5 +1,5 @@
 Advanced Custom Post Types: 3.0
-===
+---
 
 This is a framework for creating not only custom post types, roles and taxonomies in WordPress but it will also give you the ability to rapidly create custom fields (post types only).
 
@@ -10,7 +10,7 @@ New to WordPress? Use Plugins!
 - http://wordpress.org/extend/plugins/custom-post-type-ui/
 
 Usage
-===
+---
 
 1) Use a php include to add the file init.php to your plugin or functions.php theme file. For more advanced users look at the code comments for help on what args are available. ACPT also comes with its own plugin system so you don't have to muck up your functions.php file and can import others work with ease.
 
@@ -27,7 +27,7 @@ define('DEV_MODE', true);
 ```
 
 Plugins System
-===
+---
 
 You do not need to use the plugin system for ACPT to work. However, you will need to disable it in the config file if you don't want it to run.
 
@@ -51,15 +51,12 @@ The name of your plugin is the folders name or the php files name.
 Plugins are loaded in this manner so you can decide how and when they are loaded. I'm sure I'll add more option in the future.
 
 Troubleshooting
-===
-
-Slug
 ---
 
 If your slugs are not working be sure you have flushed the permalink rules. To do this go to the permalinks and save the settings. No need to mod the .htaccess file if told.
 
 Making a Custom Post Type
-===
+---
 
 Advanced Users See: post_type.php
 
@@ -120,7 +117,7 @@ function makethem() {
 ```
 
 Making a Taxonomy
-===
+---
 
 Advanced Users See: tax.php
 
@@ -136,7 +133,7 @@ function makethem() {
 ```
 
 Roles
-===
+---
 
 Advanced Users See: role.php
 
@@ -166,7 +163,7 @@ function makethem() {
 ```
 
 Meta Boxes
-===
+---
 
 Advanced Users See: meta_box.php
 
@@ -209,7 +206,7 @@ function meta_details() {
 ```
 
 Forms
-===
+---
 
 Advanced Users See: form.php
 
@@ -241,7 +238,7 @@ function meta_details() {
 ```
 
 Output
-===
+---
 To get data out of the forms API use the functions: e_acpt_meta('your_field_name') and acpt_meta('your_field_name').
 
 e_acpt_meta() will echo the data. The function acpt_meta() will simply get the data.
@@ -249,7 +246,7 @@ e_acpt_meta() will echo the data. The function acpt_meta() will simply get the d
 To know what 'your_field_name' is turn on dev mode and view the fields. Or out put all of the post meta and it will be available from there. You can also you use get_post_meta() from WordPress if needed.
 
 Together: Post Type and Taxonomy
-===
+---
 
 Here is an example of how to work with Post Types and Taxonomies together.
 
@@ -274,7 +271,7 @@ function makethem() {
 ```
 
 Together: Post Type, Meta Box, Form and Taxonomy
-===
+---
 
 ```php
 include('acpt/init.php');
@@ -311,7 +308,7 @@ function meta_details() {
 ```
 
 Actions
-===
+---
 
 - start_acpt_meta
 - end_acpt_meta
@@ -319,12 +316,12 @@ Actions
 - end_acpt_save
 
 Filters
-===
+---
 
-- {your_field_name}_filter : This for the admin screens
-- acpt_save_filter: Meta data being saved.
+- {your_field_name}_filter : This for the admin screens. It filters the output of custom fields.
+- acpt_save_filter: Meta data being saved. Best used to validate and sanitize custom data.
 
 Contributors
-===
+---
 
 - Gina Guerrero https://twitter.com/mnemyx
