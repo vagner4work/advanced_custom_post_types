@@ -45,6 +45,7 @@ jQuery(document).ready(function($){
                 var fullUrl = prefix + mapBase + 'center=' + center + mapData + center;
                 //console.log(fullUrl);
                 $(img).attr('src', fullUrl);
+                $(input[1]).attr('value', center);
             }, 1000);
 
         });

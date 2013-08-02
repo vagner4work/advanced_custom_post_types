@@ -8,6 +8,23 @@ endif;
 // load config
 require_once('config.php');
 
+// load classes
+$lib = array(
+  'acpt',
+  'save',
+  'utility',
+  'validate',
+  'post_type',
+  'tax',
+  'role',
+  'form',
+  'meta_box'
+);
+
+foreach($lib as $value) :
+  require_once('core/class-'.$value.'.php');
+endforeach;
+
 // getting the meta
 function acpt_meta($name = '', $fallBack = '', $theID = null) {
     global $post;
@@ -25,20 +42,11 @@ function e_acpt_meta($name = '', $fallBack = '', $theID = null) {
     echo $data;
 }
 
-// load classes
-require_once('core/acpt.php');
-include('core/validate.php');
-include('core/post_type.php');
-include('core/tax.php');
-include('core/role.php');
-include('core/form.php');
-include('core/meta_box.php');
-
 // setup
-if(ACPT_MESSAGES) add_filter('post_updated_messages', 'acpt::set_messages' );
-add_action('save_post','acpt::save_form');
-if(ACPT_STYLES) add_action('admin_init', 'acpt::apply_css');
-if( is_admin() ) add_action('admin_enqueue_scripts', 'acpt::upload_scripts');
+if(ACPT_MESSAGES) add_filter('post_updated_messages', 'utility::set_messages' );
+add_action('save_post','save::save_post_fields');
+if(ACPT_STYLES) add_action('admin_init', 'utility::apply_css');
+if( is_admin() ) add_action('admin_enqueue_scripts', 'utility::upload_scripts');
 
 // load plugins
 if(ACPT_LOAD_PLUGINS == true) :
