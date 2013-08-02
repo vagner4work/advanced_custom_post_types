@@ -322,8 +322,3 @@ Filters
 
 - {your_field_name}_filter : This for the admin screens. It filters the output of custom fields.
 - acpt_save_filter: Meta data being saved. Best used to validate and sanitize custom data.
-
-Contributors
----
-
-- Gina Guerrero https://twitter.com/mnemyx
