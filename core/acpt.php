@@ -113,7 +113,7 @@ class acpt {
 	static function upload_scripts() {
 
     wp_enqueue_script('fields', ACPT_LOCATION .'/'.ACPT_FOLDER_NAME.'/core/js/fields.js', array('jquery'));
-		wp_enqueue_script( 'jquery-ui-datepicker-acpt', array( 'jquery' ) );
+		wp_enqueue_script( 'jquery-ui-datepicker', array( 'jquery' ), '1.0', true );
 
     wp_enqueue_style('jquery-ui-acpt', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css');
 
