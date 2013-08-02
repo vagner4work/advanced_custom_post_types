@@ -7,7 +7,13 @@
  */
 jQuery(document).ready(function($){
 
-    $('.date-picker').datepicker();
+    $('.date-picker').each(function(){
+        $(this).datepicker();
+    });
+
+    $('.color-picker').each(function(){
+        $(this).wpColorPicker();
+    });
 
     function mapIt(str) {
         return encodeURIComponent(str.toString());

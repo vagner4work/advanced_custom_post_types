@@ -118,6 +118,26 @@ class form {
 		echo apply_filters($fieldName . '_filter', $input_fields);
 	}
 
+    /**
+     * Form Color.
+     *
+     * @param string $singular singular name is required
+     * @param array $opts args override and extend
+     */
+    function color($name, $opts=array(), $label = true) {
+        if(!$this->formName) exit('Making Form: You need to make the form first.');
+        if(!$name) exit('Making Input: You need to enter a singular name.');
+
+        $type = 'color';
+        $fieldName = $this->get_field_name($name, $type);
+        $html = '';
+
+        // $name, $opts, $classes, $fieldName, $label, $type
+        $input_fields = $this->get_text_form($name, $opts, "$type color-picker", $fieldName, $label, $type, $html);
+
+        echo apply_filters($fieldName . '_filter', $input_fields);
+    }
+
 	/**
 	 * Form Textarea.
 	 *

@@ -222,6 +222,7 @@ function meta_details() {
 	$form = new form('details', null);
 
 	$form->text('name', array('label' => 'Text Field'));
+	$form->color('color', array('label' => 'Color Field'));
 
 	// With images and files a second hidden field is made
 	// containing the the ID. As: {your_field_name}_id

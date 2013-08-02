@@ -33,6 +33,7 @@ function addThem() {
 function meta_custom() {
 	$form = new form('details', null);
 	$form->text('text', array('label' => 'Text Field'));
+  $form->color('color', array('label' => 'Color Field'));
 	$form->image('image', array('label' => 'Image Field', 'button' => 'Add Your Image'));
 	$form->file('file', array('label' => 'File Field', 'button' => 'Select a File'));
 	$form->google_map('address', array('label' => 'Address Field'));
