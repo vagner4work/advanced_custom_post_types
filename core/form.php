@@ -209,7 +209,7 @@ class form {
 
 		// name
 		if ( is_string($fieldName) ) :
-			$nameAttr = 'name="'.$fieldName.'"';
+			$nameAttr = 'name="acpt['.$fieldName.']"';
 		endif;
 
 		// get options HTML
@@ -264,7 +264,7 @@ class form {
 	  wp_editor(
 	      $content,
 	      'wysisyg_'.$this->formName.'_'.$name,
-	      array_merge($opts,array('textarea_name' => $fieldName))
+	      array_merge($opts,array('textarea_name' => 'acpt['.$fieldName.']'))
 	  );
 		echo $this->dev_message($fieldName);
 		echo '</div>';
@@ -303,7 +303,7 @@ class form {
       $valueID = 'value="'.get_post_meta($post->ID, $fieldName."_id", true).'"';
 		endif;
 
-		$html .= "<input type=\"hidden\" class=\"attachment-id-hidden\" name=\"{$fieldName}_id\" {$valueID}>";
+		$html .= "<input type=\"hidden\" class=\"attachment-id-hidden\" name=\"acpt[{$fieldName}_id]\" {$valueID}>";
 		$html .= '<input type="button" class="button-primary upload-button" value="'.$button.'">';
 		$html .= '<div class="image-placeholder"><a class="remove-image">remove</a>' . $placeHolderImage . '</div>';
 
@@ -342,7 +342,7 @@ class form {
       $valueID = 'value="'.get_post_meta($post->ID, $fieldName."_id", true).'"';
     endif;
 
-    $html .= "<input type=\"hidden\" class=\"attachment-id-hidden\" name=\"{$fieldName}_id\" {$valueID}>";
+    $html .= "<input type=\"hidden\" class=\"attachment-id-hidden\" name=\"acpt[{$fieldName}_id]\" {$valueID}>";
 		$html .= '<input type="button" class="button-primary upload-button" value="'.$button.'"> <span class="clear-attachment">clear file</span>';
 
 		// $name, $opts, $classes, $fieldName, $label, $type
@@ -382,7 +382,7 @@ class form {
 			$loc = 'New+York,NY';
 		endif;
 
-		$html .= "<input type=\"hidden\" value=\"$loc\" name=\"{$fieldName}_encoded\" />";
+		$html .= "<input type=\"hidden\" value=\"$loc\" name=\"acpt[{$fieldName}_encoded]\" />";
 		$html .= '<p class="map"><img src="'.$http.'maps.googleapis.com/maps/api/staticmap?center='.$loc.'&zoom='.$zoom.'&size=1200x140&sensor=true&markers='.$loc.'" class="map-image" alt="Map Image" /></p>';
 
 		// $name, $opts, $classes, $fieldName, $label, $type
@@ -415,42 +415,8 @@ class form {
 	/* Helper Functions
 	--------------------------------------------------------------------------- */
 
-	function get_validate_field($validate, $fieldName) {
-		if( isset($validate)) {
-			switch($validate) {
-				case 'text' :
-					$validate = 'text';
-					break;
-				case 'date' :
-					$validate = 'date';
-					break;
-				case 'url' :
-					$validate = 'url';
-					break;
-				case 'img' :
-					$validate = 'img';
-					break;
-				case 'number' :
-					$validate = 'number';
-					break;
-				default :
-					$validate = '';
-			}
-		}
-
-		return "<input type=\"hidden\" name=\"validate_{$$fieldName}\" value=\"{$validate}\" />";
-	}
-
-	function get_required_field($required, $fieldName) {
-		if(is_bool($required) && $required == true) {
-			return "<input type=\"hidden\" name=\"required_{$$fieldName}\" value=\"{$required}\" />";
-		} else {
-			return '';
-		}
-	}
-
 	function get_field_name($name, $type) {
-		return 'acpt_'.$this->formName.'_'.$name;
+		return $this->formName.'_'.$name;
 	}
 
 	function get_opts($name, $opts, $fieldName, $label) {
@@ -482,10 +448,10 @@ class form {
 
 		// name and id
 		if ( isset($fieldName) ) {
-			$setup['nameAttr'] = 'name="'.$fieldName.'"';
+			$setup['nameAttr'] = 'name="acpt['.$fieldName.']"';
 			$setup['attr'] .= ' '. $setup['nameAttr'];
 
-			$setup['id'] = 'id="'.$fieldName.'"';
+			$setup['id'] = 'id="acpt_'.$fieldName.'"';
 			$setup['attr'] .= ' '. $setup['id'];
 		}
 
@@ -542,26 +508,12 @@ class form {
 			$value = 'value="'.$value.'"';
 		endif;
 
-		// required
-		if(isset($opts['required'])) {
-			$required = $this->get_required_field($opts['required'], $fieldName);
-		} else {
-			$required = '';
-		}
-
-		// validate
-		if(isset($opts['validate'])) {
-			$validate = $this->get_validate_field($opts['validate'], $fieldName);
-		} else {
-			$validate = '';
-		}
-
-		$classes = $classes . ' ' . $fieldName . ' ' . $setup['class'];
+		$classes = $classes . '  acpt_' . $fieldName . ' ' . $setup['class'];
 
 		$field = "<input type=\"text\" class=\"{$classes}\" {$setup['attr']} $value />";
 		$dev_note = $this->dev_message($fieldName);
 
-		return $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$html.$required.$validate.$dev_note.$setup['help'].$setup['afterField'];
+		return $setup['beforeLabel'].$setup['label'].$setup['afterLabel'].$field.$html.$dev_note.$setup['help'].$setup['afterField'];
 	}
 
 	function make_computer_name($name) {

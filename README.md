@@ -313,13 +313,16 @@ function meta_details() {
 Actions
 ===
 
-- end_acpt_meta
 - start_acpt_meta
+- end_acpt_meta
+- start_acpt_save
+- end_acpt_save
 
 Filters
 ===
 
-- filter_{your_field_name} : This for the admin screens
+- {your_field_name}_filter : This for the admin screens
+- acpt_save_filter: Meta data being saved.
 
 Contributors
 ===

@@ -81,62 +81,28 @@ class acpt {
 	}
 
 	static function save_form($postID) {
-		if(!empty($_POST['save_acpt']) && check_admin_referer('nonce_actp_nonce_action','nonce_acpt_nonce_field')) :
+		if(isset($_POST['save_acpt']) && check_admin_referer('nonce_actp_nonce_action','nonce_acpt_nonce_field')) :
 		global $post;
+    do_action('start_acpt_save');
+    $metaData = apply_filters('acpt_save_filter', $_POST['acpt']);
 
 		// called after a post or page is saved
 		if($parent_id = wp_is_post_revision($postID)) $postID = $parent_id;
-		// Loop through custom fields
-		foreach($_POST as $cf_name => $cf_data) {
-			// only new meta
-			if( preg_match('/^acpt_.*/' , $cf_name) ) { // change to your prefix
-				// validate data from custom fields
-				$cf_data = trim($_POST[$cf_name]);
-				$cf_data = acpt::validate($cf_name, $cf_data);
+		foreach($metaData as $key => $value) :
 
-				$cf_meta = get_post_meta($postID, $cf_name, true);
-				if ($cf_data) { // add and update
-					if(!$cf_meta) { add_post_meta($postID, $cf_name, $cf_data); }
-					elseif($cf_data != $cf_meta) { update_post_meta($postID, $cf_name, $cf_data); }
-				} // delete
-				elseif($cf_data == "" && isset($cf_meta)) { delete_post_meta($postID, $cf_name); }
-			}
-		} // end foreach
+				$value = trim($value);
+				$current_meta = get_post_meta($postID, $key, true);
+
+				if ($value && !$current_meta || $value != $current_meta ) :
+            update_post_meta($postID, $key, $value);
+				elseif( empty($value) && isset($current_meta)) :
+            delete_post_meta($postID, $key);
+        endif;
+
+		endforeach;
+
+    do_action('end_acpt_save');
 		endif; // end nonce
-	}
-
-	/*
-	 * Validate Types
-	 *
-	 * 0 -> sql
-	 * 1 -> text
-	 * 2 -> date
-	 * 3 -> url
-	 * 4 -> img
-	 * default - > none
-	 * */
-	static function validate($key, $value) {
-
-		if( preg_match('/^acpt_v0.*/' , $key) ) {
-			$value = $value;
-		}
-		else if( preg_match('/^acpt_v1.*/' , $key) ) {
-			$value = sanitize_text_field($value);
-		}
-		else if( preg_match('/^acpt_v2.*/' , $key) ) {
-			$html = force_balance_tags($value);
-			$value = $html;
-		}
-		else if( preg_match('/^acpt_v3.*/' , $key) ) {
-			$value = esc_url($value);
-		}
-		else if( preg_match('/^acpt_v4.*/' , $key) ) {
-			$value = esc_url($value);
-		}
-		else {
-			$value = $value;
-		}
-		return $value;
 	}
 
 	static function apply_css() {
@@ -146,18 +112,14 @@ class acpt {
 
 	static function upload_scripts() {
 
-		wp_register_script('fields', ACPT_LOCATION .'/'.ACPT_FOLDER_NAME.'/core/js/fields.js', array('jquery'));
-		wp_enqueue_script('fields');
-
+    wp_enqueue_script('fields', ACPT_LOCATION .'/'.ACPT_FOLDER_NAME.'/core/js/fields.js', array('jquery'));
 		wp_enqueue_script( 'jquery-ui-datepicker', array( 'jquery' ) );
 
-		wp_register_style('jquery-ui', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css');
-		wp_enqueue_style( 'jquery-ui' );
+    wp_enqueue_style('jquery-ui', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css');
 
 		if(function_exists( 'wp_enqueue_media' )){
 		    wp_enqueue_media();
-		    wp_register_script('upload', ACPT_LOCATION .'/'.ACPT_FOLDER_NAME.'/core/js/upload-3.5.js', array('jquery'));
-				wp_enqueue_script('upload');
+        wp_enqueue_script('upload', ACPT_LOCATION .'/'.ACPT_FOLDER_NAME.'/core/js/upload-3.5.js', array('jquery'));
 				wp_enqueue_script('plupload');
 				wp_enqueue_script('media-upload');
 				wp_enqueue_style('thickbox');
@@ -168,8 +130,7 @@ class acpt {
 			wp_enqueue_script('media-upload');
 			wp_enqueue_style('thickbox');
 			wp_enqueue_script('thickbox');
-			wp_register_script('upload', ACPT_LOCATION .'/'.ACPT_FOLDER_NAME.'/core/js/upload.js', array('jquery','media-upload','thickbox'));
-			wp_enqueue_script('upload');
+      wp_enqueue_script('upload', ACPT_LOCATION .'/'.ACPT_FOLDER_NAME.'/core/js/upload.js', array('jquery','media-upload','thickbox'));
 		}
 	}
 
