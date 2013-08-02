@@ -253,6 +253,42 @@ e_acpt_meta() will echo the data. The function acpt_meta() will simply get the d
 
 To know what 'your_field_name' is turn on dev mode and view the fields. Or out put all of the post meta and it will be available from there. You can also you use get_post_meta() from WordPress if needed.
 
+Form fields are now a combination of the form name and the form field name. They no longer begin with acpt_.
+
+For example the text field would be 'slide_title'.
+
+```php
+// example of a meta box
+add_action( 'add_meta_boxes', 'acpt_custom_meta' );
+
+function acpt_custom_meta() {
+new meta_box('slide_options');
+}
+
+// form api example, input names are much shorter now
+function meta_slide_options() {
+$form = new form('slide', null);
+$form->text('title'); // input attr name will be 'acpt[slide_title]'
+$form->text('desc'); // input attr name will be 'acpt[slide_desc]'
+}
+```
+
+Saving now includes a filter for data exclusive to ACPT fields. Filtering can be done as follows:
+
+```php
+add_filter('acpt_save_filter', 'my_custom_function');
+
+function my_custom_function($acpt_data) {
+// your code here: validation and sanitization for example
+// you access the data as follows
+// $acpt_data[{formName_fieldName}]
+
+$acpt_data['slide_title'] = esc_html($acpt_data['slide_title']);
+
+return $acpt_data;
+}
+```
+
 Together: Post Type and Taxonomy
 ---
 
