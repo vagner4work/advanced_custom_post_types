@@ -26,6 +26,8 @@ For custom settings see the config.php file. Set DEV_MODE to true for forms API 
 define('DEV_MODE', true);
 ```
 
+3) Set define('ACPT_FOLDER_NAME', 'acpt') if you are using another folder structure. For example, define('ACPT_FOLDER_NAME', 'inc/acpt') if you have acpt in a folder called inc.
+
 Plugins System
 ---
 

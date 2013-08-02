@@ -44,11 +44,12 @@ if( is_admin() ) add_action('admin_enqueue_scripts', 'acpt::upload_scripts');
 if(ACPT_LOAD_PLUGINS == true) :
 	foreach($acptPlugins as $plugin) {
 		$pluginFile = '';
-		if (file_exists(ACPT_FILE_PATH . '/acpt/plugins/' . $plugin . '/index.php')) {
-			$pluginFile = 'plugins/' . $plugin . '/index.php';
+      $pluginsFolder = ACPT_FILE_PATH.'/'.ACPT_FOLDER_NAME.'/plugins/';
+		if (file_exists($pluginsFolder . $plugin . '/index.php')) {
+			$pluginFile = $plugin . '/index.php';
 		} else {
-			$pluginFile = 'plugins/' . $plugin . '.php';
+			$pluginFile =  $plugin . '.php';
 		}
-		include_once($pluginFile);
+		include_once($pluginsFolder.$pluginFile);
 	}
 endif;
