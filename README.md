@@ -222,8 +222,13 @@ function meta_details() {
 	$form = new form('details', null);
 
 	$form->text('name', array('label' => 'Text Field'));
+
+	// With images and files a second hidden field is made
+	// containing the the ID. As: {your_field_name}_id
 	$form->image('image', array('label' => 'Image Field'));
 	$form->file('file', array('label' => 'File Field'));
+
+
 	$form->textarea('address',array('label' => 'Textarea'));
 	$form->select('rooms', array('one', 'two', 'three'), array('label' => 'Select List'));
 	$form->radio('baths', array('blue', 'green', 'red'), array('label' => 'Radio Buttons'));
