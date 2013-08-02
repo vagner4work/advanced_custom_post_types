@@ -53,12 +53,12 @@ $slides = new WP_Query($args); ?>
 <ul class="<?php echo $classes; ?>">
 <?php if ( $slides->have_posts() ) : while ( $slides->have_posts() ) : $slides->the_post(); ?>
     <li>
-        <img src="<?php e_acpt_meta("acpt_slide_image"); ?>" <?php echo $width.$height ?> alt="<?php the_title(); ?>">
+        <img src="<?php e_acpt_meta("slide_image"); ?>" <?php echo $width.$height ?> alt="<?php the_title(); ?>">
 
-			<?php if (acpt_meta("acpt_slide_showText") == 'Yes') : ?>
+			<?php if (acpt_meta("slide_showText") == 'Yes') : ?>
         <div class="<?php echo $classCaption; ?>">
-            <h2><?php e_acpt_meta("acpt_slide_headline"); ?></h2>
-            <p><?php e_acpt_meta("acpt_slide_description"); ?></p>
+            <h2><?php e_acpt_meta("slide_headline"); ?></h2>
+            <p><?php e_acpt_meta("slide_description"); ?></p>
         </div>
 			<?php endif; ?>
     </li>
