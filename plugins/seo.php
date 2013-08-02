@@ -1,7 +1,7 @@
 <?php
 if( !defined('WPSEO_URL') && !defined('AIOSEOP_VERSION') ) {
 	add_action( 'add_meta_boxes', 'acpt_seo_meta' );
-	add_filter( 'wp_title', 'acpt_seo_title' );
+	add_filter( 'wp_title', 'acpt_seo_title', 100 );
 	add_action( 'wp_head' , 'acpt_seo_description');
 }
 
@@ -16,22 +16,20 @@ function meta_acpt_seo() {
 	$form->textarea('description', array('label' => 'Description'));
 }
 
-function acpt_seo_title( $title ) {
-	global $post;
+function acpt_seo_title( $title, $sep = '', $other = '' ) {
+    global $paged, $page;
 
-	$newTitle = get_post_meta($post->ID, 'acpt_acpt_seo_text_title', true);
+    $newTitle = acpt_meta('acpt_seo_title');
 
-	if ( empty($newTitle) ) :
-		$newTitle = $title;
-	else :
-		$newTitle = ' ' . $newTitle . ' ' ;
-	endif;
+    if ( isset($newTitle) || is_feed() || is_single() || is_page() || is_singular() )
+        return $newTitle;
+    else
+        return $title;
 
-	return $newTitle;
 }
 
 function acpt_seo_description() {
 	global $post;
-	$description = get_post_meta($post->ID, "acpt_acpt_seo_textarea_description", true);
+	$description = acpt_meta('acpt_seo_description');;
 	if( !empty( $description ) ) { echo "\t<meta name=\"Description\" content=\"$description\" />\n"; }
 }
