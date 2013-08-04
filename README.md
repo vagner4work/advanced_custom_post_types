@@ -62,6 +62,8 @@ Making a Custom Post Type
 
 Advanced Users See: post_type.php
 
+Class access function: acpt_post_type()
+
 Making post types with ACPT is fast and easy. The post_type class takes up to 4 arguments (only the first two are required). First the singular name and then the plural name of your post type (makes these lowercase). The next is for capabilities. If you don’t know how capabilities work set this to false and everything should work expected (the default, false, is the same as posts capabilities). Set capabilities to true to create custom capabilities using the post types name (see roles for advanced usage). Last, you have the settings argument. This is used if you want to change the default settings or override them. Use the settings argument the same as you would for creating post types using Wordpress building registration method.
 
 Icons
@@ -110,7 +112,7 @@ function makethem() {
         'hierarchical' => true,
     );
 
-    $books = new acpt_post_type('book','books', false,  $args );
+    $books = acpt_post_type('book','books', false,  $args );
 
     // add icon to post type
     $books->icon('notebook');
@@ -123,6 +125,8 @@ Making a Taxonomy
 
 Advanced Users See: tax.php
 
+Class access function: acpt_tax()
+
 Making taxonomies with ACPT is fast and easy. The tax class takes up to 6 arguments (only the first 2 are required). First the singular name and then the plural name of your taxonomy (makes these lowercase). Third, you list have post types in an array (you can also set this in the post type itself, I recommend this way). Fourth, hierarchy. Set hierarchy to true if you want to allow the taxonomy to have descendants (the default, false). The last is for capabilities. If you don’t know how capabilities work set this to false and everything should work expected (the default, false). Set capabilities to true to create custom capabilities using the taxonomies name (see roles for advanced usage). Last, you have the settings argument. This is used if you want to change the default settings or override them. Use the settings argument the same as you would for registering taxonomies using Wordpress building registration method.
 
 ```php
@@ -130,7 +134,7 @@ include('acpt/init.php');
 
 add_action('init', 'makethem');
 function makethem() {
-    $colors = new acpt_tax('color','colors', null, false );
+    $colors = acpt_tax('color','colors', null, false );
 }
 ```
 
@@ -138,6 +142,8 @@ Roles
 ---
 
 Advanced Users See: role.php
+
+Class access function: acpt_cole()
 
 Roles are the most powerful part of ACPT. You can make(), update() and remove() with the role class. When working with roles in ACPT you need to understand how roles work in Wordpress to keep your site installation working smoothly. Unlike Taxonomies and Post Types, when roles are made they are added to the DB. This means you only need to run role code once for it to work. It is best to run this code on theme switching or plugin activation. You can get away with running the code once other ways but this is a common way to do so without a UI.
 
@@ -158,7 +164,7 @@ You can set the first argument with capital letters. Formatted name is suggested
 include('acpt/init.php');
 add_action('init', 'makethem');
 function makethem() {
-    $r = new acpt_role();
+    $r = acpt_role();
     $r->make('Library Manager', array('read'), array('book', 'books'));
     $r->update('Administrator', null, null, array('book','books'));
 }
@@ -168,6 +174,8 @@ Meta Boxes
 ---
 
 Advanced Users See: meta_box.php
+
+Class access function: acpt_meta_box()
 
 You can now add Meta Boxes with ACPT. The meta_box class takes up to 3 arguments (only the first is required). First the name of the meta box. Second, the post types you want to use. Last any settings you want to override (priority for example). You can add custom meta boxes to you post types by adding the name of the meta box to the post types supports arg or by applying the post type within the make function. To add HTML/PHP to the meta box create a function beginning with "meta_" and append the name of the field to the end of it.
 
@@ -189,20 +197,20 @@ function makeThem() {
         'hierarchical' => true,
     );
 
-    $courses = new acpt_post_type('course','courses', false, $argsCourse );
-    $books = new acpt_post_type('book','books', false, $argsBook );
+    $courses = acpt_post_type('course','courses', false, $argsCourse );
+    $books = acpt_post_type('book','books', false, $argsBook );
 
 }
 
 add_action( 'add_meta_boxes', 'addThem' );
 
 function addThem() {
-    new acpt_meta_box('Details', array('book'));
+    acpt_meta_box('Details', array('book'));
 }
 
 // Note: forms API explained below
 function meta_details() {
-    $form = new acpt_form('details');
+    $form = acpt_form('details');
     $form->text('name');
 }
 ```
@@ -212,6 +220,8 @@ Forms
 
 Advanced Users See: form.php
 
+Class access function: acpt_form()
+
 You can now make Forms with ACPT. Please see the code for how to use this section. You will need to modify for best results. Plus I don't have time to document it right now. The meta box section has the code example you need.
 
 Forms API also come with a dev mode, see config.php.
@@ -219,7 +229,7 @@ Forms API also come with a dev mode, see config.php.
 ```php
 function meta_details() {
     // name, options
-	$form = new acpt_form('details', null);
+	$form = acpt_form('details', null);
 
 	$form->text('name', array('label' => 'Text Field'));
 	$form->color('color', array('label' => 'Color Field'));
@@ -262,12 +272,12 @@ For example the text field would be 'slide_title'.
 add_action( 'add_meta_boxes', 'acpt_custom_meta' );
 
 function acpt_custom_meta() {
-new acpt_meta_box('slide_options');
+acpt_meta_box('slide_options');
 }
 
 // form api example, input names are much shorter now
 function meta_slide_options() {
-$form = new acpt_form('slide', null);
+$form = acpt_form('slide', null);
 $form->text('title'); // input attr name will be 'acpt[slide_title]'
 $form->text('desc'); // input attr name will be 'acpt[slide_desc]'
 }
@@ -305,11 +315,11 @@ function makethem() {
         'hierarchical' => true,
     );
 
-    $books = new post_type('book','books', false,  $args );
-    $courses = new post_type('course','courses', false,  $args );
+    $books = acpt_post_type('book','books', false,  $args );
+    $courses = acpt_post_type('course','courses', false,  $args );
 
-    new tax('color', 'colors', true,  array($books));
-    new tax('author', 'authors', true, array($books, $courses) );
+    acpt_tax('color', 'colors', true,  array($books));
+    acpt_tax('author', 'authors', true, array($books, $courses) );
 
 }
 ```
@@ -328,24 +338,24 @@ function makeThem() {
         'hierarchical' => true,
     );
 
-    $books = new post_type('book','books', false,  $args );
-    $courses = new post_type('course','courses', false,  $args );
+    $books = acpt_post_type('book','books', false,  $args );
+    $courses = acpt_post_type('course','courses', false,  $args );
 
     $books->icon('notebook');
 
-    new tax('color', 'colors', 'book', true);
-    new tax('author', 'authors', array($books, $courses), true );
+    acpt_tax('color', 'colors', 'book', true);
+    acpt_tax('author', 'authors', array($books, $courses), true );
 
 }
 
 add_action( 'add_meta_boxes', 'addThem' );
 
 function addThem() {
-    new meta_box('Details', array('book', 'course'));
+    acpt_meta_box('Details', array('book', 'course'));
 }
 
 function meta_details() {
-    $form = new form('details', null);
+    $form = acpt_form('details', null);
     $form->text('name');
     $form->textarea('address');
 }
@@ -369,4 +379,5 @@ Filters
 Change Log
 ---
 
+- v3.0.2 - code cleanup
 - v3.0 - tagging now being used for versions

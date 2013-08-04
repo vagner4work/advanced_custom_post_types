@@ -25,7 +25,7 @@ foreach($lib as $value) :
   require_once('core/class-'.$value.'.php');
 endforeach;
 
-require_once('core/depreciated.php');
+if($useDepreciated) { require_once('core/depreciated.php'); }
 
 // getting the meta
 function acpt_meta($name = '', $fallBack = '', $theID = null) {
