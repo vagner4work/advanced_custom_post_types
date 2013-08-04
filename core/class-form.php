@@ -3,9 +3,11 @@
 class acpt_form extends acpt {
 
 public $name = null;
+public $action = null;
+public $method = null;
 
 function __construct($name, $opts=array()) {
-  $this->make($name, $opts);
+  return $this->make($name, $opts);
 }
 
 /**
@@ -18,17 +20,22 @@ function make($name, $opts=array()) {
     $this->test_for($name, 'Making Form: You need to enter a singular name.');
 
     if(isset($opts['method'])) :
+        $this->method = $opts['method'];
         $field = '<form id="'.$name.'" ';
         $field .= isset($opts['method']) ? 'method="'.$opts['method'].'" ' : 'method="post" ';
         $field .= isset($opts['action']) ? 'action="'.$opts['action'].'" ' : 'action="'.$name.'" ';
         $field .= '>';
     endif;
 
+    if(isset($opts['action'])) $this->method = $opts['action'];
+
     $this->name = $name;
 
     if(isset($field)) echo $field;
     wp_nonce_field('nonce_actp_nonce_action','nonce_acpt_nonce_field');
     echo '<input type="hidden" name="save_acpt" value="true" />';
+
+    return $this;
 }
 
 /**
@@ -578,10 +585,14 @@ protected function get_color_form($args) {
 protected function get_field_value($field) {
   global $post;
 
-  if(isset($post->ID)) { $value = get_post_meta($post->ID, $field, true); }
+  if(isset($post->ID)) { $value = acpt_meta($field); }
   else { $value = null; }
 
   return $value;
 }
 
+}
+
+function acpt_form($name, $opts=array()) {
+  return new acpt_form($name, $opts=array());
 }

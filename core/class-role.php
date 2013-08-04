@@ -8,12 +8,18 @@
  * there is an arg shortcut for custom post type capabilities.
  **/
 class acpt_role extends acpt {
+
+  function __construct($role = null, $settings = array(), $postType = null) {
+    return $this->make($role, $settings, $postType);
+  }
+
 	/**
 	 * Make Role. Do not use before init. Use before making a post type.
 	 * 
 	 * @param string $role formatted role is suggested. role is required
 	 * @param array $settings args override and extend
 	 * @param array $postType args singular then plueral post type names
+   * @return $this
 	 */
 	function make($role = null, $settings = array(), $postType = null) {
 		if(!$role) exit('Making Role: You need to enter a role name.');
@@ -40,6 +46,8 @@ class acpt_role extends acpt {
 		elseif ($postType != null) :
 			exit('Post types must be an array with two values. Singular name and plural.');
 		endif;
+
+    return $this;
 	}
 	/**
 	 * Update Role. Do not use before init. Use before making a post type.
@@ -48,6 +56,7 @@ class acpt_role extends acpt {
 	 * @param array $addCap args override and extend
 	 * @param array $removeCap args override and remove
 	 * @param array $postType args singular then plueral post type names
+   * @return $this
 	 */
 	function update($role = null, $addCap = null, $removeCap = null, $postType = null) {
 		if(!is_string($role)) exit('Updating Role: You need to enter a role name.');
@@ -87,18 +96,26 @@ class acpt_role extends acpt {
 		elseif ($postType != null) :
 			exit('Post types must be an array with two values. Singular name and plural.');
 		endif;
+
+    return $this;
 	}
 	/**
 	 * Remove Role. Do not use before init. Use before making a post type.
 	 * 
-	 * @param string $name name is required
+	 * @param string $role name is required
+   * @return $this
 	 */
 	function remove($role = null) {
 		if(!is_string($role)) exit('Removing Role: You need to enter a role name.');
 
 		$computerName = $this->make_computer_name($role);
 		remove_role( $computerName );
+
+    return $this;
 	}
-	function meta() {
-	}
+
+}
+
+function acpt_role($role = null, $settings = array(), $postType = null) {
+  return new acpt_role($role, $settings, $postType);
 }

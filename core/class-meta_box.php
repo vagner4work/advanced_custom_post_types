@@ -1,5 +1,4 @@
 <?php
-if(isset($acpt_version)) :
 /**
   * Meta Box
   *
@@ -27,7 +26,7 @@ class acpt_meta_box extends acpt {
 	public $label = null;
 
 	function __construct($name=null, $post_type = null, $settings=array()) {
-		if($name) $this->make($name, $post_type, $settings);
+		return $this->make($name, $post_type, $settings);
 	}
 	
 	function make($name=null, $post_type = null, $settings=array('context' => 'normal', 'priority' => 'high', 'label' => null, 'callback' => null )) {
@@ -89,6 +88,8 @@ class acpt_meta_box extends acpt {
 		elseif(is_string($post_type)) :
 			$this->reg($post_type);
 		endif;
+
+    return $this;
 	}
 
 	function reg($type) {
@@ -100,6 +101,11 @@ class acpt_meta_box extends acpt {
 			$this->settings['context'],
 			$this->settings['priority']
 		);
+
+    return $this;
 	}
 }
-endif;
+
+function acpt_meta_box($name=null, $post_type = null, $settings=array()) {
+  return new acpt_meta_box($name, $post_type, $settings);
+}

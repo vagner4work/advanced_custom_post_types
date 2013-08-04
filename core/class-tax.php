@@ -25,7 +25,7 @@ class acpt_tax extends acpt {
 	public $args = array();
 
 	function __construct($singular = null, $plural = null, $post_type = null, $hierarchical = false, $cap = false, $settings = array() ) {
-		if($singular !== null ) $this->make($singular, $plural, $post_type, $hierarchical, $cap, $settings);
+		return $this->make($singular, $plural, $post_type, $hierarchical, $cap, $settings);
 	}
 
 	/**
@@ -37,6 +37,7 @@ class acpt_tax extends acpt {
 	* @param boolean $cap turn on custom capabilities
 	* @param string|array $post_type set the post types which to apply taxonomy (null is an option)
 	* @param array $settings args override and extend
+  * @return $this
 	*/
 	function make($singular = null, $plural = null, $post_type = null, $hierarchical = false, $cap = false, $settings = array() ) {
 		if(!$singular) exit('Making Taxonomy: You need to enter a singular name.');
@@ -107,7 +108,7 @@ class acpt_tax extends acpt {
 
 				if(is_string($type)) :
 					array_push($the_types, $type);
-				elseif( $type instanceof post_type ) :
+				elseif( $type instanceof acpt_post_type ) :
 					array_push($the_types, $type->singular);
 				endif;
 
@@ -115,15 +116,22 @@ class acpt_tax extends acpt {
 
 			$this->reg($the_types);
 
-		elseif( $post_type instanceof post_type ) :
+		elseif( $post_type instanceof acpt_post_type ) :
 			$this->reg($post_type->singular);
 		elseif(is_string($post_type)) :
 			$this->reg($post_type);
 		endif;
 
+    return $this;
 	}
 
 	function reg($post_type) {
 		register_taxonomy($this->singular, $post_type, $this->args);
+
+    return $this;
 	}
+}
+
+function acpt_tax($singular = null, $plural = null, $post_type = null, $hierarchical = false, $cap = false, $settings = array() ) {
+  return new acpt_tax($singular, $plural, $post_type, $hierarchical, $cap, $settings );
 }

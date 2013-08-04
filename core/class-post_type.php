@@ -57,16 +57,16 @@ class acpt_post_type extends acpt {
 	);
 
 	function __construct( $singular = null, $plural = null, $cap = false, $settings = array(), $icon = null ) {
-		if($singular !== null ) $this->make($singular, $plural, $cap, $settings);
+		return $this->make($singular, $plural, $cap, $settings);
 	}
 
 	function icon($name) {
 		if(!array_key_exists($name, $this->icon_pos)) exit('Adding Icon: You need to enter a valid icon name. You used ' . $name);
 
 		$this->icon = $name;
-
 		add_action( 'admin_head', array($this, 'set_icon_css') );
 
+    return $this;
 	}
 
 	function set_icon_css() { ?>
@@ -96,6 +96,7 @@ class acpt_post_type extends acpt {
 	 * @param string $plural plural name is required
 	 * @param boolean $cap turn on custom capabilities
 	 * @param array $settings args override and extend
+   * @return $this
 	 */
 	function make($singular = null, $plural = null, $cap = false, $settings = array() ) {
 		if(!$singular) exit('Making Post Type: You need to enter a singular name.');
@@ -161,5 +162,11 @@ class acpt_post_type extends acpt {
 
 		// Register post type
 		register_post_type($singular, $args);
+
+    return $this;
 	}
+}
+
+function acpt_post_type( $singular = null, $plural = null, $cap = false, $settings = array(), $icon = null ) {
+  return new acpt_post_type($singular, $plural, $cap, $settings);
 }
