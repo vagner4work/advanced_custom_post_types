@@ -1,4 +1,4 @@
-Advanced Custom Post Types: 3.0
+Advanced Custom Post Types: 3.0.2
 ---
 
 This is a framework for creating not only custom post types, roles and taxonomies in WordPress but it will also give you the ability to rapidly create custom fields (post types only).
@@ -110,7 +110,7 @@ function makethem() {
         'hierarchical' => true,
     );
 
-    $books = new post_type('book','books', false,  $args );
+    $books = new acpt_post_type('book','books', false,  $args );
 
     // add icon to post type
     $books->icon('notebook');
@@ -130,7 +130,7 @@ include('acpt/init.php');
 
 add_action('init', 'makethem');
 function makethem() {
-    $colors = new tax('color','colors', null, false );
+    $colors = new acpt_tax('color','colors', null, false );
 }
 ```
 
@@ -158,7 +158,7 @@ You can set the first argument with capital letters. Formatted name is suggested
 include('acpt/init.php');
 add_action('init', 'makethem');
 function makethem() {
-    $r = new role();
+    $r = new acpt_role();
     $r->make('Library Manager', array('read'), array('book', 'books'));
     $r->update('Administrator', null, null, array('book','books'));
 }
@@ -189,20 +189,20 @@ function makeThem() {
         'hierarchical' => true,
     );
 
-    $courses = new post_type('course','courses', false, $argsCourse );
-    $books = new post_type('book','books', false, $argsBook );
+    $courses = new acpt_post_type('course','courses', false, $argsCourse );
+    $books = new acpt_post_type('book','books', false, $argsBook );
 
 }
 
 add_action( 'add_meta_boxes', 'addThem' );
 
 function addThem() {
-    new meta_box('Details', array('book'));
+    new acpt_meta_box('Details', array('book'));
 }
 
 // Note: forms API explained below
 function meta_details() {
-    $form = new form('details');
+    $form = new acpt_form('details');
     $form->text('name');
 }
 ```
@@ -219,7 +219,7 @@ Forms API also come with a dev mode, see config.php.
 ```php
 function meta_details() {
     // name, options
-	$form = new form('details', null);
+	$form = new acpt_form('details', null);
 
 	$form->text('name', array('label' => 'Text Field'));
 	$form->color('color', array('label' => 'Color Field'));
@@ -262,12 +262,12 @@ For example the text field would be 'slide_title'.
 add_action( 'add_meta_boxes', 'acpt_custom_meta' );
 
 function acpt_custom_meta() {
-new meta_box('slide_options');
+new acpt_meta_box('slide_options');
 }
 
 // form api example, input names are much shorter now
 function meta_slide_options() {
-$form = new form('slide', null);
+$form = new acpt_form('slide', null);
 $form->text('title'); // input attr name will be 'acpt[slide_title]'
 $form->text('desc'); // input attr name will be 'acpt[slide_desc]'
 }
