@@ -11,6 +11,7 @@ require_once('config.php');
 // load classes
 $lib = array(
   'acpt',
+  'html',
   'save',
   'utility',
   'validate',

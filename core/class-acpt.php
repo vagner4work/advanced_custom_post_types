@@ -31,8 +31,10 @@ class acpt {
     switch($type) {
       case 'array' :
         if(isset($data) && !is_array($data) ) die('ACPT Error: '. $error);
+        break;
       case 'bool' :
         if(isset($data) && !is_bool($data) ) die('ACPT Error: '. $error);
+        break;
       default:
         if(empty($data) && !is_string($data)) die('ACPT Error: '. $error);
         break;

@@ -295,28 +295,6 @@ function image($name, $opts=array(), $label = true) {
   $this->test_for($name, 'Making Form: You need to enter a singular name.');
 
   $fieldName = $this->get_field_name($name);
-  $value = $this->get_field_value($fieldName);
-  $valueID = $placeHolderImage = '';
-
-  if(empty($opts['readonly'])) $opts['readonly'] = true;
-
-  // button
-  if(isset($opts['button'])) :
-    $button = $opts['button'];
-  else :
-    $button = "Insert Image";
-  endif;
-
-  // placeholder image and image id value
-  if(!empty($value)) :
-    $value = esc_url($value);
-    $placeHolderImage = '<img class="upload-img" src="'.$value.'" />';
-    $valueID = 'value="'.$value = $this->get_field_value($fieldName.'_id').'"';
-  endif;
-
-  $html = "<input type=\"hidden\" class=\"attachment-id-hidden\" name=\"acpt[{$fieldName}_id]\" {$valueID}>";
-  $html .= '<input type="button" class="button-primary upload-button" value="'.$button.'">';
-  $html .= '<div class="image-placeholder"><a class="remove-image">remove</a>' . $placeHolderImage . '</div>';
 
   $args = array(
     'name' => $name,
@@ -324,10 +302,10 @@ function image($name, $opts=array(), $label = true) {
     'classes' => "image upload-url",
     'field' => $fieldName,
     'label' => $label,
-    'html' => $html
+    'html' => ''
   );
 
-  echo apply_filters($fieldName . '_filter', $this->get_text_form($args));
+  echo apply_filters($fieldName . '_filter', $this->get_image_form($args));
 
   return $this;
 }
@@ -416,32 +394,68 @@ function image($name, $opts=array(), $label = true) {
     return $this;
   }
 
-
-  /**
-   * Get Text Form
-   *
-   * @param $o
-   *
-   * @return string
-   */
-  protected function get_text_form($o) {
-    // setup
-    $s = $this->get_opts($o['name'], $o['opts'], $o['field'], $o['label']);
-
-    // value
+  function get_image_form($o) {
     $value = $this->get_field_value($o['field']);
-    if(isset($value)) :
-      $v = "value=\"{$value}\"";
+
+    if(empty($o['opts']['readonly'])) $o['opts']['readonly'] = true;
+
+    // button text
+    if(isset($opts['button'])) :
+      $btnValue = $o['opts']['button'];
     else :
-      $v = '';
+      $btnValue = "Insert Image";
     endif;
 
-    $classes = $o['classes'] . '  acpt_' . $o['field'] . ' ' . $s['class'];
+    // placeholder image and image id value
+    if(!empty($value)) :
+      $value = esc_url($value);
+      $placeHolderImage = '<img class="upload-img" src="'.$value.'" />';
+      $vID = $this->get_field_value($o['field'].'_id');
+    else :
+      $vID = $placeHolderImage = '';
+    endif;
 
-    $field = "<input type=\"text\" class=\"{$classes}\" {$s['attr']} $v />";
-    $dev_note = $this->dev_message($o['field']);
+    $attachmentID = acpt_html::make_input(array(
+      'type' => 'hidden',
+      'class' => 'attachment-id-hidden',
+      'name' => 'acpt['.$o['field'].'_id]',
+      'value' => $vID
+    ));
 
-    return $s['beforeLabel'].$s['label'].$s['afterLabel'].$field.$o['html'].$dev_note.$s['help'].$s['afterField'];
+    $btn = array('input' => array(
+      'type' => 'button',
+      'class' => 'button-primary upload-button',
+      'value' => $btnValue
+    ));
+
+    $phRemove = array(
+        'a' => array(
+          'class' => 'remove-image',
+          'html' => 'remove'
+        )
+    );
+
+    $phImg = array(
+      'none' => array(
+        'html' => $placeHolderImage
+      )
+    );
+
+    $ph = array(
+      'div' => array(
+        'class' => 'image-placeholder',
+        'html' => array(
+          $phRemove,
+          $phImg
+        )
+      )
+    );
+
+    $html = array($attachmentID, $btn, $ph );
+
+    $o['html'] = acpt_html::make_html($html);
+
+    return $this->get_text_form($o);
   }
 
   /**
@@ -517,7 +531,7 @@ function image($name, $opts=array(), $label = true) {
 
     // placeholder image and image id value
     if(isset($value)) :
-      $valueID = 'value="'.$value.'"';
+      $valueID = acpt_html::make_html_attr('value', $value);
     else :
       $valueID = '';
     endif;
@@ -526,6 +540,33 @@ function image($name, $opts=array(), $label = true) {
     $o['html'] .= '<input type="button" class="button-primary upload-button" value="'.$button.'"> <span class="clear-attachment">clear file</span>';
 
     return $this->get_text_form($o);
+  }
+
+  /**
+   * Get Text Form
+   *
+   * @param $o
+   *
+   * @return string
+   */
+  protected function get_text_form($o) {
+    // setup
+    $s = $this->get_opts($o['name'], $o['opts'], $o['field'], $o['label']);
+
+    // value
+    $value = $this->get_field_value($o['field']);
+    if(isset($value)) :
+      $v = acpt_html::make_html_attr('value', $value);
+    else :
+      $v = '';
+    endif;
+
+    $classes = $o['classes'] . '  acpt_' . $o['field'] . ' ' . $s['class'];
+
+    $field = "<input type=\"text\" class=\"{$classes}\" {$s['attr']} $v />";
+    $dev_note = $this->dev_message($o['field']);
+
+    return $s['beforeLabel'].$s['label'].$s['afterLabel'].$field.$o['html'].$dev_note.$s['help'].$s['afterField'];
   }
 
   /**
