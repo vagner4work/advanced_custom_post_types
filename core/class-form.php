@@ -519,8 +519,8 @@ function image($name, $opts=array(), $label = true) {
       $args['opts']['default'] = $acptDefaultColor;
     }
 
-    wp_localize_script('fields', 'acpt_'.$args['field'].'_color_palette', $args['opts']['palette'] );
-    wp_localize_script('fields', 'acpt_'.$args['field'].'_defaultColor', $args['opts']['default'] );
+    wp_localize_script('acpt-fields', 'acpt_'.$args['field'].'_color_palette', $args['opts']['palette'] );
+    wp_localize_script('acpt-fields', 'acpt_'.$args['field'].'_defaultColor', $args['opts']['default'] );
 
     return $this->get_text_form($args);
   }
@@ -568,10 +568,7 @@ function image($name, $opts=array(), $label = true) {
    * @return string
    */
   protected function get_text_form($o) {
-    // setup
     $s = $this->get_opts($o['name'], $o['opts'], $o['field'], $o['label']);
-
-    // value
     $v = $this->get_field_value($o['field']);
 
     $field = acpt_html::make_input(array(
@@ -583,10 +580,6 @@ function image($name, $opts=array(), $label = true) {
         'readonly' => $s['read']
     ), true);
 
-//    $v = acpt_html::make_html_attr('value', $v);
-//    $c = acpt_html::make_html_attr('class', "{$o['classes']}  acpt_{$o['field']} {$s['class']}");
-//
-//    $field = "<input type=\"text\" $c {$s['nameAttr']} {$s['readonly']} {$s['id']} $v />";
     $dev_note = $this->dev_message($o['field']);
 
     return $s['beforeLabel'].$s['label'].$s['afterLabel'].$field.$o['html'].$dev_note.$s['help'].$s['afterField'];
@@ -660,8 +653,6 @@ function image($name, $opts=array(), $label = true) {
       $s['read'] = '';
     }
 
-
-
     // name and id
     $s['nameAttr'] = $this->make_attr_name($fieldName);
     $s['name'] = $this->get_acpt_post_name($fieldName);
@@ -671,7 +662,11 @@ function image($name, $opts=array(), $label = true) {
 
     // help text
     if(isset($opts['help'])) :
-      $s['help'] = '<p class="help-text">'.$opts['help'].'</p>';
+      $s['help'] = acpt_html::make_html(array(array(
+        'p' => array(
+          'class' => 'help-text',
+          'html' => $opts['help']
+      ))));
     else :
       $s['help'] = '';
     endif;
@@ -708,8 +703,7 @@ function image($name, $opts=array(), $label = true) {
             'class' => 'control-label',
             'for' => $id,
             'html' => $labelName
-          )
-      )));
+       ))));
 
     endif;
 

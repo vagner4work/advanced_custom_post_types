@@ -43,7 +43,7 @@ class acpt_utility extends acpt {
 
   static function upload_scripts() {
 
-    wp_enqueue_script('fields', ACPT_LOCATION .'/'.ACPT_FOLDER_NAME.'/core/js/fields.js', array('jquery'), '1.0', true);
+    wp_enqueue_script('acpt-fields', ACPT_LOCATION .'/'.ACPT_FOLDER_NAME.'/core/js/fields.js', array('jquery'), '1.0', true);
     wp_enqueue_script( 'jquery-ui-datepicker', array( 'jquery' ), '1.0', true );
     wp_enqueue_style( 'wp-color-picker' );
     wp_enqueue_script( 'wp-color-picker' );
