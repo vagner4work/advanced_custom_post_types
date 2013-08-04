@@ -332,267 +332,329 @@ function image($name, $opts=array(), $label = true) {
   return $this;
 }
 
-/**
- * Form File
- *
- * @param string $name singular name is required
- * @param array $opts args override and extend
- * @param bool $label show label or not
- * @return $this
- */
-function file($name, $opts=array(), $label = true) {
-  $this->test_for($this->name, 'Making Form: You need to make the form first.');
-  $this->test_for($name, 'Making Form: You need to enter a singular name.');
+  /**
+   * Form File
+   *
+   * @param string $name singular name is required
+   * @param array $opts args override and extend
+   * @param bool $label show label or not
+   * @return $this
+   */
+  function file($name, $opts=array(), $label = true) {
+    $this->test_for($this->name, 'Making Form: You need to make the form first.');
+    $this->test_for($name, 'Making Form: You need to enter a singular name.');
 
-  $fieldName = $this->get_field_name($name);
-  $value = $this->get_field_value($fieldName."_id");
-  $valueID = '';
+    $fieldName = $this->get_field_name($name);
 
-  if(empty($opts['readonly'])) $opts['readonly'] = true;
+    $args = array(
+      'name' => $name,
+      'opts' => $opts,
+      'classes' => "file upload-url",
+      'field' => $fieldName,
+      'label' => $label,
+      'html' => ''
+    );
 
-  // button
-  if(isset($opts['button'])) :
-    $button = $opts['button'];
-  else :
-    $button = "Insert File";
-  endif;
+    echo apply_filters($fieldName . '_filter', $this->get_file_form($args));
 
-  // placeholder image and image id value
-  if(isset($value)) :
-    $valueID = 'value="'.$value.'"';
-  endif;
-
-  $html = "<input type=\"hidden\" class=\"attachment-id-hidden\" name=\"acpt[{$fieldName}_id]\" {$valueID}>";
-  $html .= '<input type="button" class="button-primary upload-button" value="'.$button.'"> <span class="clear-attachment">clear file</span>';
-
-  // $name, $opts, $classes, $fieldName, $label, $type
-  $args = array(
-    'name' => $name,
-    'opts' => $opts,
-    'classes' => "file upload-url",
-    'field' => $fieldName,
-    'label' => $label,
-    'html' => $html
-  );
-
-  echo apply_filters($fieldName . '_filter', $this->get_text_form($args));
-
-  return $this;
-}
-
-/**
- * Google Maps.
- *
- * @param string $name singular name is required
- * @param array $opts args override and extend
- * @param bool $label show label or not
- * @return $this
- */
-function google_map($name, $opts=array(), $label = true) {
-  $this->test_for($this->name, 'Making Form: You need to make the form first.');
-  $this->test_for($name, 'Making Form: You need to enter a singular name.');
-
-  $fieldName = $this->get_field_name($name);
-
-  $args = array(
-    'name' => $name,
-    'opts' => $opts,
-    'classes' => "googleMap",
-    'field' => $fieldName,
-    'label' => $label,
-    'html' => ''
-  );
-
-  echo apply_filters($fieldName . '_filter', $this->get_google_map_form($args));
-
-  return $this;
-}
-
-/**
- * Date.
- *
- * @param string $name singular name is required
- * @param array $opts args override and extend
- * @param bool $label show label or not
- * @return $this
- */
-function date($name, $opts=array(), $label = true) {
-  $this->test_for($this->name, 'Making Form: You need to make the form first.');
-  $this->test_for($name, 'Making Form: You need to enter a singular name.');
-
-  $fieldName = $this->get_field_name($name);
-
-  $args = array(
-    'name' => $name,
-    'opts' => $opts,
-    'classes' => "date date-picker",
-    'field' => $fieldName,
-    'label' => $label,
-    'html' => ''
-  );
-
-  echo apply_filters($fieldName . '_filter', $this->get_text_form($args));
-
-  return $this;
-}
-
-/* Helper Functions
---------------------------------------------------------------------------- */
-
-protected function get_field_name($name) {
-  return $this->name.'_'.$name;
-}
-
-protected function get_opts($name, $opts, $fieldName, $label) {
-
-  $s['attr'] = '';
-
-  // classes
-  if ( is_string(isset($opts['class'])) ) $s['class'] = $opts['class'];
-  else $s['class'] = '';
-
-  // readonly
-  if ( isset($opts['readonly']) ) {
-    $s['readonly'] = 'readonly="readonly"';
-    $s['attr'] .= ' '. $s['readonly'];
-  } else {
-    $s['readonly'] = '';
+    return $this;
   }
 
-  // size
-  if ( array_key_exists('size', $opts) && is_integer($opts['size']) ) {
-    $s['size'] = 'size="'.$opts['size'].'"';
-    $s['attr'] .= ' '. $s['size'];
-  } else {
-    $s['size'] = '';
+  /**
+   * Google Maps.
+   *
+   * @param string $name singular name is required
+   * @param array $opts args override and extend
+   * @param bool $label show label or not
+   * @return $this
+   */
+  function google_map($name, $opts=array(), $label = true) {
+    $this->test_for($this->name, 'Making Form: You need to make the form first.');
+    $this->test_for($name, 'Making Form: You need to enter a singular name.');
+
+    $fieldName = $this->get_field_name($name);
+
+    $args = array(
+      'name' => $name,
+      'opts' => $opts,
+      'classes' => "googleMap",
+      'field' => $fieldName,
+      'label' => $label,
+      'html' => ''
+    );
+
+    echo apply_filters($fieldName . '_filter', $this->get_google_map_form($args));
+
+    return $this;
   }
 
-  // name and id
-  if ( isset($fieldName) ) {
-    $s['nameAttr'] = 'name="acpt['.$fieldName.']"';
-    $s['attr'] .= ' '. $s['nameAttr'];
+  /**
+   * Date.
+   *
+   * @param string $name singular name is required
+   * @param array $opts args override and extend
+   * @param bool $label show label or not
+   * @return $this
+   */
+  function date($name, $opts=array(), $label = true) {
+    $this->test_for($this->name, 'Making Form: You need to make the form first.');
+    $this->test_for($name, 'Making Form: You need to enter a singular name.');
 
-    $s['id'] = 'id="acpt_'.$fieldName.'"';
-    $s['attr'] .= ' '. $s['id'];
+    $fieldName = $this->get_field_name($name);
+
+    $args = array(
+      'name' => $name,
+      'opts' => $opts,
+      'classes' => "date date-picker",
+      'field' => $fieldName,
+      'label' => $label,
+      'html' => ''
+    );
+
+    echo apply_filters($fieldName . '_filter', $this->get_text_form($args));
+
+    return $this;
   }
 
-  // help text
-  if(isset($opts['help'])) :
-    $s['help'] = '<p class="help-text">'.$opts['help'].'</p>';
-  else :
-    $s['help'] = '';
-  endif;
 
-  // beforeLabel
-  if(isset($opts['beforeLabel'])) :
-    $s['beforeLabel'] = $opts['beforeLabel'];
-  else :
-    $s['beforeLabel'] = BEFORE_LABEL;
-  endif;
+  /**
+   * Get Text Form
+   *
+   * @param $o
+   *
+   * @return string
+   */
+  protected function get_text_form($o) {
+    // setup
+    $s = $this->get_opts($o['name'], $o['opts'], $o['field'], $o['label']);
 
-  // afterLabel
-  if(isset($opts['afterLabel'])) :
-    $s['afterLabel'] = $opts['afterLabel'];
-  else :
-    $s['afterLabel'] = AFTER_LABEL;
-  endif;
+    // value
+    $value = $this->get_field_value($o['field']);
+    if(isset($value)) :
+      $v = "value=\"{$value}\"";
+    else :
+      $v = '';
+    endif;
 
-  // afterField
-  if(isset($opts['afterField'])) :
-    $s['afterField'] = $opts['afterField'];
-  else :
-    $s['afterField'] = AFTER_FIELD;
-  endif;
+    $classes = $o['classes'] . '  acpt_' . $o['field'] . ' ' . $s['class'];
 
-  // label
-  if(empty($opts['labelTag'])) $opts['labelTag'] = 'label';
+    $field = "<input type=\"text\" class=\"{$classes}\" {$s['attr']} $v />";
+    $dev_note = $this->dev_message($o['field']);
 
-  if(isset($label)) :
-    $labelName = (isset($opts['label']) ? $opts['label'] : $name);
-    $s['label'] = '<'.$opts['labelTag'].' class="control-label" for="'.$fieldName.'">'.$labelName.'</'.$opts['labelTag'].'>';
-  endif;
-
-  return $s;
-}
-
-protected function dev_message($fieldName) {
-  if(DEV_MODE == true) return "<input class=\"dev_note\" readonly value=\"acpt_meta('{$fieldName}');\" />";
-  else return '';
-}
-
-protected function get_text_form($o) {
-  // setup
-  $s = $this->get_opts($o['name'], $o['opts'], $o['field'], $o['label']);
-
-  // value
-  $value = $this->get_field_value($o['field']);
-  if(isset($value)) :
-    $v = "value=\"{$value}\"";
-  else :
-    $v = '';
-  endif;
-
-  $classes = $o['classes'] . '  acpt_' . $o['field'] . ' ' . $s['class'];
-
-  $field = "<input type=\"text\" class=\"{$classes}\" {$s['attr']} $v />";
-  $dev_note = $this->dev_message($o['field']);
-
-  return $s['beforeLabel'].$s['label'].$s['afterLabel'].$field.$o['html'].$dev_note.$s['help'].$s['afterField'];
-}
-
-protected function get_google_map_form($o) {
-  $value = $this->get_field_value($o['field']);
-
-  // set http
-  if (is_ssl()) :
-    $http = 'https://';
-  else :
-    $http = 'http://';
-  endif;
-
-  // value
-  if(isset($value)) :
-    $value = urlencode($value);
-    $zoom = 15;
-  else :
-    $zoom = 1;
-    $value = 'New+York,NY';
-  endif;
-
-  $o['html'] = "<input type=\"hidden\" value=\"{$value}\" name=\"acpt[{$o['field']}_encoded]\" />";
-  $o['html'] .= '<p class="map"><img src="'.$http.'maps.googleapis.com/maps/api/staticmap?center='.$value.'&zoom='.$zoom.'&size=1200x140&sensor=true&markers='.$value.'" class="map-image" alt="Map Image" /></p>';
-
-  return $this->get_text_form($o);
-}
-
-protected function get_color_form($args) {
-  global $acptPalette, $acptDefaultColor;
-
-  if(!isset($args['opts']['palette'])) {
-    $args['opts']['palette'] = $acptPalette;
+    return $s['beforeLabel'].$s['label'].$s['afterLabel'].$field.$o['html'].$dev_note.$s['help'].$s['afterField'];
   }
 
-  if(!isset($args['opts']['default'])) {
-    $args['opts']['default'] = $acptDefaultColor;
+  /**
+   * Get Google Map Form
+   *
+   * @param $o
+   *
+   * @return string
+   */
+  protected function get_google_map_form($o) {
+    $value = $this->get_field_value($o['field']);
+
+    // set http
+    if (is_ssl()) $http = 'https://';
+    else $http = 'http://';
+
+    // zoom
+    if(empty($value)) $zoom = 1;
+    else $zoom = 15;
+
+    $o['html'] = "<input type=\"hidden\" class=\"googleMap-encoded\" value=\"{$value}\" name=\"acpt[{$o['field']}_encoded]\" />";
+    $o['html'] .= '<p class="map"><img src="'.$http.'maps.googleapis.com/maps/api/staticmap?center='.$value.'&zoom='.$zoom.'&size=1200x140&sensor=true&markers='.$value.'" class="map-image" alt="Map Image" /></p>';
+
+    return $this->get_text_form($o);
   }
 
-  wp_localize_script('fields', 'acpt_'.$args['field'].'_color_palette', $args['opts']['palette'] );
-  wp_localize_script('fields', 'acpt_'.$args['field'].'_defaultColor', $args['opts']['default'] );
 
-  return $this->get_text_form($args);
-}
+  /**
+   * Get Color Form
+   *
+   * get color input and form data
+   *
+   * @param $args
+   *
+   * @return string
+   */
+  protected function get_color_form($args) {
+    global $acptPalette, $acptDefaultColor;
 
-protected function get_field_value($field) {
-  global $post;
+    if(!isset($args['opts']['palette'])) {
+      $args['opts']['palette'] = $acptPalette;
+    }
 
-  if(isset($post->ID)) { $value = acpt_meta($field); }
-  else { $value = null; }
+    if(!isset($args['opts']['default'])) {
+      $args['opts']['default'] = $acptDefaultColor;
+    }
 
-  return $value;
-}
+    wp_localize_script('fields', 'acpt_'.$args['field'].'_color_palette', $args['opts']['palette'] );
+    wp_localize_script('fields', 'acpt_'.$args['field'].'_defaultColor', $args['opts']['default'] );
+
+    return $this->get_text_form($args);
+  }
+
+  /**
+   * Get File Form
+   *
+   * @param $o
+   *
+   * @return string
+   */
+  function get_file_form($o) {
+
+    $value = $this->get_field_value($o['field']."_id");
+
+    if(empty($o['opts']['readonly'])) $o['opts']['readonly'] = true;
+
+    // button
+    if(isset($o['opts']['button'])) :
+      $button = $o['opts']['button'];
+    else :
+      $button = "Insert File";
+    endif;
+
+    // placeholder image and image id value
+    if(isset($value)) :
+      $valueID = 'value="'.$value.'"';
+    else :
+      $valueID = '';
+    endif;
+
+    $o['html'] = "<input type=\"hidden\" class=\"attachment-id-hidden\" name=\"acpt[{$o['field']}_id]\" {$valueID}>";
+    $o['html'] .= '<input type="button" class="button-primary upload-button" value="'.$button.'"> <span class="clear-attachment">clear file</span>';
+
+    return $this->get_text_form($o);
+  }
+
+  /**
+   * Get Field Value
+   *
+   * Get the value if it is a post type or another page form
+   *
+   * @param $field
+   *
+   * @return mixed|null|string
+   */
+  protected function get_field_value($field) {
+    global $post;
+
+    if(isset($post->ID)) { $value = acpt_meta($field); }
+    else { $value = null; }
+
+    return $value;
+  }
+
+  /**
+   * Get Dev Note
+   *
+   * Add the dev field to the admin to see the a acpt_meta() function
+   *
+   * @param $fieldName
+   *
+   * @return string
+   */
+  protected function dev_message($fieldName) {
+    if(DEV_MODE == true) return "<input class=\"dev_note\" readonly value=\"acpt_meta('{$fieldName}');\" />";
+    else return '';
+  }
+
+  /**
+   * Get Field Name
+   *
+   * @param $name
+   *
+   * @return string
+   */
+  protected function get_field_name($name) {
+    return $this->name.'_'.$name;
+  }
+
+  /**
+   * Get Input Options
+   *
+   * @param $name
+   * @param $opts
+   * @param $fieldName
+   * @param $label
+   *
+   * @return mixed
+   */
+  protected function get_opts($name, $opts, $fieldName, $label) {
+
+    $s['attr'] = '';
+
+    // classes
+    if ( is_string(isset($opts['class'])) ) $s['class'] = $opts['class'];
+    else $s['class'] = '';
+
+    // readonly
+    if ( isset($opts['readonly']) ) {
+      $s['readonly'] = 'readonly="readonly"';
+      $s['attr'] .= ' '. $s['readonly'];
+    } else {
+      $s['readonly'] = '';
+    }
+
+    // size
+    if ( array_key_exists('size', $opts) && is_integer($opts['size']) ) {
+      $s['size'] = 'size="'.$opts['size'].'"';
+      $s['attr'] .= ' '. $s['size'];
+    } else {
+      $s['size'] = '';
+    }
+
+    // name and id
+    if ( isset($fieldName) ) {
+      $s['nameAttr'] = 'name="acpt['.$fieldName.']"';
+      $s['attr'] .= ' '. $s['nameAttr'];
+
+      $s['id'] = 'id="acpt_'.$fieldName.'"';
+      $s['attr'] .= ' '. $s['id'];
+    }
+
+    // help text
+    if(isset($opts['help'])) :
+      $s['help'] = '<p class="help-text">'.$opts['help'].'</p>';
+    else :
+      $s['help'] = '';
+    endif;
+
+    // beforeLabel
+    if(isset($opts['beforeLabel'])) :
+      $s['beforeLabel'] = $opts['beforeLabel'];
+    else :
+      $s['beforeLabel'] = BEFORE_LABEL;
+    endif;
+
+    // afterLabel
+    if(isset($opts['afterLabel'])) :
+      $s['afterLabel'] = $opts['afterLabel'];
+    else :
+      $s['afterLabel'] = AFTER_LABEL;
+    endif;
+
+    // afterField
+    if(isset($opts['afterField'])) :
+      $s['afterField'] = $opts['afterField'];
+    else :
+      $s['afterField'] = AFTER_FIELD;
+    endif;
+
+    // label
+    if(empty($opts['labelTag'])) $opts['labelTag'] = 'label';
+
+    if(isset($label)) :
+      $labelName = (isset($opts['label']) ? $opts['label'] : $name);
+      $s['label'] = '<'.$opts['labelTag'].' class="control-label" for="'.$fieldName.'">'.$labelName.'</'.$opts['labelTag'].'>';
+    endif;
+
+    return $s;
+  }
 
 }
 
 function acpt_form($name, $opts=array()) {
-  return new acpt_form($name, $opts=array());
+  return new acpt_form($name, $opts);
 }

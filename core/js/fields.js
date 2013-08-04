@@ -20,7 +20,12 @@ jQuery(document).ready(function($){
     });
 
     function mapIt(str) {
-        return encodeURIComponent(str.toString());
+        if(str == '') {
+            str = '';
+        } else {
+            str = encodeURIComponent(str.toString());
+        }
+        return str;
     }
 
     var typewatch = (function(){
@@ -49,7 +54,7 @@ jQuery(document).ready(function($){
                 var fullUrl = prefix + mapBase + 'center=' + center + mapData + center;
                 //console.log(fullUrl);
                 $(img).attr('src', fullUrl);
-                $(input[1]).attr('value', center);
+                $(input[0]).siblings('.googleMap-encoded').attr('value', center);
             }, 1000);
 
         });
