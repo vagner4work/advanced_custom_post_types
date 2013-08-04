@@ -53,8 +53,10 @@ class acpt_html extends acpt {
    * @return string
    */
   static function make_html_attr($attr, $value='') {
-    if($value != '') return "{$attr}=\"{$value}\"";
-    else return '';
+    if($value === true) { $value = $attr; }
+
+    if($value != '') { return "{$attr}=\"{$value}\""; }
+    else { return ''; }
   }
 
   private function check_none($tag, $output) {

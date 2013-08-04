@@ -274,7 +274,7 @@ function editor($name, $label=null, $opts=array()) {
   wp_editor(
       $value,
       'wysisyg_'.$this->name.'_'.$name,
-      array_merge($opts,array('textarea_name' => 'acpt['.$fieldName.']'))
+      array_merge($opts,array('textarea_name' => $this->get_acpt_post_name($fieldName)))
   );
   echo $this->dev_message($fieldName);
   echo '</div>';
@@ -476,7 +476,9 @@ function image($name, $opts=array(), $label = true) {
     if(empty($value)) $zoom = 1;
     else $zoom = 15;
 
-    $o['html'] = "<input type=\"hidden\" class=\"googleMap-encoded\" value=\"{$value}\" name=\"acpt[{$o['field']}_encoded]\" />";
+    $attrName = $this->make_attr_name($o['field'], '_encoded');
+
+    $o['html'] = "<input type=\"hidden\" class=\"googleMap-encoded\" value=\"{$value}\" {$attrName} />";
     $o['html'] .= '<p class="map"><img src="'.$http.'maps.googleapis.com/maps/api/staticmap?center='.$value.'&zoom='.$zoom.'&size=1200x140&sensor=true&markers='.$value.'" class="map-image" alt="Map Image" /></p>';
 
     return $this->get_text_form($o);
@@ -536,7 +538,9 @@ function image($name, $opts=array(), $label = true) {
       $valueID = '';
     endif;
 
-    $o['html'] = "<input type=\"hidden\" class=\"attachment-id-hidden\" name=\"acpt[{$o['field']}_id]\" {$valueID}>";
+    $attrName = $this->make_attr_name($o['field'], '_id');
+
+    $o['html'] = "<input type=\"hidden\" class=\"attachment-id-hidden\" {$attrName} {$valueID}>";
     $o['html'] .= '<input type="button" class="button-primary upload-button" value="'.$button.'"> <span class="clear-attachment">clear file</span>';
 
     return $this->get_text_form($o);
@@ -554,16 +558,12 @@ function image($name, $opts=array(), $label = true) {
     $s = $this->get_opts($o['name'], $o['opts'], $o['field'], $o['label']);
 
     // value
-    $value = $this->get_field_value($o['field']);
-    if(isset($value)) :
-      $v = acpt_html::make_html_attr('value', $value);
-    else :
-      $v = '';
-    endif;
+    $v = $this->get_field_value($o['field']);
+    $v = acpt_html::make_html_attr('value', $v);
 
-    $classes = $o['classes'] . '  acpt_' . $o['field'] . ' ' . $s['class'];
+    $classes = acpt_html::make_html_attr('class', $o['classes'] . '  acpt_' . $o['field'] . ' ' . $s['class']);
 
-    $field = "<input type=\"text\" class=\"{$classes}\" {$s['attr']} $v />";
+    $field = "<input type=\"text\" {$classes} {$s['attr']} $v />";
     $dev_note = $this->dev_message($o['field']);
 
     return $s['beforeLabel'].$s['label'].$s['afterLabel'].$field.$o['html'].$dev_note.$s['help'].$s['afterField'];
@@ -647,13 +647,13 @@ function image($name, $opts=array(), $label = true) {
     }
 
     // name and id
-    if ( isset($fieldName) ) {
-      $s['nameAttr'] = 'name="acpt['.$fieldName.']"';
-      $s['attr'] .= ' '. $s['nameAttr'];
+    $s['nameAttr'] = $this->make_attr_name($fieldName);
+    $s['attr'] .= ' '. $s['nameAttr'];
 
-      $s['id'] = 'id="acpt_'.$fieldName.'"';
-      $s['attr'] .= ' '. $s['id'];
-    }
+    $id = 'acpt_'.$fieldName;
+
+    $s['id'] = 'id="'.$id.'"';
+    $s['attr'] .= ' '. $s['id'];
 
     // help text
     if(isset($opts['help'])) :
@@ -688,10 +688,27 @@ function image($name, $opts=array(), $label = true) {
 
     if(isset($label)) :
       $labelName = (isset($opts['label']) ? $opts['label'] : $name);
-      $s['label'] = '<'.$opts['labelTag'].' class="control-label" for="'.$fieldName.'">'.$labelName.'</'.$opts['labelTag'].'>';
+
+      $s['label'] = acpt_html::make_html(array(array(
+          $opts['labelTag'] => array(
+            'class' => 'control-label',
+            'for' => $id,
+            'html' => $labelName
+          )
+      )));
+
     endif;
 
     return $s;
+  }
+
+  private function make_attr_name($field, $prefix = '', $suffix = '', $group = '') {
+    $value = $this->get_acpt_post_name($field, $prefix, $suffix, $group);
+    return acpt_html::make_html_attr('name', $value);
+  }
+
+  private function get_acpt_post_name($field, $prefix = '', $suffix = '', $group = '') {
+    return "acpt{$group}[{$suffix}{$field}{$prefix}]";
   }
 
 }
