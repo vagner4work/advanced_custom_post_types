@@ -135,7 +135,7 @@ function textarea($name, $opts=array(), $label = true) {
   $this->test_for($this->name, 'Making Form: You need to make the form first.');
   $this->test_for($name, 'Making Form: You need to enter a singular name.');
 
-  $fieldName = $this->get_field_name($name, $opts, 'textarea');
+  $fieldName = $this->get_field_name($name);
   $value = $this->get_field_value($fieldName);
 
   // value
@@ -165,7 +165,7 @@ function select($name, $options=array('Key' => 'Value'), $opts=array(), $label =
   $this->test_for($name, 'Making Form: You need to enter a singular name.');
 
   $optionsList = '';
-  $fieldName = $this->get_field_name($name, 'select');
+  $fieldName = $this->get_field_name($name);
 
   // get options HTML
   if(isset($options)) :
@@ -213,7 +213,7 @@ function radio($name, $options=array('Key' => 'Value'), $opts=array(), $label = 
 
   $optionsList = '';
   $opts['labelTag'] = 'span';
-  $fieldName = $this->get_field_name($name, 'radio');
+  $fieldName = $this->get_field_name($name);
 
   // name
   $s = $this->get_opts($name, $opts, $fieldName, $label);
@@ -225,7 +225,7 @@ function radio($name, $options=array('Key' => 'Value'), $opts=array(), $label = 
 
     foreach( $options as $key => $option) :
       if($option == $value)
-        $checked = 'checked="checked"';
+        $checked = 'checked';
       else
         $checked = null;
 
@@ -234,7 +234,24 @@ function radio($name, $options=array('Key' => 'Value'), $opts=array(), $label = 
       else
         $key = $option;
 
-      $optionsList .= "<label><input type=\"radio\" {$s['nameAttr']} $checked value=\"$option\" /><span>$key</span></label>";
+      $anOption = array(array(
+        'label' => array(
+          'html' => array(array(
+            'input' => array(
+              'type' => 'radio',
+              'name' => $s['name'],
+              'value' => $option,
+              'checked' => $checked
+            )
+          ), array(
+            'span' => array(
+              'html' => $key
+            )
+          ))
+        )
+      ));
+
+      $optionsList .= acpt_html::make_html($anOption);
 
     endforeach;
 
@@ -262,7 +279,7 @@ function editor($name, $label=null, $opts=array()) {
   $this->test_for($this->name, 'Making Form: You need to make the form first.');
   $this->test_for($name, 'Making Form: You need to enter a singular name.');
 
-  $fieldName = $this->get_field_name($name, 'editor');
+  $fieldName = $this->get_field_name($name);
   $v = $this->get_field_value($fieldName);
   $s = $this->get_opts($label, array('labelTag' => 'span'), $fieldName, true);
 
@@ -561,12 +578,15 @@ function image($name, $opts=array(), $label = true) {
         'class' => "{$o['classes']}  acpt_{$o['field']} {$s['class']}",
         'type' => 'text',
         'value' => $v,
-        ''
-    ));
-    $v = acpt_html::make_html_attr('value', $v);
-    $c = acpt_html::make_html_attr('class', "{$o['classes']}  acpt_{$o['field']} {$s['class']}");
+        'name' => $s['name'],
+        'id' => $s['justID'],
+        'readonly' => $s['read']
+    ), true);
 
-    $field = "<input type=\"text\" $c {$s['nameAttr']} {$s['readonly']} {$s['id']} $v />";
+//    $v = acpt_html::make_html_attr('value', $v);
+//    $c = acpt_html::make_html_attr('class', "{$o['classes']}  acpt_{$o['field']} {$s['class']}");
+//
+//    $field = "<input type=\"text\" $c {$s['nameAttr']} {$s['readonly']} {$s['id']} $v />";
     $dev_note = $this->dev_message($o['field']);
 
     return $s['beforeLabel'].$s['label'].$s['afterLabel'].$field.$o['html'].$dev_note.$s['help'].$s['afterField'];
@@ -633,15 +653,21 @@ function image($name, $opts=array(), $label = true) {
 
     // readonly
     if ( isset($opts['readonly']) ) {
+      $s['read'] = $opts['readonly'];
       $s['readonly'] = 'readonly="readonly"';
     } else {
       $s['readonly'] = '';
+      $s['read'] = '';
     }
+
+
 
     // name and id
     $s['nameAttr'] = $this->make_attr_name($fieldName);
+    $s['name'] = $this->get_acpt_post_name($fieldName);
     $id = 'acpt_'.$fieldName;
     $s['id'] = 'id="'.$id.'"';
+    $s['justID'] = $id;
 
     // help text
     if(isset($opts['help'])) :
