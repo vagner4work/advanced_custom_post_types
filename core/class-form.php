@@ -83,17 +83,6 @@ function text($name, $opts=array(), $label = true) {
 }
 
 /**
- * Form URL.
- *
- * @param string $name singular name is required
- * @param array $opts args override and extend
- * @param bool $label show label or not
- */
-function url($name, $opts=array(), $label = true) {
-  $this->text($name, $opts, $label);
-}
-
-/**
  * Form Color
  *
  * this function works well for making a form element {@link get_color_form()}
