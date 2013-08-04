@@ -19,7 +19,7 @@ if(isset($acpt_version)) :
   *
   * @global string $acpt_version
   */
-class meta_box extends acpt {
+class acpt_meta_box extends acpt {
 
 	public $name = null;
 	public $post_type = null;

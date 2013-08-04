@@ -1,6 +1,6 @@
 <?php
 
-class form extends acpt {
+class acpt_form extends acpt {
 
 public $name = null;
 
@@ -11,8 +11,8 @@ function __construct($name, $opts=array()) {
 /**
  * Make Form.
  *
- * @param string $singular singular name is required
- * @param array $opts args override and extend
+ * @param string $name singular name is required
+ * @param array $opts args [action, method]
  */
 function make($name, $opts=array()) {
     $this->test_for($name, 'Making Form: You need to enter a singular name.');
@@ -34,7 +34,7 @@ function make($name, $opts=array()) {
 /**
  * End Form.
  *
- * @param string $singular singular name is required
+ * @param string $name singular name is required
  * @param array $opts args override and extend
  */
 function end($name=null, $opts=array()) {
@@ -50,8 +50,10 @@ function end($name=null, $opts=array()) {
 /**
  * Form Text.
  *
- * @param string $singular singular name is required
+ * @param string $name singular name is required
  * @param array $opts args override and extend
+ * @param bool $label show label or not
+ * @return $this
  */
 function text($name, $opts=array(), $label = true) {
   $this->test_for($this->name, 'Making Form: You need to make the form first.');
@@ -69,23 +71,30 @@ function text($name, $opts=array(), $label = true) {
   );
 
   echo apply_filters($field . '_filter', $this->get_text_form($args));
+
+  return $this;
 }
 
 /**
  * Form URL.
  *
- * @param string $singular singular name is required
+ * @param string $name singular name is required
  * @param array $opts args override and extend
+ * @param bool $label show label or not
  */
 function url($name, $opts=array(), $label = true) {
   $this->text($name, $opts, $label);
 }
 
 /**
- * Form Color.
+ * Form Color
  *
- * @param string $singular singular name is required
+ * this function works well for making a form element {@link get_color_form()}
+ *
+ * @param string $name singular name is required
  * @param array $opts args override and extend
+ * @param bool $label show label or not
+ * @return $this
  */
 function color($name, $opts=array(), $label = true) {
   $this->test_for($this->name, 'Making Form: You need to make the form first.');
@@ -102,14 +111,18 @@ function color($name, $opts=array(), $label = true) {
     'html' => ''
   );
 
-  echo apply_filters($fieldName . '_filter', $this->get_text_form($args));
+  echo apply_filters($fieldName . '_filter', $this->get_color_form($args));
+
+  return $this;
 }
 
 /**
  * Form Textarea.
  *
- * @param string $singular singular name is required
+ * @param string $name singular name is required
  * @param array $opts args override and extend
+ * @param bool $label show label or not
+ * @return $this
  */
 function textarea($name, $opts=array(), $label = true) {
   $this->test_for($this->name, 'Making Form: You need to make the form first.');
@@ -127,14 +140,18 @@ function textarea($name, $opts=array(), $label = true) {
   $dev_note = $this->dev_message($fieldName);
 
   echo apply_filters($fieldName . '_filter', $s['beforeLabel'].$s['label'].$s['afterLabel'].$field.$dev_note.$s['help'].$s['afterField']);
+
+  return $this;
 }
 
 /**
  * Form Select.
  *
- * @param string $singular singular name is required
- * @param array $options args for items
+ * @param string $name singular name is required
+ * @param array $options values for select options
  * @param array $opts args override and extend
+ * @param bool $label show label or not
+ * @return $this
  */
 function select($name, $options=array('Key' => 'Value'), $opts=array(), $label = true) {
   $this->test_for($this->name, 'Making Form: You need to make the form first.');
@@ -170,14 +187,18 @@ function select($name, $options=array('Key' => 'Value'), $opts=array(), $label =
   $dev_note = $this->dev_message($fieldName);
 
   echo apply_filters($fieldName . '_filter', $s['beforeLabel'].$s['label'].$s['afterLabel'].$field.$dev_note.$s['help'].$s['afterField']);
+
+  return $this;
 }
 
 /**
  * Form Radio.
  *
- * @param string $singular singular name is required
- * @param array $options args for items
+ * @param string $name singular name is required
+ * @param array $options values for radio options
  * @param array $opts args override and extend
+ * @param bool $label show label or not
+ * @return $this
  */
 function radio($name, $options=array('Key' => 'Value'), $opts=array(), $label = true) {
   $this->test_for($this->name, 'Making Form: You need to make the form first.');
@@ -218,15 +239,19 @@ function radio($name, $options=array('Key' => 'Value'), $opts=array(), $label = 
   $dev_note = $this->dev_message($fieldName);
 
   echo apply_filters($fieldName . '_filter', $s['beforeLabel'].$s['label'].$s['afterLabel'].$field.$dev_note.$s['help'].$s['afterField']);
+
+  return $this;
 }
 
 /**
  * Form WP Editor.
  *
- * @param string $singular singular name is required
- * @param array $opts args override and extend
+ * @param string $name singular name is required
+ * @param bool $label text for the label
+ * @param array $opts args override and extend wp_editor
+ * @return $this
  */
-function editor($name, $label=null, $opts=array(), $settings=array('validate'=>'none')) {
+function editor($name, $label=null, $opts=array()) {
   $this->test_for($this->name, 'Making Form: You need to make the form first.');
   $this->test_for($name, 'Making Form: You need to enter a singular name.');
 
@@ -246,13 +271,17 @@ function editor($name, $label=null, $opts=array(), $settings=array('validate'=>'
   );
   echo $this->dev_message($fieldName);
   echo '</div>';
+
+  return $this;
 }
 
 /**
  * Form Image
  *
- * @param string $singular singular name is required
+ * @param string $name singular name is required
  * @param array $opts args override and extend
+ * @param bool $label show label or not
+ * @return $this
  */
 function image($name, $opts=array(), $label = true) {
   $this->test_for($this->name, 'Making Form: You need to make the form first.');
@@ -292,13 +321,17 @@ function image($name, $opts=array(), $label = true) {
   );
 
   echo apply_filters($fieldName . '_filter', $this->get_text_form($args));
+
+  return $this;
 }
 
 /**
  * Form File
  *
- * @param string $singular singular name is required
+ * @param string $name singular name is required
  * @param array $opts args override and extend
+ * @param bool $label show label or not
+ * @return $this
  */
 function file($name, $opts=array(), $label = true) {
   $this->test_for($this->name, 'Making Form: You need to make the form first.');
@@ -336,13 +369,17 @@ function file($name, $opts=array(), $label = true) {
   );
 
   echo apply_filters($fieldName . '_filter', $this->get_text_form($args));
+
+  return $this;
 }
 
 /**
  * Google Maps.
  *
- * @param string $singular singular name is required
+ * @param string $name singular name is required
  * @param array $opts args override and extend
+ * @param bool $label show label or not
+ * @return $this
  */
 function google_map($name, $opts=array(), $label = true) {
   $this->test_for($this->name, 'Making Form: You need to make the form first.');
@@ -360,13 +397,17 @@ function google_map($name, $opts=array(), $label = true) {
   );
 
   echo apply_filters($fieldName . '_filter', $this->get_google_map_form($args));
+
+  return $this;
 }
 
 /**
  * Date.
  *
- * @param string $singular singular name is required
+ * @param string $name singular name is required
  * @param array $opts args override and extend
+ * @param bool $label show label or not
+ * @return $this
  */
 function date($name, $opts=array(), $label = true) {
   $this->test_for($this->name, 'Making Form: You need to make the form first.');
@@ -384,6 +425,8 @@ function date($name, $opts=array(), $label = true) {
   );
 
   echo apply_filters($fieldName . '_filter', $this->get_text_form($args));
+
+  return $this;
 }
 
 /* Helper Functions
@@ -478,6 +521,8 @@ protected function get_text_form($o) {
   $value = $this->get_field_value($o['field']);
   if(isset($value)) :
     $v = "value=\"{$value}\"";
+  else :
+    $v = '';
   endif;
 
   $classes = $o['classes'] . '  acpt_' . $o['field'] . ' ' . $s['class'];
@@ -488,7 +533,7 @@ protected function get_text_form($o) {
   return $s['beforeLabel'].$s['label'].$s['afterLabel'].$field.$o['html'].$dev_note.$s['help'].$s['afterField'];
 }
 
-function get_google_map_form($o) {
+protected function get_google_map_form($o) {
   $value = $this->get_field_value($o['field']);
 
   // set http
@@ -513,7 +558,24 @@ function get_google_map_form($o) {
   return $this->get_text_form($o);
 }
 
-function get_field_value($field) {
+protected function get_color_form($args) {
+  global $acptPalette, $acptDefaultColor;
+
+  if(!isset($args['opts']['palette'])) {
+    $args['opts']['palette'] = $acptPalette;
+  }
+
+  if(!isset($args['opts']['default'])) {
+    $args['opts']['default'] = $acptDefaultColor;
+  }
+
+  wp_localize_script('fields', 'acpt_'.$args['field'].'_color_palette', $args['opts']['palette'] );
+  wp_localize_script('fields', 'acpt_'.$args['field'].'_defaultColor', $args['opts']['default'] );
+
+  return $this->get_text_form($args);
+}
+
+protected function get_field_value($field) {
   global $post;
 
   if(isset($post->ID)) { $value = get_post_meta($post->ID, $field, true); }

@@ -23,3 +23,12 @@ define('ACPT_LOAD_PLUGINS', true);
 
 // plugins list
 $acptPlugins = array('sample', 'seo');
+
+// default color for color picker
+$acptDefaultColor = "#fff";
+
+// palettes colors for color picker
+$acptPalette = array('#fff', '#000', '#333', '#ccc', '#f00', '#0f0', '#00f');
+
+// use depreciated classes (form, meta_box, post_type, tax, role)
+$useDepreciated = true;

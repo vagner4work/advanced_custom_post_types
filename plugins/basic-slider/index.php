@@ -11,21 +11,21 @@ $args = array(
 'show_ui' => true
 );
 
-$slide = new post_type('slide','slides', false,  $args );
+$slide = new acpt_post_type('slide','slides', false,  $args );
 
 $slide->icon('refresh');
 
-new tax('group','groups', $slide, true);
+new acpt_tax('group','groups', $slide, true);
 }
 
 add_action( 'add_meta_boxes', 'acpt_slider_meta' );
 
 function acpt_slider_meta() {
-	new meta_box('acpt_slide_options', array('slide'), array('label' => 'Slide'));
+	new acpt_meta_box('acpt_slide_options', array('slide'), array('label' => 'Slide'));
 }
 
 function meta_acpt_slide_options() {
-	$form = new form('slide', null);
+	$form = new acpt_form('slide', null);
 	$form->image('image', array('label' => 'Image URL', 'help' => 'Upload an Image that is 940px by 350px for best results', 'button' => 'Add Your Slide'));
 	$form->text('headline', array('label' => 'Headline'));
 	$form->textarea('description',array('label' => 'Description'));

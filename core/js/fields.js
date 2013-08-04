@@ -12,7 +12,11 @@ jQuery(document).ready(function($){
     });
 
     $('.color-picker').each(function(){
-        $(this).wpColorPicker();
+        pal = $(this).attr('id') + '_color_palette';
+        def = $(this).attr('id') + '_defaultColor';
+        myobj = { palettes: window[pal], defaultColor: window[def]  }
+        console.log(myobj);
+        $(this).wpColorPicker(myobj);
     });
 
     function mapIt(str) {

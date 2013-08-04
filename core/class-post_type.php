@@ -18,7 +18,7 @@
   *
   * @global string $acpt_version
   */
-class post_type extends acpt {
+class acpt_post_type extends acpt {
 
 	public $singular = null;
 	public $plural = null;

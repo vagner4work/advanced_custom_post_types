@@ -1,8 +1,8 @@
 <?php
 // Include this file in functions.php or plugin
 global $wp_version;
-if($wp_version < '3.3' || $wp_version == null ): exit('You need the 3.3+ version of WordPress.');
-else: $acpt_version = '3.0';
+if($wp_version < '3.5' || $wp_version == null ): exit('You need the 3.5+ version of WordPress.');
+else: $acpt_version = '3.0.2';
 endif;
 
 // load config
@@ -25,6 +25,8 @@ foreach($lib as $value) :
   require_once('core/class-'.$value.'.php');
 endforeach;
 
+require_once('core/depreciated.php');
+
 // getting the meta
 function acpt_meta($name = '', $fallBack = '', $theID = null) {
     global $post;
@@ -43,10 +45,10 @@ function e_acpt_meta($name = '', $fallBack = '', $theID = null) {
 }
 
 // setup
-if(ACPT_MESSAGES) add_filter('post_updated_messages', 'utility::set_messages' );
-add_action('save_post','save::save_post_fields');
-if(ACPT_STYLES) add_action('admin_init', 'utility::apply_css');
-if( is_admin() ) add_action('admin_enqueue_scripts', 'utility::upload_scripts');
+if(ACPT_MESSAGES) add_filter('post_updated_messages', 'acpt_utility::set_messages' );
+add_action('save_post','acpt_save::save_post_fields');
+if(ACPT_STYLES) add_action('admin_init', 'acpt_utility::apply_css');
+if( is_admin() ) add_action('admin_enqueue_scripts', 'acpt_utility::upload_scripts');
 
 // load plugins
 if(ACPT_LOAD_PLUGINS == true) :

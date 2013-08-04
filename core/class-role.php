@@ -7,7 +7,7 @@
  * reason. Use on theme or plugin activation. At the end og make and update
  * there is an arg shortcut for custom post type capabilities.
  **/
-class role extends acpt {
+class acpt_role extends acpt {
 	/**
 	 * Make Role. Do not use before init. Use before making a post type.
 	 * 

@@ -14,27 +14,28 @@ $args_example = array(
 	'show_ui' => true
 );
 
-$sample = new post_type('sample','samples', false,  $args_sample );
-$example = new post_type('example','examples', false,  $args_example );
+$sample = new acpt_post_type('sample','samples', false,  $args_sample );
+$example = new acpt_post_type('example','examples', false,  $args_example );
 
 $sample->icon('person');
 $example->icon('location');
 
-new tax('color', 'colors', $sample, true, false);
+new acpt_tax('color', 'colors', $sample, true, false);
 
 }
 
 add_action( 'add_meta_boxes', 'addThem' );
 
 function addThem() {
-	new meta_box('custom', array('sample', 'example'), array('label' => 'Custom Meta Box'));
+	new acpt_meta_box('custom', array('sample', 'example'), array('label' => 'Custom Meta Box'));
 }
 
 function meta_custom() {
-	$form = new form('details', null);
+	$form = new acpt_form('details', null);
 	$form->text('text', array('label' => 'Text Field'));
-  $form->color('color', array('label' => 'Color Field'));
-	$form->image('image', array('label' => 'Image Field', 'button' => 'Add Your Image'));
+  $form->color('color_p', array('label' => 'Color Field', 'default' => '#000', 'palette' => array('#ffffff', '#ff0000', '#ff3300')));
+  $form->color('color', array('label' => 'Color Field (no palette)'));
+  $form->image('image', array('label' => 'Image Field', 'button' => 'Add Your Image'));
 	$form->file('file', array('label' => 'File Field', 'button' => 'Select a File'));
 	$form->google_map('address', array('label' => 'Address Field'));
 	$form->date('date', array('label' => 'Date Field', 'button' => 'Enter a Date'));

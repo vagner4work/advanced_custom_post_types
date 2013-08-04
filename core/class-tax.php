@@ -18,7 +18,7 @@
   *
   * @global string $acpt_version
   */
-class tax extends acpt {
+class acpt_tax extends acpt {
 
 	public $singular = null;
 	public $plural = null;

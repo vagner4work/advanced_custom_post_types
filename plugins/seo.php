@@ -7,11 +7,11 @@ if( !defined('WPSEO_URL') && !defined('AIOSEOP_VERSION') ) {
 
 function acpt_seo_meta() {
 	$publicTypes = get_post_types( array( 'public' => true ) );
-	new meta_box('acpt_seo', $publicTypes, array('label' => 'Search Engine Optimization'));
+	new acpt_meta_box('acpt_seo', $publicTypes, array('label' => 'Search Engine Optimization'));
 }
 
 function meta_acpt_seo() {
-	$form = new form('acpt_seo', null);
+	$form = new acpt_form('acpt_seo', null);
 	$form->text('title', array('label' => 'Title'));
 	$form->textarea('description', array('label' => 'Description'));
 }

@@ -1,5 +1,5 @@
 <?php
-class utility extends acpt {
+class acpt_utility extends acpt {
 
   static function set_messages($messages) {
     global $post;
