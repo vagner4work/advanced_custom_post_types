@@ -143,7 +143,7 @@ function textarea($name, $opts=array(), $label = true) {
 
   $s = $this->get_opts($name, $opts, $fieldName, $label);
 
-  $field = "<textarea class=\"textarea $fieldName {$s['class']}\" {$s['id']} {$s['size']} {$s['readonly']} {$s['nameAttr']} />$value</textarea>";
+  $field = "<textarea class=\"textarea $fieldName {$s['class']}\" {$s['id']} {$s['readonly']} {$s['nameAttr']} />$value</textarea>";
   $dev_note = $this->dev_message($fieldName);
 
   echo apply_filters($fieldName . '_filter', $s['beforeLabel'].$s['label'].$s['afterLabel'].$field.$dev_note.$s['help'].$s['afterField']);
@@ -190,7 +190,7 @@ function select($name, $options=array('Key' => 'Value'), $opts=array(), $label =
 
   $s = $this->get_opts($name, $opts, $fieldName, $label);
 
-  $field = "<select class=\"select $fieldName {$s['class']}\" {$s['id']} {$s['size']} {$s['readonly']} {$s['nameAttr']} />$optionsList</select>";
+  $field = "<select class=\"select $fieldName {$s['class']}\" {$s['id']} {$s['readonly']} {$s['nameAttr']} />$optionsList</select>";
   $dev_note = $this->dev_message($fieldName);
 
   echo apply_filters($fieldName . '_filter', $s['beforeLabel'].$s['label'].$s['afterLabel'].$field.$dev_note.$s['help'].$s['afterField']);
@@ -216,7 +216,7 @@ function radio($name, $options=array('Key' => 'Value'), $opts=array(), $label = 
   $fieldName = $this->get_field_name($name, 'radio');
 
   // name
-  $nameAttr = 'name="acpt['.$fieldName.']"';
+  $s = $this->get_opts($name, $opts, $fieldName, $label);
 
   // get options HTML
   if(!empty($options)) :
@@ -234,13 +234,13 @@ function radio($name, $options=array('Key' => 'Value'), $opts=array(), $label = 
       else
         $key = $option;
 
-      $optionsList .= "<label><input type=\"radio\" $nameAttr $checked value=\"$option\" /><span>$key</span></label>";
+      $optionsList .= "<label><input type=\"radio\" {$s['nameAttr']} $checked value=\"$option\" /><span>$key</span></label>";
 
     endforeach;
 
   endif;
 
-  $s = $this->get_opts($name, $opts, $fieldName, $label);
+
 
   $field = "<div class=\"radio $fieldName {$s['class']}\" {$s['id']} />$optionsList</div>";
   $dev_note = $this->dev_message($fieldName);
@@ -263,17 +263,14 @@ function editor($name, $label=null, $opts=array()) {
   $this->test_for($name, 'Making Form: You need to enter a singular name.');
 
   $fieldName = $this->get_field_name($name, 'editor');
-  $value = $this->get_field_value($fieldName);
-
-  if(empty($value)) $value = '';
-
+  $v = $this->get_field_value($fieldName);
   $s = $this->get_opts($label, array('labelTag' => 'span'), $fieldName, true);
 
   echo '<div class="control-group">';
   echo $s['label'];
   wp_editor(
-      $value,
-      'wysisyg_'.$this->name.'_'.$name,
+      $v,
+      'wysisyg_'.$fieldName,
       array_merge($opts,array('textarea_name' => $this->get_acpt_post_name($fieldName)))
   );
   echo $this->dev_message($fieldName);
@@ -559,11 +556,17 @@ function image($name, $opts=array(), $label = true) {
 
     // value
     $v = $this->get_field_value($o['field']);
+
+    $field = acpt_html::make_input(array(
+        'class' => "{$o['classes']}  acpt_{$o['field']} {$s['class']}",
+        'type' => 'text',
+        'value' => $v,
+        ''
+    ));
     $v = acpt_html::make_html_attr('value', $v);
+    $c = acpt_html::make_html_attr('class', "{$o['classes']}  acpt_{$o['field']} {$s['class']}");
 
-    $classes = acpt_html::make_html_attr('class', $o['classes'] . '  acpt_' . $o['field'] . ' ' . $s['class']);
-
-    $field = "<input type=\"text\" {$classes} {$s['attr']} $v />";
+    $field = "<input type=\"text\" $c {$s['nameAttr']} {$s['readonly']} {$s['id']} $v />";
     $dev_note = $this->dev_message($o['field']);
 
     return $s['beforeLabel'].$s['label'].$s['afterLabel'].$field.$o['html'].$dev_note.$s['help'].$s['afterField'];
@@ -624,8 +627,6 @@ function image($name, $opts=array(), $label = true) {
    */
   protected function get_opts($name, $opts, $fieldName, $label) {
 
-    $s['attr'] = '';
-
     // classes
     if ( is_string(isset($opts['class'])) ) $s['class'] = $opts['class'];
     else $s['class'] = '';
@@ -633,27 +634,14 @@ function image($name, $opts=array(), $label = true) {
     // readonly
     if ( isset($opts['readonly']) ) {
       $s['readonly'] = 'readonly="readonly"';
-      $s['attr'] .= ' '. $s['readonly'];
     } else {
       $s['readonly'] = '';
     }
 
-    // size
-    if ( array_key_exists('size', $opts) && is_integer($opts['size']) ) {
-      $s['size'] = 'size="'.$opts['size'].'"';
-      $s['attr'] .= ' '. $s['size'];
-    } else {
-      $s['size'] = '';
-    }
-
     // name and id
     $s['nameAttr'] = $this->make_attr_name($fieldName);
-    $s['attr'] .= ' '. $s['nameAttr'];
-
     $id = 'acpt_'.$fieldName;
-
     $s['id'] = 'id="'.$id.'"';
-    $s['attr'] .= ' '. $s['id'];
 
     // help text
     if(isset($opts['help'])) :
