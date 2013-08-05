@@ -4,7 +4,6 @@ class acpt_save extends acpt {
 
   static function save_post_fields($postID) {
     if(isset($_POST['save_acpt']) && check_admin_referer('nonce_actp_nonce_action','nonce_acpt_nonce_field')) :
-      global $post;
       do_action('start_acpt_save');
       $metaData = apply_filters('acpt_save_filter', $_POST['acpt']);
 

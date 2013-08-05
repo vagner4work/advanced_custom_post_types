@@ -374,6 +374,7 @@ Filters
 
 - {your_field_name}_filter : This for the admin screens. It filters the output of custom fields.
 - acpt_save_filter: Meta data being saved. Best used to validate and sanitize custom data.
+- acpt_plugin_folder: Set the plugins folder. Should be file system level include path not relative to project.
 
 
 Change Log

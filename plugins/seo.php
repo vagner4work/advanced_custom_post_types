@@ -21,10 +21,15 @@ function acpt_seo_title( $title, $sep = '', $other = '' ) {
 
     $newTitle = acpt_meta('acpt_seo_title');
 
-    if ( isset($newTitle) || is_feed() || is_single() || is_page() || is_singular() )
+    if ( $newTitle != '') {
+      if(is_feed() || is_single() || is_page() || is_singular() ) {
         return $newTitle;
-    else
+      } else {
         return $title;
+      }
+    } else {
+      return $title;
+    }
 
 }
 

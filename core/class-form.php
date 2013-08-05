@@ -428,7 +428,7 @@ function image($name, $opts=array(), $label = true) {
    * @return string
    */
   function get_image_form($o) {
-    $value = $this->get_field_value($o['field']);
+    $value = esc_url($this->get_field_value($o['field']));
 
     if(empty($o['opts']['readonly'])) $o['opts']['readonly'] = true;
 
@@ -437,8 +437,7 @@ function image($name, $opts=array(), $label = true) {
 
     // placeholder image and image id value
     if(!empty($value)) :
-      $value = esc_url($value);
-      $placeHolderImage = '<img class="upload-img" src="'.esc_url($value).'" />';
+      $placeHolderImage = '<img class="upload-img" src="'.$value.'" />';
       $vID = $this->get_field_value($o['field'].'_id');
     else :
       $vID = $placeHolderImage = '';

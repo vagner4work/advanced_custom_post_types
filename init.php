@@ -55,7 +55,7 @@ if( is_admin() ) add_action('admin_enqueue_scripts', 'acpt_utility::upload_scrip
 if(ACPT_LOAD_PLUGINS == true) :
 	foreach($acptPlugins as $plugin) {
 		$pluginFile = '';
-      $pluginsFolder = ACPT_FILE_PATH.'/'.ACPT_FOLDER_NAME.'/plugins/';
+      $pluginsFolder = apply_filters('acpt_plugin_folder', ACPT_FILE_PATH.'/'.ACPT_FOLDER_NAME.'/plugins/');
 		if (file_exists($pluginsFolder . $plugin . '/index.php')) {
 			$pluginFile = $plugin . '/index.php';
 		} else {

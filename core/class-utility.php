@@ -37,8 +37,8 @@ class acpt_utility extends acpt {
   }
 
   static function apply_css() {
-    wp_register_style( 'acpt-styles', ACPT_LOCATION . '/'.ACPT_FOLDER_NAME.'/core/css/style.css' );
-    wp_enqueue_style( 'acpt-styles' );
+    wp_enqueue_style( 'acpt-styles', ACPT_LOCATION . '/'.ACPT_FOLDER_NAME.'/core/css/style.css' );
+    wp_enqueue_style( 'acpt-date-picker', ACPT_LOCATION . '/'.ACPT_FOLDER_NAME.'/core/css/date-picker.css' );
   }
 
   static function upload_scripts() {
