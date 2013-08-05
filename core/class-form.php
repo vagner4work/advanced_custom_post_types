@@ -429,9 +429,23 @@ function image($name, $opts=array(), $label = true) {
       'html' => ''
     );
 
-    echo apply_filters($fieldName . '_filter', $this->get_text_form($args));
+    echo apply_filters($fieldName . '_filter', $this->get_date_form($args));
 
     return $this;
+  }
+
+  /**
+   * Get Date Form
+   *
+   * @param $o
+   *
+   * @return string
+   */
+  function get_date_form($o) {
+    $o['opts'] = $this->set_empty_keys($o['opts']);
+    $o['opts']['readonly'] = $this->get_opt_by_test($o['opts']['readonly'], true);
+
+    return $this->get_text_form($o);
   }
 
   /**
