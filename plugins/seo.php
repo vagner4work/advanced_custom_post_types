@@ -19,7 +19,8 @@ function meta_acpt_seo() {
 function acpt_seo_title( $title, $sep = '', $other = '' ) {
     global $paged, $page;
 
-    $newTitle = acpt_meta('acpt_seo_title');
+    $newTitle = acpt_meta('seo');
+    $newTitle = $newTitle['acpt_seo_title'];
 
     if ( $newTitle != '') {
       if(is_feed() || is_single() || is_page() || is_singular() ) {
@@ -35,6 +36,6 @@ function acpt_seo_title( $title, $sep = '', $other = '' ) {
 
 function acpt_seo_description() {
 	global $post;
-	$description = acpt_meta('acpt_seo_description');;
-	if( !empty( $description ) ) { echo "\t<meta name=\"Description\" content=\"$description\" />\n"; }
+	$seo = acpt_meta('seo');;
+	if( !empty( $seo ) ) { echo "\t<meta name=\"Description\" content=\"{$seo['acpt_seo_description']}\" />\n"; }
 }
