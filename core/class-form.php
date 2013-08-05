@@ -47,7 +47,7 @@ function make($name, $opts=array()) {
 function end($name=null, $opts=array()) {
   if($name) :
     $field = $opts['type'] == 'button' ? '<input type="button"' : '<input type="submit"';
-    $field .= 'value="'.$name.'" />';
+    $field .= 'value="'.esc_attr($name).'" />';
     $field .= '</form>';
   endif;
 
@@ -132,10 +132,18 @@ function textarea($name, $opts=array(), $label = true) {
 
   $s = $this->get_opts($name, $opts, $fieldName, $label);
 
-  $field = "<textarea class=\"textarea $fieldName {$s['class']}\" {$s['id']} {$s['readonly']} {$s['nameAttr']} />$value</textarea>";
+  $attr = array(
+    'readonly' => $s['read'],
+    'class' => "textarea $fieldName {$s['class']}",
+    'id' => $s['justID'],
+    'name' => $s['name'],
+    'html' => $value
+  );
+  $field = acpt_html::element('textarea', $attr);
+
   $dev_note = $this->dev_message($fieldName);
 
-  echo apply_filters($fieldName . '_filter', $s['beforeLabel'].$s['label'].$s['afterLabel'].$field.$dev_note.$s['help'].$s['afterField']);
+  echo apply_filters($fieldName . '_filter', $s['bLabel'].$s['label'].$s['aLabel'].$field.$dev_note.$s['help'].$s['afterField']);
 
   return $this;
 }
@@ -172,6 +180,8 @@ function select($name, $options=array('Key' => 'Value'), $opts=array(), $label =
       else
         $key = $option;
 
+      $option = esc_attr($option);
+
       $optionsList .= "<option $selected value=\"$option\">$key</option>";
     endforeach;
 
@@ -179,10 +189,17 @@ function select($name, $options=array('Key' => 'Value'), $opts=array(), $label =
 
   $s = $this->get_opts($name, $opts, $fieldName, $label);
 
-  $field = "<select class=\"select $fieldName {$s['class']}\" {$s['id']} {$s['readonly']} {$s['nameAttr']} />$optionsList</select>";
+  $attr = array(
+    'readonly' => $s['read'],
+    'class' => "select $fieldName {$s['class']}",
+    'id' => $s['justID'],
+    'name' => $s['name'],
+    'html' => $optionsList
+  );
+  $field = acpt_html::element('select', $attr);
   $dev_note = $this->dev_message($fieldName);
 
-  echo apply_filters($fieldName . '_filter', $s['beforeLabel'].$s['label'].$s['afterLabel'].$field.$dev_note.$s['help'].$s['afterField']);
+  echo apply_filters($fieldName . '_filter', $s['bLabel'].$s['label'].$s['aLabel'].$field.$dev_note.$s['help'].$s['afterField']);
 
   return $this;
 }
@@ -229,7 +246,7 @@ function radio($name, $options=array('Key' => 'Value'), $opts=array(), $label = 
             'input' => array(
               'type' => 'radio',
               'name' => $s['name'],
-              'value' => $option,
+              'value' => esc_attr($option),
               'checked' => $checked
             )
           ), array(
@@ -246,12 +263,16 @@ function radio($name, $options=array('Key' => 'Value'), $opts=array(), $label = 
 
   endif;
 
-
-
-  $field = "<div class=\"radio $fieldName {$s['class']}\" {$s['id']} />$optionsList</div>";
+  $attr = array(
+    'readonly' => $s['read'],
+    'class' => "radio $fieldName {$s['class']}",
+    'id' => $s['justID'],
+    'html' => $optionsList
+  );
+  $field = acpt_html::element('div', $attr);
   $dev_note = $this->dev_message($fieldName);
 
-  echo apply_filters($fieldName . '_filter', $s['beforeLabel'].$s['label'].$s['afterLabel'].$field.$dev_note.$s['help'].$s['afterField']);
+  echo apply_filters($fieldName . '_filter', $s['bLabel'].$s['label'].$s['aLabel'].$field.$dev_note.$s['help'].$s['afterField']);
 
   return $this;
 }
@@ -403,11 +424,7 @@ function image($name, $opts=array(), $label = true) {
     if(empty($o['opts']['readonly'])) $o['opts']['readonly'] = true;
 
     // button text
-    if(isset($opts['button'])) :
-      $btnValue = $o['opts']['button'];
-    else :
-      $btnValue = "Insert Image";
-    endif;
+    $btnValue = $this->get_opt_by_test($o['opts']['button'], "Insert Image", $o['opts']['button']);
 
     // placeholder image and image id value
     if(!empty($value)) :
@@ -418,17 +435,17 @@ function image($name, $opts=array(), $label = true) {
       $vID = $placeHolderImage = '';
     endif;
 
-    $attachmentID = acpt_html::make_input(array(
+    $attachmentID = acpt_html::input(array(
       'type' => 'hidden',
       'class' => 'attachment-id-hidden',
       'name' => 'acpt['.$o['field'].'_id]',
-      'value' => $vID
+      'value' => esc_attr($vID)
     ));
 
     $btn = array('input' => array(
       'type' => 'button',
       'class' => 'button-primary upload-button',
-      'value' => $btnValue
+      'value' => esc_attr($btnValue)
     ));
 
     $phRemove = array(
@@ -469,7 +486,7 @@ function image($name, $opts=array(), $label = true) {
    * @return string
    */
   protected function get_google_map_form($o) {
-    $value = $this->get_field_value($o['field']);
+    $value = esc_attr($this->get_field_value($o['field']));
 
     // set http
     if (is_ssl()) $http = 'https://';
@@ -536,7 +553,7 @@ function image($name, $opts=array(), $label = true) {
 
     // placeholder image and image id value
     if(isset($value)) :
-      $valueID = acpt_html::make_html_attr('value', $value);
+      $valueID = acpt_html::make_html_attr('value', esc_attr($value));
     else :
       $valueID = '';
     endif;
@@ -560,10 +577,10 @@ function image($name, $opts=array(), $label = true) {
     $s = $this->get_opts($o['name'], $o['opts'], $o['field'], $o['label']);
     $v = $this->get_field_value($o['field']);
 
-    $field = acpt_html::make_input(array(
+    $field = acpt_html::input(array(
         'class' => "{$o['classes']}  acpt_{$o['field']} {$s['class']}",
         'type' => 'text',
-        'value' => $v,
+        'value' => esc_attr($v),
         'name' => $s['name'],
         'id' => $s['justID'],
         'readonly' => $s['read']
@@ -571,7 +588,7 @@ function image($name, $opts=array(), $label = true) {
 
     $dev_note = $this->dev_message($o['field']);
 
-    return $s['beforeLabel'].$s['label'].$s['afterLabel'].$field.$o['html'].$dev_note.$s['help'].$s['afterField'];
+    return $s['bLabel'].$s['label'].$s['aLabel'].$field.$o['html'].$dev_note.$s['help'].$s['afterField'];
   }
 
   /**
@@ -629,74 +646,84 @@ function image($name, $opts=array(), $label = true) {
    */
   protected function get_opts($name, $opts, $fieldName, $label) {
 
+    $opts = $this->set_empty_keys($opts);
+
     // classes
-    if ( is_string(isset($opts['class'])) ) $s['class'] = $opts['class'];
-    else $s['class'] = '';
+    $s['class'] = $this->get_opt_by_test($opts['class']);
 
     // readonly
-    if ( isset($opts['readonly']) ) {
-      $s['read'] = $opts['readonly'];
-      $s['readonly'] = 'readonly="readonly"';
-    } else {
-      $s['readonly'] = '';
-      $s['read'] = '';
-    }
+    $s['read'] = $this->get_opt_by_test($opts['readonly']);
 
     // name and id
     $s['nameAttr'] = $this->make_attr_name($fieldName);
     $s['name'] = $this->get_acpt_post_name($fieldName);
     $id = 'acpt_'.$fieldName;
-    $s['id'] = 'id="'.$id.'"';
     $s['justID'] = $id;
 
     // help text
-    if(isset($opts['help'])) :
-      $s['help'] = acpt_html::make_html(array(array(
-        'p' => array(
-          'class' => 'help-text',
-          'html' => $opts['help']
-      ))));
-    else :
-      $s['help'] = '';
-    endif;
-
-    // beforeLabel
-    if(isset($opts['beforeLabel'])) :
-      $s['beforeLabel'] = $opts['beforeLabel'];
-    else :
-      $s['beforeLabel'] = BEFORE_LABEL;
-    endif;
-
-    // afterLabel
-    if(isset($opts['afterLabel'])) :
-      $s['afterLabel'] = $opts['afterLabel'];
-    else :
-      $s['afterLabel'] = AFTER_LABEL;
-    endif;
-
-    // afterField
-    if(isset($opts['afterField'])) :
-      $s['afterField'] = $opts['afterField'];
-    else :
-      $s['afterField'] = AFTER_FIELD;
-    endif;
+    $help = acpt_html::element('p', array(
+        'class' => 'help-text',
+        'html' => $opts['help']
+    ));
+    $s['help'] = $this->get_opt_by_test($opts['help'], '', $help);
 
     // label
-    if(empty($opts['labelTag'])) $opts['labelTag'] = 'label';
+    $s['bLabel'] = $this->get_opt_by_test($opts['bLabel'], BEFORE_LABEL);
+    $s['aLabel'] = $this->get_opt_by_test($opts['aLabel'], AFTER_LABEL);
+    $s['afterField'] = $this->get_opt_by_test($opts['afterField'], AFTER_FIELD);
+    $opts['labelTag'] = $this->get_opt_by_test($opts['labelTag'], 'label');
 
     if(isset($label)) :
-      $labelName = (isset($opts['label']) ? $opts['label'] : $name);
+      $labelName = $this->get_opt_by_test($opts['label'], $name);
 
-      $s['label'] = acpt_html::make_html(array(array(
-          $opts['labelTag'] => array(
-            'class' => 'control-label',
-            'for' => $id,
-            'html' => $labelName
-       ))));
-
+      $s['label'] = acpt_html::element($opts['labelTag'], array(
+        'class' => 'control-label',
+        'for' => $id,
+        'html' => $labelName
+      ));
     endif;
 
     return $s;
+  }
+
+  /**
+   * Get Options By Test
+   *
+   * Setting the $return field will send those results if the test passes.
+   * Default is sent on a failing test.
+   *
+   * @param $test
+   * @param string $default
+   * @param bool $return
+   *
+   * @return bool|string
+   */
+  private function get_opt_by_test($test, $default = '', $return = true) {
+    $return = ($return === true) ? $test : $return;
+    return (isset($test)) ? $return : $default;
+  }
+
+  /**
+   * Set Empty Keys
+   *
+   * @param $opts
+   * @param bool $desired_keys
+   *
+   * @return mixed
+   */
+  private function set_empty_keys($opts, $desired_keys = false) {
+    $keys = array_keys($opts);
+
+    if($desired_keys === false) {
+      $desired_keys = array('readonly', 'button', 'help', 'bLabel', 'aLabel', 'afterField', 'label', 'labelTag', 'class');
+    }
+
+    foreach($desired_keys as $desired_key){
+      if(in_array($desired_key, $keys)) continue;
+      $opts[$desired_key] = null;
+    }
+
+    return $opts;
   }
 
   private function make_attr_name($field, $prefix = '', $suffix = '', $group = '') {

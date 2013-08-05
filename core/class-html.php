@@ -74,8 +74,12 @@ class acpt_html extends acpt {
     endif;
   }
 
-  static function make_input($args, $make = null) {
-    $args = array('input' => $args );
+  static function input($args, $make = null ) {
+    return self::element('input', $args, $make );
+  }
+
+  static function element($tag, $args, $make = true) {
+    $args = array( $tag => $args );
 
     if(isset($make)) {
       return self::make_html(array($args));
