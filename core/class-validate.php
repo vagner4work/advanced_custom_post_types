@@ -51,6 +51,11 @@ class acpt_validate extends acpt {
     return !preg_match ("/[^0-9]/", $digit);
   }
 
+  /* for post name groups */
+  static function bracket($group) {
+    return preg_match("/^\[.+\]/", $group);
+  }
+
   static function hex( $hex ) {
     $hex = trim( $hex );
     /* Strip recognized prefixes. */

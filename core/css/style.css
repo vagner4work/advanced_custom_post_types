@@ -113,6 +113,7 @@ input[readonly].dev_note {
   padding: 5px;
   box-sizing: border-box;
   max-width: 100%;
+  max-height: 200px;
   float: left;
   clear: both;
   background: #fff;

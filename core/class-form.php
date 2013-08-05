@@ -5,6 +5,7 @@ class acpt_form extends acpt {
 public $name = null;
 public $action = null;
 public $method = null;
+public $group = null;
 
 function __construct($name, $opts=array()) {
   return $this->make($name, $opts);
@@ -20,6 +21,9 @@ function __construct($name, $opts=array()) {
  */
 function make($name, $opts=array()) {
     $this->test_for($name, 'Making Form: You need to enter a singular name.');
+
+    $opts = $this->set_empty_keys($opts, array('group'));
+    $this->group = $this->get_opt_by_test($opts['group'], '');
 
     if(isset($opts['method'])) :
         $this->method = $opts['method'];
@@ -127,7 +131,9 @@ function textarea($name, $opts=array(), $label = true) {
   $this->test_for($name, 'Making Form: You need to enter a singular name.');
 
   $fieldName = $this->get_field_name($name);
-  $value = $this->get_field_value($fieldName);
+
+  $opts = $this->set_empty_keys($opts, array('group', 'sub'));
+  $value = $this->get_field_value($fieldName, $opts['group'], $opts['sub']);
 
   // value
   if(empty($value)) $value = '';
@@ -143,7 +149,7 @@ function textarea($name, $opts=array(), $label = true) {
   );
   $field = acpt_html::element('textarea', $attr);
 
-  $dev_note = $this->dev_message($fieldName);
+  $dev_note = $this->dev_message($fieldName, $opts['group'], $opts['sub']);
 
   echo apply_filters($fieldName . '_filter', $s['bLabel'].$s['label'].$s['aLabel'].$field.$dev_note.$s['help'].$s['afterField']);
 
@@ -169,7 +175,8 @@ function select($name, $options=array('Key' => 'Value'), $opts=array(), $label =
   // get options HTML
   if(isset($options)) :
 
-    $value = $this->get_field_value($fieldName);
+    $opts = $this->set_empty_keys($opts, array('group', 'sub'));
+    $value = $this->get_field_value($fieldName, $opts['group'], $opts['sub']);
 
     foreach( $options as $key => $option) :
       if($option == $value)
@@ -199,7 +206,7 @@ function select($name, $options=array('Key' => 'Value'), $opts=array(), $label =
     'html' => $optionsList
   );
   $field = acpt_html::element('select', $attr);
-  $dev_note = $this->dev_message($fieldName);
+  $dev_note = $this->dev_message($fieldName, $opts['group'], $opts['sub']);
 
   echo apply_filters($fieldName . '_filter', $s['bLabel'].$s['label'].$s['aLabel'].$field.$dev_note.$s['help'].$s['afterField']);
 
@@ -229,7 +236,8 @@ function radio($name, $options=array('Key' => 'Value'), $opts=array(), $label = 
   // get options HTML
   if(!empty($options)) :
 
-    $value = $this->get_field_value($fieldName);
+    $opts = $this->set_empty_keys($opts, array('group', 'sub'));
+    $value = $this->get_field_value($fieldName, $opts['group'], $opts['sub']);
 
     foreach( $options as $key => $option) :
       if($option == $value)
@@ -272,7 +280,7 @@ function radio($name, $options=array('Key' => 'Value'), $opts=array(), $label = 
     'html' => $optionsList
   );
   $field = acpt_html::element('div', $attr);
-  $dev_note = $this->dev_message($fieldName);
+  $dev_note = $this->dev_message($fieldName, $opts['group'], $opts['sub']);
 
   echo apply_filters($fieldName . '_filter', $s['bLabel'].$s['label'].$s['aLabel'].$field.$dev_note.$s['help'].$s['afterField']);
 
@@ -292,17 +300,23 @@ function editor($name, $label=null, $opts=array()) {
   $this->test_for($name, 'Making Form: You need to enter a singular name.');
 
   $fieldName = $this->get_field_name($name);
-  $v = $this->get_field_value($fieldName);
+
+  $opts = $this->set_empty_keys($opts, array('group', 'sub'));
+  $group = $this->get_opt_by_test($opts['group'], '');
+  $sub = $this->get_opt_by_test($opts['sub'], '');
+
+  $v = $this->get_field_value($fieldName, $group, $opts['sub']);
   $s = $this->get_opts($label, array('labelTag' => 'span'), $fieldName, true);
+
 
   echo '<div class="control-group">';
   echo $s['label'];
   wp_editor(
       acpt_sanitize::editor($v),
       'wysisyg_'.$fieldName,
-      array_merge($opts,array('textarea_name' => $this->get_acpt_post_name($fieldName)))
+      array_merge($opts,array('textarea_name' => $this->get_acpt_post_name($fieldName, $group, $sub)))
   );
-  echo $this->dev_message($fieldName);
+  echo $this->dev_message($fieldName, $group, $sub);
   echo '</div>';
 
   return $this;
@@ -428,9 +442,9 @@ function image($name, $opts=array(), $label = true) {
    * @return string
    */
   function get_image_form($o) {
-    $value = esc_url($this->get_field_value($o['field']));
-
-    if(empty($o['opts']['readonly'])) $o['opts']['readonly'] = true;
+    $o['opts'] = $this->set_empty_keys($o['opts']);
+    $o['opts']['readonly'] = $this->get_opt_by_test($o['opts']['readonly'], true);
+    $value = esc_url($this->get_field_value($o['field'], $o['opts']['group'], $o['opts']['sub']));
 
     // button text
     $btnValue = $this->get_opt_by_test($o['opts']['button'], "Insert Image", $o['opts']['button']);
@@ -438,7 +452,7 @@ function image($name, $opts=array(), $label = true) {
     // placeholder image and image id value
     if(!empty($value)) :
       $placeHolderImage = '<img class="upload-img" src="'.$value.'" />';
-      $vID = $this->get_field_value($o['field'].'_id');
+      $vID = $this->get_field_value($o['field'].'_id', $o['opts']['group'], $o['opts']['sub']);
     else :
       $vID = $placeHolderImage = '';
     endif;
@@ -494,7 +508,8 @@ function image($name, $opts=array(), $label = true) {
    * @return string
    */
   protected function get_google_map_form($o) {
-    $value = esc_attr($this->get_field_value($o['field']));
+    $o['opts'] = $this->set_empty_keys($o['opts']);
+    $value = $this->get_field_value($o['field']."_id", $o['opts']['group'], $o['opts']['sub']);
 
     // set http
     if (is_ssl()) $http = 'https://';
@@ -504,7 +519,7 @@ function image($name, $opts=array(), $label = true) {
     if(empty($value)) $zoom = 1;
     else $zoom = 15;
 
-    $attrName = $this->make_attr_name($o['field'], '_encoded');
+    $attrName = $this->make_attr_name($o['field'].'_encoded', $o['opts']['group'], $o['opts']['sub']);
 
     $o['html'] = "<input type=\"hidden\" class=\"googleMap-encoded\" value=\"{$value}\" {$attrName} />";
     $o['html'] .= '<p class="map"><img src="'.$http.'maps.googleapis.com/maps/api/staticmap?center='.$value.'&zoom='.$zoom.'&size=1200x140&sensor=true&markers='.$value.'" class="map-image" alt="Map Image" /></p>';
@@ -547,8 +562,8 @@ function image($name, $opts=array(), $label = true) {
    * @return string
    */
   function get_file_form($o) {
-
-    $value = $this->get_field_value($o['field']."_id");
+    $o['opts'] = $this->set_empty_keys($o['opts']);
+    $value = $this->get_field_value($o['field']."_id", $o['opts']['group'], $o['opts']['sub']);
 
     if(empty($o['opts']['readonly'])) $o['opts']['readonly'] = true;
 
@@ -566,7 +581,7 @@ function image($name, $opts=array(), $label = true) {
       $valueID = '';
     endif;
 
-    $attrName = $this->make_attr_name($o['field'], '_id');
+    $attrName = $this->make_attr_name($o['field'].'_id', $o['opts']['group'], $o['opts']['sub']);
 
     $o['html'] = "<input type=\"hidden\" class=\"attachment-id-hidden\" {$attrName} {$valueID}>";
     $o['html'] .= '<input type="button" class="button-primary upload-button" value="'.$button.'"> <span class="clear-attachment">clear file</span>';
@@ -582,8 +597,9 @@ function image($name, $opts=array(), $label = true) {
    * @return string
    */
   protected function get_text_form($o) {
+    $o['opts'] = $this->set_empty_keys($o['opts']);
     $s = $this->get_opts($o['name'], $o['opts'], $o['field'], $o['label']);
-    $v = $this->get_field_value($o['field']);
+    $v = $this->get_field_value($o['field'], $o['opts']['group'], $o['opts']['sub']);
 
     $field = acpt_html::input(array(
         'class' => "{$o['classes']}  acpt_{$o['field']} {$s['class']}",
@@ -594,52 +610,9 @@ function image($name, $opts=array(), $label = true) {
         'readonly' => $s['read']
     ), true);
 
-    $dev_note = $this->dev_message($o['field']);
+    $dev_note = $this->dev_message($o['field'], $o['opts']['group'], $o['opts']['sub']);
 
     return $s['bLabel'].$s['label'].$s['aLabel'].$field.$o['html'].$dev_note.$s['help'].$s['afterField'];
-  }
-
-  /**
-   * Get Field Value
-   *
-   * Get the value if it is a post type or another page form
-   *
-   * @param $field
-   *
-   * @return mixed|null|string
-   */
-  protected function get_field_value($field) {
-    global $post;
-
-    if(isset($post->ID)) { $value = acpt_meta($field); }
-    else { $value = null; }
-
-    return $value;
-  }
-
-  /**
-   * Get Dev Note
-   *
-   * Add the dev field to the admin to see the a acpt_meta() function
-   *
-   * @param $fieldName
-   *
-   * @return string
-   */
-  protected function dev_message($fieldName) {
-    if(DEV_MODE == true) return "<input class=\"dev_note\" readonly value=\"acpt_meta('{$fieldName}');\" />";
-    else return '';
-  }
-
-  /**
-   * Get Field Name
-   *
-   * @param $name
-   *
-   * @return string
-   */
-  protected function get_field_name($name) {
-    return $this->name.'_'.$name;
   }
 
   /**
@@ -667,7 +640,9 @@ function image($name, $opts=array(), $label = true) {
     // attributes
     $s['class'] = $this->get_opt_by_test($opts['class']);
     $s['read'] = $this->get_opt_by_test($opts['readonly']);
-    $s['name'] = $this->get_acpt_post_name($fieldName);
+    $group = $this->get_opt_by_test($opts['group'], '');
+    $sub = $this->get_opt_by_test($opts['sub'], '');
+    $s['name'] = $this->get_acpt_post_name($fieldName, $group, $sub);
     $s['id'] = 'acpt_'.$fieldName;
 
     // label
@@ -688,44 +663,66 @@ function image($name, $opts=array(), $label = true) {
   }
 
   /**
-   * Get Options By Test
+   * Get Dev Note
    *
-   * Setting the $return field will send those results if the test passes.
-   * Default is sent on a failing test.
+   * Add the dev field to the admin to see the a acpt_meta() function
    *
-   * @param $test
-   * @param string $default
-   * @param bool $return
+   * @param $fieldName
    *
-   * @return bool|string
+   * @return string
    */
-  private function get_opt_by_test($test, $default = '', $return = true) {
-    $return = ($return === true) ? $test : $return;
-    return (isset($test)) ? $return : $default;
+  protected function dev_message($fieldName, $group = '', $sub = '') {
+    $group = $this->get_opt_by_test($group, $this->group);
+
+    $group = substr($group, 1, -1);
+
+    if(DEV_MODE == true && $group == '' ) return "<input class=\"dev_note\" readonly value=\"acpt_meta('{$fieldName}');\" />";
+    elseif(DEV_MODE == true ) return "<input class=\"dev_note\" readonly value=\"acpt_meta('{$group}');\" />";
+    else return '';
   }
 
   /**
-   * Set Empty Keys
+   * Get Field Name
    *
-   * @param $opts
-   * @param bool $desired_keys
+   * @param $name
    *
-   * @return mixed
+   * @return string
    */
-  private function set_empty_keys($opts, $desired_keys = false) {
-    $keys = array_keys($opts);
-
-    if($desired_keys === false) {
-      $desired_keys = array('readonly', 'button', 'help', 'bLabel', 'aLabel', 'afterField', 'label', 'labelTag', 'class');
-    }
-
-    foreach($desired_keys as $desired_key){
-      if(in_array($desired_key, $keys)) continue;
-      $opts[$desired_key] = null;
-    }
-
-    return $opts;
+  protected function get_field_name($name) {
+    return $this->name.'_'.$name;
   }
+  /**
+   * Get Field Value
+   *
+   * Get the value if it is a post type or another page form
+   *
+   * @param mixed|string $field
+   * @param string $group
+   * @param string $sub
+   *
+   * @return mixed|null|string
+   */
+  protected function get_field_value($field, $group, $sub) {
+    global $post;
+    $group = $this->get_opt_by_test($group, $this->group);
+
+    //if($group === '' && acpt_validate::bracket($this->group)) $group = $this->group;
+
+    if(isset($post->ID)) {
+
+      if($group != '') {
+        $value = acpt_meta(substr($group, 1, -1));
+        $value = $value[$field];
+      } else {
+        $value = acpt_meta($field);
+      }
+
+    }
+    else { $value = null; }
+
+    return $value;
+  }
+
 
   /**
    * Get $_POST Name
@@ -733,18 +730,27 @@ function image($name, $opts=array(), $label = true) {
    * This will set the name value for a field
    *
    * @param $field
-   * @param string $prefix
-   * @param string $suffix
    * @param string $group
+   * @param string $sub
    *
    * @return string
    */
-  private function get_acpt_post_name($field, $group = '', $prefix = '', $suffix = '' ) {
-    return "acpt{$group}[{$suffix}{$field}{$prefix}]";
+  private function get_acpt_post_name($field, $group, $sub ) {
+    $group = $this->get_opt_by_test($group, $this->group);
+
+    if(!acpt_validate::bracket($group) && $group != '' ) {
+      $this->test_for(false, 'ACPT ERROR: You need to to the form group to an array format ['.$group.']');
+    }
+
+    if(!acpt_validate::bracket($sub) && $sub != '' ) {
+      $this->test_for(false, 'ACPT ERROR: You need to to the form sub group to an array format ['.$group.']');
+    }
+
+    return "acpt{$group}[{$field}]{$sub}";
   }
 
-  private function make_attr_name($field, $group = '', $prefix = '', $suffix = '') {
-    $value = $this->get_acpt_post_name($field, $group, $prefix, $suffix);
+  private function make_attr_name($field, $group, $sub) {
+    $value = $this->get_acpt_post_name($field, $group, $sub);
     return acpt_html::make_html_attr('name', $value);
   }
 

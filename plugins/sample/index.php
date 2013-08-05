@@ -28,7 +28,7 @@ function addThem() {
 }
 
 function meta_custom() {
-	acpt_form('details', null)
+	acpt_form('details')
   ->text('text', array('label' => 'Text Field', 'class' => 'example-class', 'help' => 'Example help text'))
   ->color('color_p', array('label' => 'Color Field', 'default' => '#000', 'palette' => array('#fff', '#f00', '#f30')))
   ->color('color', array('label' => 'Color Field (no palette)'))
