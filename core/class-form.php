@@ -15,6 +15,8 @@ function __construct($name, $opts=array()) {
  *
  * @param string $name singular name is required
  * @param array $opts args [action, method]
+ *
+ * @return $this
  */
 function make($name, $opts=array()) {
     $this->test_for($name, 'Making Form: You need to enter a singular name.');
@@ -135,7 +137,7 @@ function textarea($name, $opts=array(), $label = true) {
   $attr = array(
     'readonly' => $s['read'],
     'class' => "textarea $fieldName {$s['class']}",
-    'id' => $s['justID'],
+    'id' => $s['id'],
     'name' => $s['name'],
     'html' => $value
   );
@@ -192,7 +194,7 @@ function select($name, $options=array('Key' => 'Value'), $opts=array(), $label =
   $attr = array(
     'readonly' => $s['read'],
     'class' => "select $fieldName {$s['class']}",
-    'id' => $s['justID'],
+    'id' => $s['id'],
     'name' => $s['name'],
     'html' => $optionsList
   );
@@ -266,7 +268,7 @@ function radio($name, $options=array('Key' => 'Value'), $opts=array(), $label = 
   $attr = array(
     'readonly' => $s['read'],
     'class' => "radio $fieldName {$s['class']}",
-    'id' => $s['justID'],
+    'id' => $s['id'],
     'html' => $optionsList
   );
   $field = acpt_html::element('div', $attr);
@@ -582,7 +584,7 @@ function image($name, $opts=array(), $label = true) {
         'type' => 'text',
         'value' => esc_attr($v),
         'name' => $s['name'],
-        'id' => $s['justID'],
+        'id' => $s['id'],
         'readonly' => $s['read']
     ), true);
 
@@ -645,20 +647,7 @@ function image($name, $opts=array(), $label = true) {
    * @return mixed
    */
   protected function get_opts($name, $opts, $fieldName, $label) {
-
     $opts = $this->set_empty_keys($opts);
-
-    // classes
-    $s['class'] = $this->get_opt_by_test($opts['class']);
-
-    // readonly
-    $s['read'] = $this->get_opt_by_test($opts['readonly']);
-
-    // name and id
-    $s['nameAttr'] = $this->make_attr_name($fieldName);
-    $s['name'] = $this->get_acpt_post_name($fieldName);
-    $id = 'acpt_'.$fieldName;
-    $s['justID'] = $id;
 
     // help text
     $help = acpt_html::element('p', array(
@@ -667,6 +656,12 @@ function image($name, $opts=array(), $label = true) {
     ));
     $s['help'] = $this->get_opt_by_test($opts['help'], '', $help);
 
+    // attributes
+    $s['class'] = $this->get_opt_by_test($opts['class']);
+    $s['read'] = $this->get_opt_by_test($opts['readonly']);
+    $s['name'] = $this->get_acpt_post_name($fieldName);
+    $s['id'] = 'acpt_'.$fieldName;
+
     // label
     $s['bLabel'] = $this->get_opt_by_test($opts['bLabel'], BEFORE_LABEL);
     $s['aLabel'] = $this->get_opt_by_test($opts['aLabel'], AFTER_LABEL);
@@ -674,12 +669,10 @@ function image($name, $opts=array(), $label = true) {
     $opts['labelTag'] = $this->get_opt_by_test($opts['labelTag'], 'label');
 
     if(isset($label)) :
-      $labelName = $this->get_opt_by_test($opts['label'], $name);
-
       $s['label'] = acpt_html::element($opts['labelTag'], array(
         'class' => 'control-label',
-        'for' => $id,
-        'html' => $labelName
+        'for' => $s['id'],
+        'html' => $this->get_opt_by_test($opts['label'], $name)
       ));
     endif;
 
