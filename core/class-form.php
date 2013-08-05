@@ -719,12 +719,24 @@ function image($name, $opts=array(), $label = true) {
     return $opts;
   }
 
-  private function make_attr_name($field, $prefix = '', $suffix = '', $group = '') {
-    $value = $this->get_acpt_post_name($field, $prefix, $suffix, $group);
+  private function make_attr_name($field, $group = '', $prefix = '', $suffix = '') {
+    $value = $this->get_acpt_post_name($field, $group, $prefix, $suffix);
     return acpt_html::make_html_attr('name', $value);
   }
 
-  private function get_acpt_post_name($field, $prefix = '', $suffix = '', $group = '') {
+  /**
+   * Get $_POST Name
+   *
+   * This will set the name value for a field
+   *
+   * @param $field
+   * @param string $prefix
+   * @param string $suffix
+   * @param string $group
+   *
+   * @return string
+   */
+  private function get_acpt_post_name($field, $group = '', $prefix = '', $suffix = '' ) {
     return "acpt{$group}[{$suffix}{$field}{$prefix}]";
   }
 
