@@ -36,6 +36,6 @@ function acpt_seo_title( $title, $sep = '', $other = '' ) {
 
 function acpt_seo_description() {
 	global $post;
-	$seo = acpt_meta('seo');;
+	$seo = acpt_meta('seo');
 	if( !empty( $seo ) ) { echo "\t<meta name=\"Description\" content=\"{$seo['acpt_seo_description']}\" />\n"; }
 }
