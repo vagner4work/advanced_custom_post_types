@@ -444,15 +444,22 @@ function image($name, $opts=array(), $label = true) {
   function get_image_form($o) {
     $o['opts'] = $this->set_empty_keys($o['opts']);
     $o['opts']['readonly'] = $this->get_opt_by_test($o['opts']['readonly'], true);
-    $value = esc_url($this->get_field_value($o['field'], $o['opts']['group'], $o['opts']['sub']));
+
+    // setup for grouping
+    $group = $this->get_opt_by_test($o['opts']['group'], '');
+    $sub = $this->get_opt_by_test($o['opts']['sub'], '');
+    $field = $o['field'];
+
+    $value = $this->get_field_value($field, $group, $sub);
+    $name = $this->get_acpt_post_name($field.'_id', $group, $sub);
 
     // button text
     $btnValue = $this->get_opt_by_test($o['opts']['button'], "Insert Image", $o['opts']['button']);
 
     // placeholder image and image id value
     if(!empty($value)) :
-      $placeHolderImage = '<img class="upload-img" src="'.$value.'" />';
-      $vID = $this->get_field_value($o['field'].'_id', $o['opts']['group'], $o['opts']['sub']);
+      $placeHolderImage = '<img class="upload-img" src="'.esc_url($value).'" />';
+      $vID = $this->get_field_value($field.'_id', $group, $sub);
     else :
       $vID = $placeHolderImage = '';
     endif;
@@ -460,7 +467,7 @@ function image($name, $opts=array(), $label = true) {
     $attachmentID = acpt_html::input(array(
       'type' => 'hidden',
       'class' => 'attachment-id-hidden',
-      'name' => 'acpt['.$o['field'].'_id]',
+      'name' => $name,
       'value' => esc_attr($vID)
     ));
 
@@ -509,7 +516,14 @@ function image($name, $opts=array(), $label = true) {
    */
   protected function get_google_map_form($o) {
     $o['opts'] = $this->set_empty_keys($o['opts']);
-    $value = $this->get_field_value($o['field']."_id", $o['opts']['group'], $o['opts']['sub']);
+
+    // setup for grouping
+    $group = $this->get_opt_by_test($o['opts']['group'], '');
+    $sub = $this->get_opt_by_test($o['opts']['sub'], '');
+    $field = $o['field'].'_encoded';
+
+    $value = $this->get_field_value($field, $group, $sub);
+    $name = $this->get_acpt_post_name($field, $group, $sub);
 
     // set http
     if (is_ssl()) $http = 'https://';
@@ -519,7 +533,7 @@ function image($name, $opts=array(), $label = true) {
     if(empty($value)) $zoom = 1;
     else $zoom = 15;
 
-    $attrName = $this->make_attr_name($o['field'].'_encoded', $o['opts']['group'], $o['opts']['sub']);
+    $attrName = acpt_html::make_html_attr('name', $name);
 
     $o['html'] = "<input type=\"hidden\" class=\"googleMap-encoded\" value=\"{$value}\" {$attrName} />";
     $o['html'] .= '<p class="map"><img src="'.$http.'maps.googleapis.com/maps/api/staticmap?center='.$value.'&zoom='.$zoom.'&size=1200x140&sensor=true&markers='.$value.'" class="map-image" alt="Map Image" /></p>';
@@ -563,7 +577,14 @@ function image($name, $opts=array(), $label = true) {
    */
   function get_file_form($o) {
     $o['opts'] = $this->set_empty_keys($o['opts']);
-    $value = $this->get_field_value($o['field']."_id", $o['opts']['group'], $o['opts']['sub']);
+
+    // setup for grouping
+    $group = $this->get_opt_by_test($o['opts']['group'], '');
+    $sub = $this->get_opt_by_test($o['opts']['sub'], '');
+    $field = $o['field'].'_id';
+
+    $value = $this->get_field_value($field, $group, $sub);
+    $name = $this->get_acpt_post_name($field, $group, $sub);
 
     if(empty($o['opts']['readonly'])) $o['opts']['readonly'] = true;
 
@@ -581,7 +602,7 @@ function image($name, $opts=array(), $label = true) {
       $valueID = '';
     endif;
 
-    $attrName = $this->make_attr_name($o['field'].'_id', $o['opts']['group'], $o['opts']['sub']);
+    $attrName = acpt_html::make_html_attr('name', $name); // $o['field'].'_id', $o['opts']['group'], $o['opts']['sub']);
 
     $o['html'] = "<input type=\"hidden\" class=\"attachment-id-hidden\" {$attrName} {$valueID}>";
     $o['html'] .= '<input type="button" class="button-primary upload-button" value="'.$button.'"> <span class="clear-attachment">clear file</span>';
@@ -720,7 +741,7 @@ function image($name, $opts=array(), $label = true) {
 
     if(isset($post->ID)) {
 
-      if($group != '') {
+      if($group != '' || !empty($group) ) {
         $value = acpt_meta($this->parse_group($group));
         $value = is_array($value) ? $value : array();
         $value = array_key_exists($field, $value) ? $value[$field] : '';
@@ -764,11 +785,6 @@ function image($name, $opts=array(), $label = true) {
     }
 
     return "acpt{$group}[{$field}]{$sub}";
-  }
-
-  private function make_attr_name($field, $group, $sub) {
-    $value = $this->get_acpt_post_name($field, $group, $sub);
-    return acpt_html::make_html_attr('name', $value);
   }
 
 }
