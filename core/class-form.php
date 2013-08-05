@@ -290,12 +290,15 @@ function radio($name, $options=array('Key' => 'Value'), $opts=array(), $label = 
 /**
  * Form WP Editor.
  *
+ * In the $editor_setteings set array('teeny' => true) to have a smaller editor
+ *
  * @param string $name singular name is required
  * @param bool $label text for the label
  * @param array $opts args override and extend wp_editor
+ * @param array $editor_settings
  * @return $this
  */
-function editor($name, $label=null, $opts=array()) {
+function editor($name, $label=null, $opts=array(), $editor_settings = array()) {
   $this->test_for($this->name, 'Making Form: You need to make the form first.');
   $this->test_for($name, 'Making Form: You need to enter a singular name.');
 
@@ -305,7 +308,7 @@ function editor($name, $label=null, $opts=array()) {
   $group = $this->get_opt_by_test($opts['group'], '');
   $sub = $this->get_opt_by_test($opts['sub'], '');
 
-  $v = $this->get_field_value($fieldName, $group, $opts['sub']);
+  $v = $this->get_field_value($fieldName, $group, $sub);
   $s = $this->get_opts($label, array('labelTag' => 'span'), $fieldName, true);
 
 
@@ -314,7 +317,7 @@ function editor($name, $label=null, $opts=array()) {
   wp_editor(
       acpt_sanitize::editor($v),
       'wysisyg_'.$fieldName,
-      array_merge($opts,array('textarea_name' => $this->get_acpt_post_name($fieldName, $group, $sub)))
+      array_merge($editor_settings, array('textarea_name' => $this->get_acpt_post_name($fieldName, $group, $sub)))
   );
   echo $this->dev_message($fieldName, $group, $sub);
   echo '</div>';
@@ -443,7 +446,7 @@ function image($name, $opts=array(), $label = true) {
    */
   function get_date_form($o) {
     $o['opts'] = $this->set_empty_keys($o['opts']);
-    $o['opts']['readonly'] = $this->get_opt_by_test($o['opts']['readonly'], true);
+    //$o['opts']['readonly'] = $this->get_opt_by_test($o['opts']['readonly'], true);
 
     return $this->get_text_form($o);
   }
@@ -750,8 +753,6 @@ function image($name, $opts=array(), $label = true) {
   protected function get_field_value($field, $group, $sub) {
     global $post;
     $group = $this->get_opt_by_test($group, $this->group);
-
-    //if($group === '' && acpt_validate::bracket($this->group)) $group = $this->group;
 
     if(isset($post->ID)) {
 

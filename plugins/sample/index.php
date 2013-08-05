@@ -28,17 +28,18 @@ function addThem() {
 }
 
 function meta_custom() {
-	acpt_form('details', array('group' => '[sample_details]'))
+	acpt_form('details')
   ->text('text', array('label' => 'Text Field', 'class' => 'example-class', 'help' => 'Example help text'))
-  ->color('color_p', array('label' => 'Color Field', 'default' => '#000', 'palette' => array('#fff', '#f00', '#f30')))
-  ->color('color', array('label' => 'Color Field (no palette)'))
-  ->image('image', array('label' => 'Image Field', 'button' => 'Add Your Image'))
-	->file('file', array('label' => 'File Field', 'button' => 'Select a File'))
+  ->color('1', array('group' => '[details_colors]', 'label' => 'Color Field', 'default' => '#000', 'palette' => array('#fff', '#f00', '#f30')))
+  ->color('2', array('group' => '[details_colors]', 'label' => 'Color Field (no palette)'))
+  ->image('image', array('label' => 'Image Field', 'button' => 'Add Your Image', 'group' => '[details_files]'))
+	->file('file', array('label' => 'File Field', 'button' => 'Select a File', 'group' => '[details_files]'))
 	->google_map('address', array('label' => 'Address Field'))
-	->date('date', array('label' => 'Date Field', 'button' => 'Enter a Date'))
-	->textarea('textarea', array('label' => 'Textarea'))
-	->select('select', array('one', 'two', 'three'), array('label' => 'Select List'))
-	->select('select_key', array('One' => '1', 'Two' => '2', 'Three' => '3'), array('label' => 'Select List Key', 'select_key' =>  true))
-	->radio('radio', array('blue', 'green', 'red'), array('label' => 'Radio Buttons'))
-	->editor('editor', 'WYSIWYG Editor');
+	->date('date', array('label' => 'Date Field', 'button' => 'Enter a Date', 'group' => '[details_adv]'))
+	->textarea('textarea', array('label' => 'Textarea', 'group' => '[details_adv]'))
+	->select('select', array('one', 'two', 'three'), array('label' => 'Select List', 'group' => '[details_adv]'))
+	->select('select_key', array('One' => '1', 'Two' => '2', 'Three' => '3'), array('label' => 'Select List Key', 'select_key' =>  true, 'group' => '[details_adv]'))
+	->radio('radio', array('blue', 'green', 'red'), array('label' => 'Radio Buttons', 'group' => '[details_adv]'))
+	->editor('editor', 'WYSIWYG Editor', array('group' => '[details_adv]'))
+  ->editor('editor_teeny', 'Teeny Editor', array(), array('teeny' => true, 'media_buttons' => false));
 }
