@@ -139,7 +139,7 @@ function textarea($name, $opts=array(), $label = true) {
     'class' => "textarea $fieldName {$s['class']}",
     'id' => $s['id'],
     'name' => $s['name'],
-    'html' => $value
+    'html' => acpt_sanitize::textarea($value)
   );
   $field = acpt_html::element('textarea', $attr);
 
@@ -298,7 +298,7 @@ function editor($name, $label=null, $opts=array()) {
   echo '<div class="control-group">';
   echo $s['label'];
   wp_editor(
-      $v,
+      acpt_sanitize::editor($v),
       'wysisyg_'.$fieldName,
       array_merge($opts,array('textarea_name' => $this->get_acpt_post_name($fieldName)))
   );
