@@ -43,6 +43,27 @@ class acpt_html extends acpt {
   }
 
   /**
+   * Make Any Element
+   *
+   * Make an element cleans up unwanted array nesting
+   *
+   * @param $tag
+   * @param $args
+   * @param bool $make
+   *
+   * @return array|string
+   */
+  static function element($tag, $args, $make = true) {
+    $args = array( $tag => $args );
+
+    if(isset($make)) {
+      return self::make_html(array($args));
+    } else {
+      return $args;
+    }
+  }
+
+  /**
    * Make HTML Attributes
    *
    * Check if value is null. If so skip the attr.
@@ -76,16 +97,6 @@ class acpt_html extends acpt {
 
   static function input($args, $make = null ) {
     return self::element('input', $args, $make );
-  }
-
-  static function element($tag, $args, $make = true) {
-    $args = array( $tag => $args );
-
-    if(isset($make)) {
-      return self::make_html(array($args));
-    } else {
-      return $args;
-    }
   }
 
   private function get_close_tags() {

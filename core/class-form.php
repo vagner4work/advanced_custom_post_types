@@ -420,6 +420,13 @@ function image($name, $opts=array(), $label = true) {
     return $this;
   }
 
+  /**
+   * Get Image Form
+   *
+   * @param $o
+   *
+   * @return string
+   */
   function get_image_form($o) {
     $value = $this->get_field_value($o['field']);
 
@@ -431,7 +438,7 @@ function image($name, $opts=array(), $label = true) {
     // placeholder image and image id value
     if(!empty($value)) :
       $value = esc_url($value);
-      $placeHolderImage = '<img class="upload-img" src="'.$value.'" />';
+      $placeHolderImage = '<img class="upload-img" src="'.esc_url($value).'" />';
       $vID = $this->get_field_value($o['field'].'_id');
     else :
       $vID = $placeHolderImage = '';
@@ -639,6 +646,8 @@ function image($name, $opts=array(), $label = true) {
   /**
    * Get Input Options
    *
+   * Testing each field needs to prevent errors.
+   *
    * @param $name
    * @param $opts
    * @param $fieldName
@@ -719,11 +728,6 @@ function image($name, $opts=array(), $label = true) {
     return $opts;
   }
 
-  private function make_attr_name($field, $group = '', $prefix = '', $suffix = '') {
-    $value = $this->get_acpt_post_name($field, $group, $prefix, $suffix);
-    return acpt_html::make_html_attr('name', $value);
-  }
-
   /**
    * Get $_POST Name
    *
@@ -738,6 +742,11 @@ function image($name, $opts=array(), $label = true) {
    */
   private function get_acpt_post_name($field, $group = '', $prefix = '', $suffix = '' ) {
     return "acpt{$group}[{$suffix}{$field}{$prefix}]";
+  }
+
+  private function make_attr_name($field, $group = '', $prefix = '', $suffix = '') {
+    $value = $this->get_acpt_post_name($field, $group, $prefix, $suffix);
+    return acpt_html::make_html_attr('name', $value);
   }
 
 }
