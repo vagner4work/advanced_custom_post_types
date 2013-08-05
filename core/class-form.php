@@ -668,17 +668,27 @@ function image($name, $opts=array(), $label = true) {
    * Add the dev field to the admin to see the a acpt_meta() function
    *
    * @param $fieldName
+   * @param $group
+   * @param $sub
    *
    * @return string
    */
-  protected function dev_message($fieldName, $group = '', $sub = '') {
+  protected function dev_message($fieldName, $group, $sub = '') {
     $group = $this->get_opt_by_test($group, $this->group);
+    $group = $this->parse_group($group);
 
-    $group = substr($group, 1, -1);
+    if(DEV_MODE == true) :
+        if($group == '' ) $v = "acpt_meta('{$fieldName}');";
+        else $v = "acpt_meta('{$group}'); // key is $fieldName";
+    else :
+          $v = '';
+    endif;
 
-    if(DEV_MODE == true && $group == '' ) return "<input class=\"dev_note\" readonly value=\"acpt_meta('{$fieldName}');\" />";
-    elseif(DEV_MODE == true ) return "<input class=\"dev_note\" readonly value=\"acpt_meta('{$group}');\" />";
-    else return '';
+    return acpt_html::input(array(
+        'class' => 'dev_note',
+        'readonly' => true,
+        'value' => esc_attr($v)
+    ), true);
   }
 
   /**
@@ -711,8 +721,9 @@ function image($name, $opts=array(), $label = true) {
     if(isset($post->ID)) {
 
       if($group != '') {
-        $value = acpt_meta(substr($group, 1, -1));
-        $value = $value[$field];
+        $value = acpt_meta($this->parse_group($group));
+        $value = is_array($value) ? $value : array();
+        $value = array_key_exists($field, $value) ? $value[$field] : '';
       } else {
         $value = acpt_meta($field);
       }
@@ -721,6 +732,12 @@ function image($name, $opts=array(), $label = true) {
     else { $value = null; }
 
     return $value;
+  }
+
+
+  // TODO: This needs to be way more fleshed out
+  public function parse_group($group) {
+    return substr($group, 1, -1);
   }
 
 
