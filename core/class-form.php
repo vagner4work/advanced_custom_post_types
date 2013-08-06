@@ -711,15 +711,13 @@ function image($name, $opts=array(), $label = true) {
    *
    * @return string
    */
-  protected function dev_message($fieldName, $group, $sub = '') {
+  protected function dev_message($fieldName, $group, $sub) {
     $group = $this->get_opt_by_test($group, $this->group);
-    $group = $this->parse_group($group);
 
     if(DEV_MODE == true) :
-        if($group == '' ) $v = "acpt_meta('[{$fieldName}]');";
-        else $v = "acpt_meta('{$group}[{$fieldName}]');";
+        $v = "acpt_meta('{$group}[{$fieldName}]{$sub}');";
     else :
-          $v = '';
+        $v = '';
     endif;
 
     return acpt_html::input(array(
@@ -756,27 +754,12 @@ function image($name, $opts=array(), $label = true) {
 
     if(isset($post->ID)) {
 
-      $value = acpt_meta("{$group}[{$field}]");
-
-//      if($group != '' || !empty($group) ) {
-//        $value = acpt_meta($this->parse_group($group));
-//        $value = is_array($value) ? $value : array();
-//        $value = array_key_exists($field, $value) ? $value[$field] : '';
-//      } else {
-//        $value = acpt_meta($field);
-//      }
+      $value = acpt_meta("{$group}[{$field}]{$sub}");
 
     }
     else { $value = null; }
 
     return $value;
-  }
-
-
-  // TODO: This needs to be way more fleshed out
-  public function parse_group($group) {
-    //return substr($group, 1, -1);
-    return $group;
   }
 
 

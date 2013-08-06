@@ -26,7 +26,7 @@ For custom settings see the config.php file. Set DEV_MODE to true for forms API 
 define('DEV_MODE', true);
 ```
 
-3) Set define('ACPT_FOLDER_NAME', 'acpt') if you are using another folder structure. For example, define('ACPT_FOLDER_NAME', 'inc/acpt') if you have acpt in a folder called inc.
+3) Set `define('ACPT_FOLDER_NAME', 'acpt')` if you are using another folder structure. For example, `define('ACPT_FOLDER_NAME', 'inc/acpt')` if you have acpt in a folder called inc.
 
 Plugins System
 ---
@@ -175,7 +175,7 @@ Meta Boxes
 
 Advanced Users See: meta_box.php
 
-Class access function: acpt_meta_box()
+Class access function: `acpt_meta_box()`
 
 You can now add Meta Boxes with ACPT. The meta_box class takes up to 3 arguments (only the first is required). First the name of the meta box. Second, the post types you want to use. Last any settings you want to override (priority for example). You can add custom meta boxes to you post types by adding the name of the meta box to the post types supports arg or by applying the post type within the make function. To add HTML/PHP to the meta box create a function beginning with "meta_" and append the name of the field to the end of it.
 
@@ -220,7 +220,7 @@ Forms
 
 Advanced Users See: form.php
 
-Class access function: acpt_form()
+Class access function: `acpt_form()`
 
 You can now make Forms with ACPT. Please see the code for how to use this section. You will need to modify for best results. Plus I don't have time to document it right now. The meta box section has the code example you need.
 
@@ -279,7 +279,7 @@ acpt_meta_box('slide_options');
 
 // form api example, input names are much shorter now
 function meta_slide_options() {
-$form = acpt_form('slide', null);
+$form = acpt_form('slide');
 $form->text('title'); // input attr name will be 'acpt[slide_title]'
 $form->text('desc'); // input attr name will be 'acpt[slide_desc]'
 }
@@ -300,6 +300,45 @@ $acpt_data['slide_title'] = esc_html($acpt_data['slide_title']);
 return $acpt_data;
 }
 ```
+
+Grouping
+---
+Since version 3.0.2 you can group form fields in the DB. This is good for making more dynamic forms and help prevent strange prefixes and ban naming.
+
+To group form fields, in the `$opt` array set the key 'group' and the value as a string with `[]` around the name. For example:
+
+```php
+// form api example, input names are much shorter now
+function meta_slide_options() {
+$form = acpt_form('slide');
+$form->text('title', array('group' => '[slide]') ); // input attr name will be 'acpt[slide][slide_title]'
+$form->text('desc', array('group' => '[slide]') ); // input attr name will be 'acpt[slide][slide_desc]'
+}
+```
+
+You can also stake groups:
+
+```php
+// form api example, input names are much shorter now
+function meta_slide_options() {
+$form = acpt_form('slide');
+$form->text('title', array('group' => '[slide][text]') ); // input attr name will be 'acpt[slide][text][slide_title]'
+$form->text('desc', array('group' => '[slide][text]') ); // input attr name will be 'acpt[slide][text][slide_desc]'
+}
+```
+
+You can also apply the group to the form itself to save typing:
+
+```php
+// form api example, input names are much shorter now
+function meta_slide_options() {
+$form = acpt_form('slide', array('group' => '[slide][text]');
+$form->text('title', array('group' => '[slide][text]') ); // input attr name will be 'acpt[slide][text][slide_title]'
+$form->text('desc', array('group' => '[slide][text]') ); // input attr name will be 'acpt[slide][text][slide_desc]'
+}
+```
+
+*NOTE*: There is also a feature to add a *sub group* after the field name. The *same rules apply* but the group is added to the end. Simply replace the key `group` with `sub`. However, sub groups are only available to fields; *not the form object* itself.
 
 Together: Post Type and Taxonomy
 ---
