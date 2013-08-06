@@ -257,15 +257,17 @@ function meta_details() {
 
 Output
 ---
-To get data out of the forms API use the functions: e_acpt_meta('your_field_name') and acpt_meta('your_field_name').
+To get data out of the forms API use the functions: `e_acpt_meta('[your_field_name]')` and `acpt_meta('[your_field_name]')`.
 
-e_acpt_meta() will echo the data. The function acpt_meta() will simply get the data.
+`e_acpt_meta()` will echo the data. The function `acpt_meta()` will simply get the data.
 
-To know what 'your_field_name' is turn on dev mode and view the fields. Or out put all of the post meta and it will be available from there. You can also you use get_post_meta() from WordPress if needed.
+To know what 'your_field_name' is turn on dev mode and view the fields. Or out put all of the post meta and it will be available from there. You can also you use `get_post_meta()` from WordPress if needed.
+
+NOTE: the names need to be wrapped in brackets [] inside of the string.
 
 Form fields are now a combination of the form name and the form field name. They no longer begin with acpt_.
 
-For example the text field would be 'slide_title'.
+For example the text field would be '[slide_title]'.
 
 ```php
 // example of a meta box
@@ -355,7 +357,7 @@ function addThem() {
 }
 
 function meta_details() {
-    $form = acpt_form('details', null);
+    $form = acpt_form('details');
     $form->text('name');
     $form->textarea('address');
 }
