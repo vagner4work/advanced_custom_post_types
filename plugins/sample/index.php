@@ -1,33 +1,36 @@
 <?php
 
-add_action('init', 'makeThem');
-function makeThem() {
+add_action('init', 'acpt_sample_init');
+function acpt_sample_init() {
 
-$args_sample = array(
-'supports' => array( 'title', 'editor', 'page-attributes', 'custom'  ),
-'hierarchical' => true,
-);
+  // in supports add the meta box custom
+  $args_sample = array(
+  'supports' => array( 'title', 'editor', 'page-attributes', 'custom'  ),
+  'hierarchical' => true,
+  );
 
-$args_example = array(
-	'supports' => array('title'),
-	'public' => false,
-	'show_ui' => true
-);
+  $args_example = array(
+    'supports' => array('title'),
+    'public' => false,
+    'show_ui' => true
+  );
 
-$sample = acpt_post_type('sample','samples', false,  $args_sample )->icon('person');
-acpt_post_type('example','examples', false,  $args_example )->icon('location');
+  $sample = acpt_post_type('sample','samples', false,  $args_sample )->icon('person');
+  acpt_post_type('example','examples', false,  $args_example )->icon('location');
 
-acpt_tax('color', 'colors', $sample, true, false);
+  acpt_tax('color', 'colors', $sample, true, false);
 
 }
 
-add_action( 'add_meta_boxes', 'addThem' );
+add_action( 'add_meta_boxes', 'acpt_meta_init' );
 
-function addThem() {
-	acpt_meta_box('custom', array('sample', 'example'), array('label' => 'Custom Meta Box'));
+function acpt_meta_init() {
+	acpt_meta_box('custom', array('example'), array('label' => 'Custom Meta Box'));
 }
 
 function meta_custom() {
+  // notice the groups arg sets the data in the
+  // DB as one item serialized as an array
 	acpt_form('details')
   ->text('text', array('label' => 'Text Field', 'class' => 'example-class', 'help' => 'Example help text'))
   ->color('1', array('group' => '[details_colors]', 'label' => 'Color Field', 'default' => '#000', 'palette' => array('#fff', '#f00', '#f30')))

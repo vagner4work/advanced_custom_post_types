@@ -29,15 +29,19 @@ endforeach;
 if($useDepreciated) { require_once('core/depreciated.php'); }
 
 // getting the meta
-function acpt_meta($name = '', $groups = true, $fallBack = '', $theID = null) {
+function acpt_meta($name = '', $fallBack = '', $groups = true, $theID = null) {
     global $post;
     empty($theID) ? $theID = $post->ID : true;
-    $data = get_post_meta($theID);
 
     do_action('start_acpt_meta', $name, $fallBack, $theID);
 
     // if you are using groups test for nesting
-    if($groups) { $data = acpt_utility::acpt_get_meta($name, $data); }
+    if($groups) {
+      $data = get_post_meta($theID);
+      $data = acpt_utility::acpt_get_meta($name, $data);
+    } elseif(acpt_validate::bracket($name)) {
+      $data = get_post_meta($theID, substr($name, 1, -1), true);
+    }
 
     //if(empty($data)) { $data = get_post_meta($theID, $name, true); }
     empty($data) ? $data = $fallBack : true;
@@ -45,9 +49,10 @@ function acpt_meta($name = '', $groups = true, $fallBack = '', $theID = null) {
     return $data;
 }
 
-function e_acpt_meta($name = '', $groups = true, $fallBack = '', $theID = null) {
+function e_acpt_meta($name = '', $fallBack = '', $groups = true, $theID = null) {
     $data = acpt_meta($name, $groups, $fallBack, $theID);
-    is_string($data) ? true : $data = 'Data needs to be a string.';
+    ($fallBack !== '' ) ? true : $fallBack = 'No string data '.$name;
+    is_string($data) ? true : $data = $fallBack;
     echo $data;
 }
 
