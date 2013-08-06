@@ -11,7 +11,7 @@ function acpt_seo_meta() {
 }
 
 function meta_acpt_seo() {
-	acpt_form('acpt_seo', array('group' => '[seo]'))
+	acpt_form('acpt_seo', array('group' => '[seo][meta]'))
 	->text('title', array('label' => 'Title'))
 	->textarea('description', array('label' => 'Description'));
 }
@@ -19,8 +19,7 @@ function meta_acpt_seo() {
 function acpt_seo_title( $title, $sep = '', $other = '' ) {
     global $paged, $page;
 
-    $newTitle = acpt_meta('seo');
-    $newTitle = $newTitle['acpt_seo_title'];
+    $newTitle = acpt_meta('[seo][meta][acpt_seo_title]');
 
     if ( $newTitle != '') {
       if(is_feed() || is_single() || is_page() || is_singular() ) {
@@ -36,6 +35,6 @@ function acpt_seo_title( $title, $sep = '', $other = '' ) {
 
 function acpt_seo_description() {
 	global $post;
-	$seo = acpt_meta('seo');
-	if( !empty( $seo ) ) { echo "\t<meta name=\"Description\" content=\"{$seo['acpt_seo_description']}\" />\n"; }
+	$seo = esc_attr(acpt_meta('[seo][meta][acpt_seo_description]'));
+	if( !empty( $seo ) ) { echo "\t<meta name=\"Description\" content=\"{$seo}\" />\n"; }
 }

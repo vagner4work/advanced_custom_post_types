@@ -29,11 +29,17 @@ endforeach;
 if($useDepreciated) { require_once('core/depreciated.php'); }
 
 // getting the meta
-function acpt_meta($name = '', $fallBack = '', $theID = null) {
+function acpt_meta($name = '', $groups = true, $fallBack = '', $theID = null) {
     global $post;
-    do_action('start_acpt_meta', $name, $fallBack, $theID);
     empty($theID) ? $theID = $post->ID : true;
-    $data = get_post_meta($theID, $name, true);
+    $data = get_post_meta($theID);
+
+    do_action('start_acpt_meta', $name, $fallBack, $theID);
+
+    // if you are using groups test for nesting
+    if($groups) { $data = acpt_utility::acpt_get_meta($name, $data); }
+
+    //if(empty($data)) { $data = get_post_meta($theID, $name, true); }
     empty($data) ? $data = $fallBack : true;
     do_action('end_acpt_meta', $data);
     return $data;

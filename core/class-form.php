@@ -716,8 +716,8 @@ function image($name, $opts=array(), $label = true) {
     $group = $this->parse_group($group);
 
     if(DEV_MODE == true) :
-        if($group == '' ) $v = "acpt_meta('{$fieldName}');";
-        else $v = "acpt_meta('{$group}'); // key is $fieldName";
+        if($group == '' ) $v = "acpt_meta('[{$fieldName}]');";
+        else $v = "acpt_meta('{$group}[{$fieldName}]');";
     else :
           $v = '';
     endif;
@@ -756,13 +756,15 @@ function image($name, $opts=array(), $label = true) {
 
     if(isset($post->ID)) {
 
-      if($group != '' || !empty($group) ) {
-        $value = acpt_meta($this->parse_group($group));
-        $value = is_array($value) ? $value : array();
-        $value = array_key_exists($field, $value) ? $value[$field] : '';
-      } else {
-        $value = acpt_meta($field);
-      }
+      $value = acpt_meta("{$group}[{$field}]");
+
+//      if($group != '' || !empty($group) ) {
+//        $value = acpt_meta($this->parse_group($group));
+//        $value = is_array($value) ? $value : array();
+//        $value = array_key_exists($field, $value) ? $value[$field] : '';
+//      } else {
+//        $value = acpt_meta($field);
+//      }
 
     }
     else { $value = null; }
@@ -773,7 +775,8 @@ function image($name, $opts=array(), $label = true) {
 
   // TODO: This needs to be way more fleshed out
   public function parse_group($group) {
-    return substr($group, 1, -1);
+    //return substr($group, 1, -1);
+    return $group;
   }
 
 
