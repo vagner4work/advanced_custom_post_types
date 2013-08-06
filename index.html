@@ -4,33 +4,42 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <title>Advanced custom post types by kevindees</title>
-
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="javascripts/scale.fix.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
     <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
   </head>
   <body>
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/kevindees/advanced_custom_post_types">View On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/kevindees/advanced_custom_post_types/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/kevindees/advanced_custom_post_types/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
+
     <div class="wrapper">
-      <header>
-        <h1 class="header">Advanced custom post types</h1>
-        <p class="header">Advanced Custom Post Types</p>
 
-        <ul>
-          <li class="download"><a class="buttons" href="https://github.com/kevindees/advanced_custom_post_types/zipball/master">Download ZIP</a></li>
-          <li class="download"><a class="buttons" href="https://github.com/kevindees/advanced_custom_post_types/tarball/master">Download TAR</a></li>
-          <li><a class="buttons github" href="https://github.com/kevindees/advanced_custom_post_types">View On GitHub</a></li>
-        </ul>
-
-        <p class="header">This project is maintained by <a class="header name" href="https://github.com/kevindees">kevindees</a></p>
-
-
-      </header>
       <section>
-        <h1>Advanced Custom Post Types: 2.0</h1>
+        <div id="title">
+          <h1>Advanced custom post types</h1>
+          <p>Advanced Custom Post Types</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/kevindees">kevindees</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
+        </div>
+
+        <h2>
+<a name="advanced-custom-post-types-302" class="anchor" href="#advanced-custom-post-types-302"><span class="octicon octicon-link"></span></a>Advanced Custom Post Types: 3.0.2</h2>
 
 <p>This is a framework for creating not only custom post types, roles and taxonomies in WordPress but it will also give you the ability to rapidly create custom fields (post types only).</p>
 
@@ -41,19 +50,25 @@
 <ul>
 <li><a href="http://wordpress.org/extend/plugins/advanced-custom-fields/">http://wordpress.org/extend/plugins/advanced-custom-fields/</a></li>
 <li><a href="http://wordpress.org/extend/plugins/custom-post-type-ui/">http://wordpress.org/extend/plugins/custom-post-type-ui/</a></li>
-</ul><h1>Usage</h1>
+</ul><h2>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
 
-<p>Use a php include to add the file init.php to your plugin or functions.php theme file. For more advanced users look at the code comments for help on what args are available. ACPT also comes with its own plugin system so you don't have to muck up your functions.php file and can import others work with ease.</p>
+<p>1) Use a php include to add the file init.php to your plugin or functions.php theme file. For more advanced users look at the code comments for help on what args are available. ACPT also comes with its own plugin system so you don't have to muck up your functions.php file and can import others work with ease.</p>
 
 <div class="highlight"><pre><span class="k">include</span><span class="p">(</span><span class="s1">'acpt/init.php'</span><span class="p">);</span>
 </pre></div>
 
-<p>For custom settings see the config.php file. Set DEV_MODE to true for forms API help.</p>
+<p>2) Copy and rename sample-config.php to config.php</p>
+
+<p>For custom settings see the config.php file. Set DEV_MODE to true for forms API help when theming.</p>
 
 <div class="highlight"><pre><span class="nb">define</span><span class="p">(</span><span class="s1">'DEV_MODE'</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
 </pre></div>
 
-<h1>Plugins System</h1>
+<p>3) Set <code>define('ACPT_FOLDER_NAME', 'acpt')</code> if you are using another folder structure. For example, <code>define('ACPT_FOLDER_NAME', 'inc/acpt')</code> if you have acpt in a folder called inc.</p>
+
+<h2>
+<a name="plugins-system" class="anchor" href="#plugins-system"><span class="octicon octicon-link"></span></a>Plugins System</h2>
 
 <p>You do not need to use the plugin system for ACPT to work. However, you will need to disable it in the config file if you don't want it to run.</p>
 
@@ -74,17 +89,54 @@
 
 <p>Plugins are loaded in this manner so you can decide how and when they are loaded. I'm sure I'll add more option in the future.</p>
 
-<h1>Troubleshooting</h1>
-
-<h2>Slug</h2>
+<h2>
+<a name="troubleshooting" class="anchor" href="#troubleshooting"><span class="octicon octicon-link"></span></a>Troubleshooting</h2>
 
 <p>If your slugs are not working be sure you have flushed the permalink rules. To do this go to the permalinks and save the settings. No need to mod the .htaccess file if told.</p>
 
-<h1>Making a Custom Post Type</h1>
+<h2>
+<a name="making-a-custom-post-type" class="anchor" href="#making-a-custom-post-type"><span class="octicon octicon-link"></span></a>Making a Custom Post Type</h2>
 
 <p>Advanced Users See: post_type.php</p>
 
+<p>Class access function: acpt_post_type()</p>
+
 <p>Making post types with ACPT is fast and easy. The post_type class takes up to 4 arguments (only the first two are required). First the singular name and then the plural name of your post type (makes these lowercase). The next is for capabilities. If you don’t know how capabilities work set this to false and everything should work expected (the default, false, is the same as posts capabilities). Set capabilities to true to create custom capabilities using the post types name (see roles for advanced usage). Last, you have the settings argument. This is used if you want to change the default settings or override them. Use the settings argument the same as you would for creating post types using Wordpress building registration method.</p>
+
+<h2>
+<a name="icons" class="anchor" href="#icons"><span class="octicon octicon-link"></span></a>Icons</h2>
+
+<p>You can also add icons using the 'icon' method as in the example. Use these following names as the parameters for the icon method. This will set your icon.</p>
+
+<ul>
+<li>notebook</li>
+<li>refresh</li>
+<li>thumbs-up</li>
+<li>box</li>
+<li>bug</li>
+<li>cake</li>
+<li>calendar</li>
+<li>card-biz</li>
+<li>task</li>
+<li>clock</li>
+<li>color</li>
+<li>compass</li>
+<li>dine</li>
+<li>ipad</li>
+<li>ticket</li>
+<li>shirt</li>
+<li>plane</li>
+<li>paint</li>
+<li>mic</li>
+<li>location</li>
+<li>leaf</li>
+<li>music</li>
+<li>wine</li>
+<li>dashboard</li>
+<li>person</li>
+<li>weather</li>
+</ul><h2>
+<a name="example" class="anchor" href="#example"><span class="octicon octicon-link"></span></a>Example</h2>
 
 <div class="highlight"><pre><span class="k">include</span><span class="p">(</span><span class="s1">'acpt/init.php'</span><span class="p">);</span>
 
@@ -96,14 +148,20 @@
         <span class="s1">'hierarchical'</span> <span class="o">=&gt;</span> <span class="k">true</span><span class="p">,</span>
     <span class="p">);</span>
 
-    <span class="nv">$books</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">post_type</span><span class="p">(</span><span class="s1">'book'</span><span class="p">,</span><span class="s1">'books'</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span>  <span class="nv">$args</span> <span class="p">);</span>
+    <span class="nv">$books</span> <span class="o">=</span> <span class="nx">acpt_post_type</span><span class="p">(</span><span class="s1">'book'</span><span class="p">,</span><span class="s1">'books'</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span>  <span class="nv">$args</span> <span class="p">);</span>
+
+    <span class="c1">// add icon to post type</span>
+    <span class="nv">$books</span><span class="o">-&gt;</span><span class="na">icon</span><span class="p">(</span><span class="s1">'notebook'</span><span class="p">);</span>
 
 <span class="p">}</span>
 </pre></div>
 
-<h1>Making a Taxonomy</h1>
+<h2>
+<a name="making-a-taxonomy" class="anchor" href="#making-a-taxonomy"><span class="octicon octicon-link"></span></a>Making a Taxonomy</h2>
 
 <p>Advanced Users See: tax.php</p>
+
+<p>Class access function: acpt_tax()</p>
 
 <p>Making taxonomies with ACPT is fast and easy. The tax class takes up to 6 arguments (only the first 2 are required). First the singular name and then the plural name of your taxonomy (makes these lowercase). Third, you list have post types in an array (you can also set this in the post type itself, I recommend this way). Fourth, hierarchy. Set hierarchy to true if you want to allow the taxonomy to have descendants (the default, false). The last is for capabilities. If you don’t know how capabilities work set this to false and everything should work expected (the default, false). Set capabilities to true to create custom capabilities using the taxonomies name (see roles for advanced usage). Last, you have the settings argument. This is used if you want to change the default settings or override them. Use the settings argument the same as you would for registering taxonomies using Wordpress building registration method.</p>
 
@@ -111,13 +169,16 @@
 
 <span class="nx">add_action</span><span class="p">(</span><span class="s1">'init'</span><span class="p">,</span> <span class="s1">'makethem'</span><span class="p">);</span>
 <span class="k">function</span> <span class="nf">makethem</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nv">$colors</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">tax</span><span class="p">(</span><span class="s1">'color'</span><span class="p">,</span><span class="s1">'colors'</span><span class="p">,</span> <span class="k">null</span><span class="p">,</span> <span class="k">false</span> <span class="p">);</span>
+    <span class="nv">$colors</span> <span class="o">=</span> <span class="nx">acpt_tax</span><span class="p">(</span><span class="s1">'color'</span><span class="p">,</span><span class="s1">'colors'</span><span class="p">,</span> <span class="k">null</span><span class="p">,</span> <span class="k">false</span> <span class="p">);</span>
 <span class="p">}</span>
 </pre></div>
 
-<h1>Roles</h1>
+<h2>
+<a name="roles" class="anchor" href="#roles"><span class="octicon octicon-link"></span></a>Roles</h2>
 
 <p>Advanced Users See: role.php</p>
+
+<p>Class access function: acpt_cole()</p>
 
 <p>Roles are the most powerful part of ACPT. You can make(), update() and remove() with the role class. When working with roles in ACPT you need to understand how roles work in Wordpress to keep your site installation working smoothly. Unlike Taxonomies and Post Types, when roles are made they are added to the DB. This means you only need to run role code once for it to work. It is best to run this code on theme switching or plugin activation. You can get away with running the code once other ways but this is a common way to do so without a UI.</p>
 
@@ -128,7 +189,8 @@ Plugins: <a href="http://codex.wordpress.org/Function_Reference/register_activat
 
 <p>WARNING: You should not work with roles unless you know what you are doing. Also, Be sure you consider a plan of attack for when your theme or plugin is removed or deactivated. Using roles is ment for advanced users only.</p>
 
-<h2>Make Arguments</h2>
+<h2>
+<a name="make-arguments" class="anchor" href="#make-arguments"><span class="octicon octicon-link"></span></a>Make Arguments</h2>
 
 <p>You can set the first argument with capital letters. Formatted name is suggested.</p>
 
@@ -136,15 +198,18 @@ Plugins: <a href="http://codex.wordpress.org/Function_Reference/register_activat
 <span class="k">include</span><span class="p">(</span><span class="s1">'acpt/init.php'</span><span class="p">);</span>
 <span class="nx">add_action</span><span class="p">(</span><span class="s1">'init'</span><span class="p">,</span> <span class="s1">'makethem'</span><span class="p">);</span>
 <span class="k">function</span> <span class="nf">makethem</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nv">$r</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">role</span><span class="p">();</span>
+    <span class="nv">$r</span> <span class="o">=</span> <span class="nx">acpt_role</span><span class="p">();</span>
     <span class="nv">$r</span><span class="o">-&gt;</span><span class="na">make</span><span class="p">(</span><span class="s1">'Library Manager'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">'read'</span><span class="p">),</span> <span class="k">array</span><span class="p">(</span><span class="s1">'book'</span><span class="p">,</span> <span class="s1">'books'</span><span class="p">));</span>
     <span class="nv">$r</span><span class="o">-&gt;</span><span class="na">update</span><span class="p">(</span><span class="s1">'Administrator'</span><span class="p">,</span> <span class="k">null</span><span class="p">,</span> <span class="k">null</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">'book'</span><span class="p">,</span><span class="s1">'books'</span><span class="p">));</span>
 <span class="p">}</span>
 </pre></div>
 
-<h1>Meta Boxes</h1>
+<h2>
+<a name="meta-boxes" class="anchor" href="#meta-boxes"><span class="octicon octicon-link"></span></a>Meta Boxes</h2>
 
 <p>Advanced Users See: meta_box.php</p>
+
+<p>Class access function: <code>acpt_meta_box()</code></p>
 
 <p>You can now add Meta Boxes with ACPT. The meta_box class takes up to 3 arguments (only the first is required). First the name of the meta box. Second, the post types you want to use. Last any settings you want to override (priority for example). You can add custom meta boxes to you post types by adding the name of the meta box to the post types supports arg or by applying the post type within the make function. To add HTML/PHP to the meta box create a function beginning with "meta_" and append the name of the field to the end of it.</p>
 
@@ -165,27 +230,30 @@ Plugins: <a href="http://codex.wordpress.org/Function_Reference/register_activat
         <span class="s1">'hierarchical'</span> <span class="o">=&gt;</span> <span class="k">true</span><span class="p">,</span>
     <span class="p">);</span>
 
-    <span class="nv">$courses</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">post_type</span><span class="p">(</span><span class="s1">'course'</span><span class="p">,</span><span class="s1">'courses'</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="nv">$argsCourse</span> <span class="p">);</span>
-    <span class="nv">$books</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">post_type</span><span class="p">(</span><span class="s1">'book'</span><span class="p">,</span><span class="s1">'books'</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="nv">$argsBook</span> <span class="p">);</span>
+    <span class="nv">$courses</span> <span class="o">=</span> <span class="nx">acpt_post_type</span><span class="p">(</span><span class="s1">'course'</span><span class="p">,</span><span class="s1">'courses'</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="nv">$argsCourse</span> <span class="p">);</span>
+    <span class="nv">$books</span> <span class="o">=</span> <span class="nx">acpt_post_type</span><span class="p">(</span><span class="s1">'book'</span><span class="p">,</span><span class="s1">'books'</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="nv">$argsBook</span> <span class="p">);</span>
 
 <span class="p">}</span>
 
 <span class="nx">add_action</span><span class="p">(</span> <span class="s1">'add_meta_boxes'</span><span class="p">,</span> <span class="s1">'addThem'</span> <span class="p">);</span>
 
 <span class="k">function</span> <span class="nf">addThem</span><span class="p">()</span> <span class="p">{</span>
-    <span class="k">new</span> <span class="nx">meta_box</span><span class="p">(</span><span class="s1">'Details'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">'book'</span><span class="p">));</span>
+    <span class="nx">acpt_meta_box</span><span class="p">(</span><span class="s1">'Details'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">'book'</span><span class="p">));</span>
 <span class="p">}</span>
 
 <span class="c1">// Note: forms API explained below</span>
 <span class="k">function</span> <span class="nf">meta_details</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nv">$form</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">form</span><span class="p">(</span><span class="s1">'details'</span><span class="p">);</span>
+    <span class="nv">$form</span> <span class="o">=</span> <span class="nx">acpt_form</span><span class="p">(</span><span class="s1">'details'</span><span class="p">);</span>
     <span class="nv">$form</span><span class="o">-&gt;</span><span class="na">text</span><span class="p">(</span><span class="s1">'name'</span><span class="p">);</span>
 <span class="p">}</span>
 </pre></div>
 
-<h1>Forms</h1>
+<h2>
+<a name="forms" class="anchor" href="#forms"><span class="octicon octicon-link"></span></a>Forms</h2>
 
 <p>Advanced Users See: form.php</p>
+
+<p>Class access function: <code>acpt_form()</code></p>
 
 <p>You can now make Forms with ACPT. Please see the code for how to use this section. You will need to modify for best results. Plus I don't have time to document it right now. The meta box section has the code example you need.</p>
 
@@ -193,45 +261,116 @@ Plugins: <a href="http://codex.wordpress.org/Function_Reference/register_activat
 
 <div class="highlight"><pre><span class="k">function</span> <span class="nf">meta_details</span><span class="p">()</span> <span class="p">{</span>
     <span class="c1">// name, options</span>
-    <span class="nv">$form</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">form</span><span class="p">(</span><span class="s1">'details'</span><span class="p">,</span> <span class="k">null</span><span class="p">);</span>
+    <span class="nv">$form</span> <span class="o">=</span> <span class="nx">acpt_form</span><span class="p">(</span><span class="s1">'details'</span><span class="p">,</span> <span class="k">null</span><span class="p">);</span>
 
-    <span class="c1">// name, opts (array)</span>
-    <span class="nv">$form</span><span class="o">-&gt;</span><span class="na">text</span><span class="p">(</span><span class="s1">'name'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">'label'</span> <span class="o">=&gt;</span> <span class="s1">'First and Last Name'</span><span class="p">));</span>
-    <span class="nv">$form</span><span class="o">-&gt;</span><span class="na">textarea</span><span class="p">(</span><span class="s1">'address'</span><span class="p">);</span>
-    <span class="nv">$form</span><span class="o">-&gt;</span><span class="na">editor</span><span class="p">(</span><span class="s1">'custom'</span><span class="p">);</span>
+    <span class="nv">$form</span><span class="o">-&gt;</span><span class="na">text</span><span class="p">(</span><span class="s1">'name'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">'label'</span> <span class="o">=&gt;</span> <span class="s1">'Text Field'</span><span class="p">));</span>
+    <span class="nv">$form</span><span class="o">-&gt;</span><span class="na">color</span><span class="p">(</span><span class="s1">'color'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">'label'</span> <span class="o">=&gt;</span> <span class="s1">'Color Field'</span><span class="p">));</span>
 
-    <span class="c1">// name, options, opts</span>
-    <span class="nv">$form</span><span class="o">-&gt;</span><span class="na">select</span><span class="p">(</span><span class="s1">'options'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">'1'</span><span class="p">,</span> <span class="s1">'2'</span><span class="p">,</span> <span class="s1">'3'</span><span class="p">));</span>
-    <span class="nv">$form</span><span class="o">-&gt;</span><span class="na">radio</span><span class="p">(</span><span class="s1">'options'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">'1'</span><span class="p">,</span> <span class="s1">'2'</span><span class="p">,</span> <span class="s1">'3'</span><span class="p">),</span> <span class="k">array</span><span class="p">(</span><span class="s1">'label'</span> <span class="o">=&gt;</span> <span class="s1">'Radio Buttons'</span><span class="p">));</span>
+    <span class="c1">// With images and files a second hidden field is made</span>
+    <span class="c1">// containing the the ID. As: {your_field_name}_id</span>
+    <span class="nv">$form</span><span class="o">-&gt;</span><span class="na">image</span><span class="p">(</span><span class="s1">'image'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">'label'</span> <span class="o">=&gt;</span> <span class="s1">'Image Field'</span><span class="p">));</span>
+    <span class="nv">$form</span><span class="o">-&gt;</span><span class="na">file</span><span class="p">(</span><span class="s1">'file'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">'label'</span> <span class="o">=&gt;</span> <span class="s1">'File Field'</span><span class="p">));</span>
+
+
+    <span class="nv">$form</span><span class="o">-&gt;</span><span class="na">textarea</span><span class="p">(</span><span class="s1">'address'</span><span class="p">,</span><span class="k">array</span><span class="p">(</span><span class="s1">'label'</span> <span class="o">=&gt;</span> <span class="s1">'Textarea'</span><span class="p">));</span>
+    <span class="nv">$form</span><span class="o">-&gt;</span><span class="na">select</span><span class="p">(</span><span class="s1">'rooms'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">'one'</span><span class="p">,</span> <span class="s1">'two'</span><span class="p">,</span> <span class="s1">'three'</span><span class="p">),</span> <span class="k">array</span><span class="p">(</span><span class="s1">'label'</span> <span class="o">=&gt;</span> <span class="s1">'Select List'</span><span class="p">));</span>
+    <span class="nv">$form</span><span class="o">-&gt;</span><span class="na">radio</span><span class="p">(</span><span class="s1">'baths'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">'blue'</span><span class="p">,</span> <span class="s1">'green'</span><span class="p">,</span> <span class="s1">'red'</span><span class="p">),</span> <span class="k">array</span><span class="p">(</span><span class="s1">'label'</span> <span class="o">=&gt;</span> <span class="s1">'Radio Buttons'</span><span class="p">));</span>
+
+    <span class="c1">// When outputting editor data you may want to apply "the_content" filter</span>
+    <span class="c1">// apply_filters('the_content', $content_var)</span>
+    <span class="c1">// note that $content_var must be set to the content by you manually</span>
+    <span class="nv">$form</span><span class="o">-&gt;</span><span class="na">editor</span><span class="p">(</span><span class="s1">'baths'</span><span class="p">,</span> <span class="s1">'WYSIWYG Editor'</span><span class="p">);</span>
+
+    <span class="c1">// Advanced Fields</span>
+    <span class="nv">$form</span><span class="o">-&gt;</span><span class="na">google_map</span><span class="p">(</span><span class="s1">'address'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">'label'</span> <span class="o">=&gt;</span> <span class="s1">'Address Field'</span><span class="p">));</span>
+    <span class="nv">$form</span><span class="o">-&gt;</span><span class="na">date</span><span class="p">(</span><span class="s1">'date'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">'label'</span> <span class="o">=&gt;</span> <span class="s1">'Date Field'</span><span class="p">));</span>
 <span class="p">}</span>
 </pre></div>
 
-<h1>Together: Post Type and Taxonomy</h1>
+<h2>
+<a name="output" class="anchor" href="#output"><span class="octicon octicon-link"></span></a>Output</h2>
 
-<p>Here is an example of how to work with Post Types and Taxonomies together.</p>
+<p>To get data out of the forms API use the functions: <code>e_acpt_meta('[your_field_name]')</code> and <code>acpt_meta('[your_field_name]')</code>.</p>
 
-<div class="highlight"><pre><span class="k">include</span><span class="p">(</span><span class="s1">'acpt/init.php'</span><span class="p">);</span>
+<p><code>e_acpt_meta()</code> will echo the data. The function <code>acpt_meta()</code> will simply get the data.</p>
 
-<span class="nx">add_action</span><span class="p">(</span><span class="s1">'init'</span><span class="p">,</span> <span class="s1">'makethem'</span><span class="p">);</span>
-<span class="k">function</span> <span class="nf">makethem</span><span class="p">()</span> <span class="p">{</span>
+<p>To know what 'your_field_name' is turn on dev mode and view the fields. Or out put all of the post meta and it will be available from there. You can also you use <code>get_post_meta()</code> from WordPress if needed.</p>
 
-    <span class="nv">$args</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
-        <span class="s1">'supports'</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span> <span class="s1">'title'</span><span class="p">,</span> <span class="s1">'editor'</span><span class="p">,</span> <span class="s1">'page-attributes'</span>  <span class="p">),</span>
-        <span class="s1">'hierarchical'</span> <span class="o">=&gt;</span> <span class="k">true</span><span class="p">,</span>
-    <span class="p">);</span>
+<p>NOTE: the names need to be wrapped in brackets [] inside of the string.</p>
 
-    <span class="nv">$books</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">post_type</span><span class="p">(</span><span class="s1">'book'</span><span class="p">,</span><span class="s1">'books'</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span>  <span class="nv">$args</span> <span class="p">);</span>
-    <span class="nv">$courses</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">post_type</span><span class="p">(</span><span class="s1">'course'</span><span class="p">,</span><span class="s1">'courses'</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span>  <span class="nv">$args</span> <span class="p">);</span>
+<p>Form fields are now a combination of the form name and the form field name. They no longer begin with acpt_.</p>
 
-    <span class="k">new</span> <span class="nx">tax</span><span class="p">(</span><span class="s1">'color'</span><span class="p">,</span> <span class="s1">'colors'</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span>  <span class="k">array</span><span class="p">(</span><span class="nv">$books</span><span class="p">));</span>
-    <span class="k">new</span> <span class="nx">tax</span><span class="p">(</span><span class="s1">'author'</span><span class="p">,</span> <span class="s1">'authors'</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="nv">$books</span><span class="p">,</span> <span class="nv">$courses</span><span class="p">)</span> <span class="p">);</span>
+<p>For example the text field would be '[slide_title]'.</p>
 
+<div class="highlight"><pre><span class="c1">// example of a meta box</span>
+<span class="nx">add_action</span><span class="p">(</span> <span class="s1">'add_meta_boxes'</span><span class="p">,</span> <span class="s1">'acpt_custom_meta'</span> <span class="p">);</span>
+
+<span class="k">function</span> <span class="nf">acpt_custom_meta</span><span class="p">()</span> <span class="p">{</span>
+<span class="nx">acpt_meta_box</span><span class="p">(</span><span class="s1">'slide_options'</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// form api example, input names are much shorter now</span>
+<span class="k">function</span> <span class="nf">meta_slide_options</span><span class="p">()</span> <span class="p">{</span>
+<span class="nv">$form</span> <span class="o">=</span> <span class="nx">acpt_form</span><span class="p">(</span><span class="s1">'slide'</span><span class="p">);</span>
+<span class="nv">$form</span><span class="o">-&gt;</span><span class="na">text</span><span class="p">(</span><span class="s1">'title'</span><span class="p">);</span> <span class="c1">// input attr name will be 'acpt[slide_title]'</span>
+<span class="nv">$form</span><span class="o">-&gt;</span><span class="na">text</span><span class="p">(</span><span class="s1">'desc'</span><span class="p">);</span> <span class="c1">// input attr name will be 'acpt[slide_desc]'</span>
 <span class="p">}</span>
 </pre></div>
 
-<h1>Together: Post Type, Meta Box, Form and Taxonomy</h1>
+<p>Saving now includes a filter for data exclusive to ACPT fields. Filtering can be done as follows:</p>
 
-<p>This is still not fully tested and needs a lot of security work. Use at your own risk.</p>
+<div class="highlight"><pre><span class="nx">add_filter</span><span class="p">(</span><span class="s1">'acpt_save_filter'</span><span class="p">,</span> <span class="s1">'my_custom_function'</span><span class="p">);</span>
+
+<span class="k">function</span> <span class="nf">my_custom_function</span><span class="p">(</span><span class="nv">$acpt_data</span><span class="p">)</span> <span class="p">{</span>
+<span class="c1">// your code here: validation and sanitization for example</span>
+<span class="c1">// you access the data as follows</span>
+<span class="c1">// $acpt_data[{formName_fieldName}]</span>
+
+<span class="nv">$acpt_data</span><span class="p">[</span><span class="s1">'slide_title'</span><span class="p">]</span> <span class="o">=</span> <span class="nx">esc_html</span><span class="p">(</span><span class="nv">$acpt_data</span><span class="p">[</span><span class="s1">'slide_title'</span><span class="p">]);</span>
+
+<span class="k">return</span> <span class="nv">$acpt_data</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+<h2>
+<a name="grouping" class="anchor" href="#grouping"><span class="octicon octicon-link"></span></a>Grouping</h2>
+
+<p>Since version 3.0.2 you can group form fields in the DB. This is good for making more dynamic forms and help prevent strange prefixes and ban naming.</p>
+
+<p>To group form fields, in the <code>$opt</code> array set the key 'group' and the value as a string with <code>[]</code> around the name. For example:</p>
+
+<div class="highlight"><pre><span class="c1">// form api example, input names are much shorter now</span>
+<span class="k">function</span> <span class="nf">meta_slide_options</span><span class="p">()</span> <span class="p">{</span>
+<span class="nv">$form</span> <span class="o">=</span> <span class="nx">acpt_form</span><span class="p">(</span><span class="s1">'slide'</span><span class="p">);</span>
+<span class="nv">$form</span><span class="o">-&gt;</span><span class="na">text</span><span class="p">(</span><span class="s1">'title'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">'group'</span> <span class="o">=&gt;</span> <span class="s1">'[slide]'</span><span class="p">)</span> <span class="p">);</span> <span class="c1">// input attr name will be 'acpt[slide][slide_title]'</span>
+<span class="nv">$form</span><span class="o">-&gt;</span><span class="na">text</span><span class="p">(</span><span class="s1">'desc'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">'group'</span> <span class="o">=&gt;</span> <span class="s1">'[slide]'</span><span class="p">)</span> <span class="p">);</span> <span class="c1">// input attr name will be 'acpt[slide][slide_desc]'</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>You can also stake groups:</p>
+
+<div class="highlight"><pre><span class="c1">// form api example, input names are much shorter now</span>
+<span class="k">function</span> <span class="nf">meta_slide_options</span><span class="p">()</span> <span class="p">{</span>
+<span class="nv">$form</span> <span class="o">=</span> <span class="nx">acpt_form</span><span class="p">(</span><span class="s1">'slide'</span><span class="p">);</span>
+<span class="nv">$form</span><span class="o">-&gt;</span><span class="na">text</span><span class="p">(</span><span class="s1">'title'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">'group'</span> <span class="o">=&gt;</span> <span class="s1">'[slide][text]'</span><span class="p">)</span> <span class="p">);</span> <span class="c1">// input attr name will be 'acpt[slide][text][slide_title]'</span>
+<span class="nv">$form</span><span class="o">-&gt;</span><span class="na">text</span><span class="p">(</span><span class="s1">'desc'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">'group'</span> <span class="o">=&gt;</span> <span class="s1">'[slide][text]'</span><span class="p">)</span> <span class="p">);</span> <span class="c1">// input attr name will be 'acpt[slide][text][slide_desc]'</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>You can also apply the group to the form itself to save typing:</p>
+
+<div class="highlight"><pre><span class="c1">// form api example, input names are much shorter now</span>
+<span class="k">function</span> <span class="nf">meta_slide_options</span><span class="p">()</span> <span class="p">{</span>
+<span class="nv">$form</span> <span class="o">=</span> <span class="nx">acpt_form</span><span class="p">(</span><span class="s1">'slide'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">'group'</span> <span class="o">=&gt;</span> <span class="s1">'[slide][text]'</span><span class="p">));</span>
+<span class="nv">$form</span><span class="o">-&gt;</span><span class="na">text</span><span class="p">(</span><span class="s1">'title'</span><span class="p">);</span> <span class="c1">// input attr name will be 'acpt[slide][text][slide_title]'</span>
+<span class="nv">$form</span><span class="o">-&gt;</span><span class="na">text</span><span class="p">(</span><span class="s1">'desc'</span><span class="p">);</span> <span class="c1">// input attr name will be 'acpt[slide][text][slide_desc]'</span>
+<span class="p">}</span>
+</pre></div>
+
+<p><em>NOTE</em>: There is also a feature to add a <em>sub group</em> after the field name. The <em>same rules apply</em> but the group is added to the end. Simply replace the key <code>group</code> with <code>sub</code>. However, sub groups are only available to fields; <em>not the form object</em> itself.</p>
+
+<h2>
+<a name="together-post-type-meta-box-form-grouping-and-taxonomy" class="anchor" href="#together-post-type-meta-box-form-grouping-and-taxonomy"><span class="octicon octicon-link"></span></a>Together: Post Type, Meta Box, Form (grouping) and Taxonomy</h2>
 
 <div class="highlight"><pre><span class="k">include</span><span class="p">(</span><span class="s1">'acpt/init.php'</span><span class="p">);</span>
 
@@ -243,39 +382,59 @@ Plugins: <a href="http://codex.wordpress.org/Function_Reference/register_activat
         <span class="s1">'hierarchical'</span> <span class="o">=&gt;</span> <span class="k">true</span><span class="p">,</span>
     <span class="p">);</span>
 
-    <span class="nv">$books</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">post_type</span><span class="p">(</span><span class="s1">'book'</span><span class="p">,</span><span class="s1">'books'</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span>  <span class="nv">$args</span> <span class="p">);</span>
-    <span class="nv">$courses</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">post_type</span><span class="p">(</span><span class="s1">'course'</span><span class="p">,</span><span class="s1">'courses'</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span>  <span class="nv">$args</span> <span class="p">);</span>
+    <span class="nv">$books</span> <span class="o">=</span> <span class="nx">acpt_post_type</span><span class="p">(</span><span class="s1">'book'</span><span class="p">,</span><span class="s1">'books'</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span>  <span class="nv">$args</span> <span class="p">);</span>
+    <span class="nv">$courses</span> <span class="o">=</span> <span class="nx">acpt_post_type</span><span class="p">(</span><span class="s1">'course'</span><span class="p">,</span><span class="s1">'courses'</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span>  <span class="nv">$args</span> <span class="p">);</span>
 
-    <span class="k">new</span> <span class="nx">tax</span><span class="p">(</span><span class="s1">'color'</span><span class="p">,</span> <span class="s1">'colors'</span><span class="p">,</span> <span class="s1">'book'</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
-    <span class="k">new</span> <span class="nx">tax</span><span class="p">(</span><span class="s1">'author'</span><span class="p">,</span> <span class="s1">'authors'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="nv">$books</span><span class="p">,</span> <span class="nv">$courses</span><span class="p">),</span> <span class="k">true</span> <span class="p">);</span>
+    <span class="nv">$books</span><span class="o">-&gt;</span><span class="na">icon</span><span class="p">(</span><span class="s1">'notebook'</span><span class="p">);</span>
+
+    <span class="nx">acpt_tax</span><span class="p">(</span><span class="s1">'color'</span><span class="p">,</span> <span class="s1">'colors'</span><span class="p">,</span> <span class="s1">'book'</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
+    <span class="nx">acpt_tax</span><span class="p">(</span><span class="s1">'author'</span><span class="p">,</span> <span class="s1">'authors'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="nv">$books</span><span class="p">,</span> <span class="nv">$courses</span><span class="p">),</span> <span class="k">true</span> <span class="p">);</span>
 
 <span class="p">}</span>
 
 <span class="nx">add_action</span><span class="p">(</span> <span class="s1">'add_meta_boxes'</span><span class="p">,</span> <span class="s1">'addThem'</span> <span class="p">);</span>
 
 <span class="k">function</span> <span class="nf">addThem</span><span class="p">()</span> <span class="p">{</span>
-    <span class="k">new</span> <span class="nx">meta_box</span><span class="p">(</span><span class="s1">'Details'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">'book'</span><span class="p">,</span> <span class="s1">'course'</span><span class="p">));</span>
+    <span class="nx">acpt_meta_box</span><span class="p">(</span><span class="s1">'Details'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">'book'</span><span class="p">,</span> <span class="s1">'course'</span><span class="p">));</span>
 <span class="p">}</span>
 
 <span class="k">function</span> <span class="nf">meta_details</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nv">$form</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">form</span><span class="p">(</span><span class="s1">'details'</span><span class="p">,</span> <span class="k">null</span><span class="p">);</span>
-    <span class="nv">$form</span><span class="o">-&gt;</span><span class="na">text</span><span class="p">(</span><span class="s1">'name'</span><span class="p">);</span>
-    <span class="nv">$form</span><span class="o">-&gt;</span><span class="na">textarea</span><span class="p">(</span><span class="s1">'address'</span><span class="p">);</span>
+    <span class="nv">$personal</span> <span class="o">=</span> <span class="nx">acpt_form</span><span class="p">(</span><span class="s1">'info'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">'group'</span> <span class="o">=&gt;</span> <span class="s1">'[personal]'</span><span class="p">));</span>
+    <span class="nv">$personal</span><span class="o">-&gt;</span><span class="na">text</span><span class="p">(</span><span class="s1">'name'</span><span class="p">);</span>
+    <span class="nv">$personal</span><span class="o">-&gt;</span><span class="na">textarea</span><span class="p">(</span><span class="s1">'address'</span><span class="p">);</span>
+
+    <span class="nv">$business</span> <span class="o">=</span> <span class="nx">acpt_form</span><span class="p">(</span><span class="s1">'info'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">'group'</span> <span class="o">=&gt;</span> <span class="s1">'[business]'</span><span class="p">));</span>
+    <span class="nv">$business</span><span class="o">-&gt;</span><span class="na">text</span><span class="p">(</span><span class="s1">'name'</span><span class="p">);</span>
+    <span class="nv">$business</span><span class="o">-&gt;</span><span class="na">textarea</span><span class="p">(</span><span class="s1">'address'</span><span class="p">);</span>
 <span class="p">}</span>
 </pre></div>
 
-<h1>Contributors</h1>
+<h2>
+<a name="actions" class="anchor" href="#actions"><span class="octicon octicon-link"></span></a>Actions</h2>
 
 <ul>
-<li>Gina Guerrero <a href="https://twitter.com/mnemyx">https://twitter.com/mnemyx</a>
-</li>
+<li>start_acpt_meta</li>
+<li>end_acpt_meta</li>
+<li>start_acpt_save</li>
+<li>end_acpt_save</li>
+</ul><h2>
+<a name="filters" class="anchor" href="#filters"><span class="octicon octicon-link"></span></a>Filters</h2>
+
+<ul>
+<li>{your_field_name}_filter : This for the admin screens. It filters the output of custom fields.</li>
+<li>acpt_save_filter: Meta data being saved. Best used to validate and sanitize custom data.</li>
+<li>acpt_plugin_folder: Set the plugins folder. Should be file system level include path not relative to project.</li>
+</ul><h2>
+<a name="change-log" class="anchor" href="#change-log"><span class="octicon octicon-link"></span></a>Change Log</h2>
+
+<ul>
+<li>v3.0.2 - code cleanup</li>
+<li>v3.0 - tagging now being used for versions</li>
 </ul>
       </section>
-      <footer>
-        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
-      </footer>
+
     </div>
     <!--[if !IE]><script>fixScale(document);</script><![endif]-->
-		
+    
   </body>
 </html>
