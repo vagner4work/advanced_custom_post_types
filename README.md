@@ -332,40 +332,16 @@ You can also apply the group to the form itself to save typing:
 ```php
 // form api example, input names are much shorter now
 function meta_slide_options() {
-$form = acpt_form('slide', array('group' => '[slide][text]');
-$form->text('title', array('group' => '[slide][text]') ); // input attr name will be 'acpt[slide][text][slide_title]'
-$form->text('desc', array('group' => '[slide][text]') ); // input attr name will be 'acpt[slide][text][slide_desc]'
+$form = acpt_form('slide', array('group' => '[slide][text]'));
+$form->text('title'); // input attr name will be 'acpt[slide][text][slide_title]'
+$form->text('desc'); // input attr name will be 'acpt[slide][text][slide_desc]'
 }
 ```
 
 *NOTE*: There is also a feature to add a *sub group* after the field name. The *same rules apply* but the group is added to the end. Simply replace the key `group` with `sub`. However, sub groups are only available to fields; *not the form object* itself.
 
-Together: Post Type and Taxonomy
----
 
-Here is an example of how to work with Post Types and Taxonomies together.
-
-```php
-include('acpt/init.php');
-
-add_action('init', 'makethem');
-function makethem() {
-
-    $args = array(
-        'supports' => array( 'title', 'editor', 'page-attributes'  ),
-        'hierarchical' => true,
-    );
-
-    $books = acpt_post_type('book','books', false,  $args );
-    $courses = acpt_post_type('course','courses', false,  $args );
-
-    acpt_tax('color', 'colors', true,  array($books));
-    acpt_tax('author', 'authors', true, array($books, $courses) );
-
-}
-```
-
-Together: Post Type, Meta Box, Form and Taxonomy
+Together: Post Type, Meta Box, Form (grouping) and Taxonomy
 ---
 
 ```php
@@ -396,9 +372,13 @@ function addThem() {
 }
 
 function meta_details() {
-    $form = acpt_form('details');
-    $form->text('name');
-    $form->textarea('address');
+    $personal = acpt_form('info', array('group' => '[personal]'));
+    $personal->text('name');
+    $personal->textarea('address');
+
+    $business = acpt_form('info', array('group' => '[business]'));
+    $business->text('name');
+    $business->textarea('address');
 }
 ```
 

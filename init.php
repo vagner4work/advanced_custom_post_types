@@ -41,7 +41,9 @@ function acpt_meta($name = '', $fallBack = '', $groups = true, $theID = null) {
       $data = acpt_utility::acpt_get_meta($name, $data);
     } elseif(acpt_validate::bracket($name)) {
       $data = get_post_meta($theID, substr($name, 1, -1), true);
-    }
+    } //elseif(is_string($name) && strlen($name) > 0 ) {
+     // $data = get_post_meta($theID, $name, true);
+    //  }
 
     //if(empty($data)) { $data = get_post_meta($theID, $name, true); }
     empty($data) ? $data = $fallBack : true;
