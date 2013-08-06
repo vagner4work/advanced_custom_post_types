@@ -84,7 +84,8 @@ class acpt_utility extends acpt {
       $c = count($groups[0]);
 
       for ($i = 1; $i < $c; $i++) {
-        $data = $data[$groups[1][$i]];
+        if(isset($data[$groups[1][$i]])) { $data = $data[$groups[1][$i]]; }
+        else { return ''; }
       }
 
     else :

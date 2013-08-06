@@ -45,9 +45,9 @@ function acpt_meta($name = '', $groups = true, $fallBack = '', $theID = null) {
     return $data;
 }
 
-function e_acpt_meta($name = '', $fallBack = '', $theID = null) {
-    $data = acpt_meta($name, $fallBack, $theID);
-    is_string($data) ? true : $data = 'Data need to be a string.';
+function e_acpt_meta($name = '', $groups = true, $fallBack = '', $theID = null) {
+    $data = acpt_meta($name, $groups, $fallBack, $theID);
+    is_string($data) ? true : $data = 'Data needs to be a string.';
     echo $data;
 }
 
