@@ -1,6 +1,18 @@
 <?php
-class acpt_utility extends acpt {
+/**
+ * Class acpt_utility
+ *
+ * Functions that have no home for specific class usage.
+ */
+class acpt_utility {
 
+  /**
+   * Set custom post type messages to make more since.
+   *
+   * @param $messages
+   *
+   * @return mixed
+   */
   static function set_messages($messages) {
     global $post;
 
@@ -36,11 +48,17 @@ class acpt_utility extends acpt {
     return $messages;
   }
 
+  /**
+   * Apply ACPT CSS to WP
+   */
   static function apply_css() {
     wp_enqueue_style( 'acpt-styles', ACPT_LOCATION . '/'.ACPT_FOLDER_NAME.'/core/css/style.css' );
     wp_enqueue_style( 'acpt-date-picker', ACPT_LOCATION . '/'.ACPT_FOLDER_NAME.'/core/css/date-picker.css' );
   }
 
+  /**
+   * Apply ACPT JS to WP
+   */
   static function upload_scripts() {
 
     wp_enqueue_script('acpt-fields', ACPT_LOCATION .'/'.ACPT_FOLDER_NAME.'/core/js/fields.js', array('jquery'), '1.0', true);
@@ -65,6 +83,15 @@ class acpt_utility extends acpt {
     }
   }
 
+  /**
+   * ACPT Groups Syntax to Array
+   *
+   * Convert ACPT bracket syntax into an array and return it.
+   *
+   * @param $name
+   *
+   * @return mixed
+   */
   static function groups_to_array($name) {
     $regex = '/\[([^]]+)\]/i';
     preg_match_all($regex, $name, $groups, PREG_PATTERN_ORDER);

@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Class acpt
+ *
+ * Base class for other classes to extend
+ */
 class acpt {
 
   function __construct() {}
@@ -20,6 +24,13 @@ class acpt {
     return $this;
   }
 
+  /**
+   * Replace white space with underscore and make all text lowercase
+   *
+   * @param $name
+   *
+   * @return mixed
+   */
   protected function make_computer_name($name) {
     $pattern = '/(\s+)/';
     $replacement = '_';
@@ -27,6 +38,13 @@ class acpt {
     return $computerName;
   }
 
+  /**
+   * Test for value if there is none die.
+   *
+   * @param $data
+   * @param $error
+   * @param string $type
+   */
   protected function test_for($data, $error, $type = 'string') {
     switch($type) {
       case 'array' :

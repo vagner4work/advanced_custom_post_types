@@ -28,8 +28,15 @@ class acpt_meta_box extends acpt {
 	function __construct($name=null, $post_type = null, $settings=array()) {
 		return $this->make($name, $post_type, $settings);
 	}
-	
-	function make($name=null, $post_type = null, $settings=array('context' => 'normal', 'priority' => 'high', 'label' => null, 'callback' => null )) {
+
+  /**
+   * Make Meta Box
+   *
+   * @param null $name
+   * @param null $post_type
+   * @param array $settings
+   */
+  function make($name=null, $post_type = null, $settings=array('context' => 'normal', 'priority' => 'high', 'label' => null, 'callback' => null )) {
 		if(!$name) exit('Making Meta Box: You need to enter a name.');
 
 		$computerName = $this->make_computer_name($name);
@@ -51,6 +58,7 @@ class acpt_meta_box extends acpt {
 		$this->post_type = $post_type;
 		$this->settings = $settings;
 
+    // If a post type has in its support array the meta box add it.
 		global $post;
 		$type = get_post_type( $post->ID );
 		if ( post_type_supports( $type, $computerName ) ) {
@@ -59,6 +67,7 @@ class acpt_meta_box extends acpt {
 
 		if(isset($post_type)) $this->add_post_type_support($post_type);
 	}
+
 
 	function add_post_type_support($post_type) {
 		// check post type
@@ -104,8 +113,4 @@ class acpt_meta_box extends acpt {
 
     return $this;
 	}
-}
-
-function acpt_meta_box($name=null, $post_type = null, $settings=array()) {
-  return new acpt_meta_box($name, $post_type, $settings);
 }

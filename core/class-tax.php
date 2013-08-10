@@ -131,7 +131,3 @@ class acpt_tax extends acpt {
     return $this;
 	}
 }
-
-function acpt_tax($singular = null, $plural = null, $post_type = null, $hierarchical = false, $cap = false, $settings = array() ) {
-  return new acpt_tax($singular, $plural, $post_type, $hierarchical, $cap, $settings );
-}

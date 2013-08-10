@@ -115,7 +115,3 @@ class acpt_role extends acpt {
 	}
 
 }
-
-function acpt_role($role = null, $settings = array(), $postType = null) {
-  return new acpt_role($role, $settings, $postType);
-}

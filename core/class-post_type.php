@@ -60,7 +60,14 @@ class acpt_post_type extends acpt {
 		return $this->make($singular, $plural, $cap, $settings);
 	}
 
-	function icon($name) {
+  /**
+   * Add Icon to Post Type Menu Item
+   *
+   * @param $name
+   *
+   * @return $this
+   */
+  function icon($name) {
 		if(!array_key_exists($name, $this->icon_pos)) exit('Adding Icon: You need to enter a valid icon name. You used ' . $name);
 
 		$this->icon = $name;
@@ -69,7 +76,10 @@ class acpt_post_type extends acpt {
     return $this;
 	}
 
-	function set_icon_css() { ?>
+  /**
+   * Add CSS for Post Type Menu Icon
+   */
+  function set_icon_css() { ?>
 
 		<style type="text/css">
 			#adminmenu #menu-posts-<?php echo $this->singular; ?> .wp-menu-image {
@@ -165,8 +175,4 @@ class acpt_post_type extends acpt {
 
     return $this;
 	}
-}
-
-function acpt_post_type( $singular = null, $plural = null, $cap = false, $settings = array(), $icon = null ) {
-  return new acpt_post_type($singular, $plural, $cap, $settings);
 }

@@ -844,7 +844,6 @@ class acpt_form extends acpt {
     return $value;
   }
 
-
   /**
    * Get $_POST Name
    *
@@ -857,12 +856,21 @@ class acpt_form extends acpt {
    * @return string
    */
   private function get_acpt_post_name($field, $group, $sub ) {
-    $post_name = $this->get_post_name($field, $group, $sub);
+    $post_name = $this->get_bracket_syntax($field, $group, $sub);
 
     return "acpt{$post_name}";
   }
 
-  private function get_post_name($field, $group, $sub ) {
+  /**
+   * Compile bracket syntax for usage
+   *
+   * @param $field
+   * @param $group
+   * @param $sub
+   *
+   * @return string
+   */
+  private function get_bracket_syntax($field, $group, $sub ) {
     $group = $this->get_opt_by_test($group, $this->group);
 
     if(!acpt_validate::bracket($group) && $group != '' ) {
@@ -876,8 +884,4 @@ class acpt_form extends acpt {
     return "{$group}[{$field}]{$sub}";
   }
 
-}
-
-function acpt_form($name, $opts=array()) {
-  return new acpt_form($name, $opts);
 }

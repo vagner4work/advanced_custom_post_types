@@ -80,11 +80,31 @@ class acpt_html extends acpt {
     else { return ''; }
   }
 
+  /**
+   * Check if there is no tag
+   *
+   * Set the tag value to none to create text only
+   *
+   * @param $tag
+   * @param $output
+   *
+   * @return string
+   */
   private static function check_none($tag, $output) {
     if($tag != 'none') { return $output; }
     else { return ''; }
   }
 
+  /**
+   * Check HTML array value
+   *
+   * If the HTML value is an array add the new element.
+   * If the HTML value is a string add the plain text.
+   *
+   * @param $html
+   *
+   * @return string
+   */
   private static function check_content($html) {
     if(is_string($html)) :
       return $html;
@@ -95,10 +115,23 @@ class acpt_html extends acpt {
     endif;
   }
 
+  /**
+   * Shortcut to create an input field
+   *
+   * @param $args
+   * @param null $make
+   *
+   * @return array|string
+   */
   static function input($args, $make = null ) {
     return self::element('input', $args, $make );
   }
 
+  /**
+   * Get Tags that do not close
+   *
+   * @return array
+   */
   private static function get_close_tags() {
     return self::$noCloseTags;
   }
