@@ -80,12 +80,12 @@ class acpt_html extends acpt {
     else { return ''; }
   }
 
-  private function check_none($tag, $output) {
+  private static function check_none($tag, $output) {
     if($tag != 'none') { return $output; }
     else { return ''; }
   }
 
-  private function check_content($html) {
+  private static function check_content($html) {
     if(is_string($html)) :
       return $html;
     elseif(isset($html) && is_array($html)) :
@@ -99,7 +99,7 @@ class acpt_html extends acpt {
     return self::element('input', $args, $make );
   }
 
-  private function get_close_tags() {
+  private static function get_close_tags() {
     return self::$noCloseTags;
   }
 

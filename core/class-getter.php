@@ -35,7 +35,7 @@ class acpt_get {
     return $data;
   }
 
-  private function get_groups($name, $id) {
+  private static function get_groups($name, $id) {
     $data = get_post_meta($id);
 
     if(!empty($data)) :
@@ -47,7 +47,7 @@ class acpt_get {
     return $data;
   }
 
-  private function get_single($name, $id) {
+  private static function get_single($name, $id) {
     $data = get_post_meta($id, substr($name, 1, -1), true);
 
     if(empty($data)) :
@@ -57,14 +57,14 @@ class acpt_get {
     return $data;
   }
 
-  private function get_meta_data($name, $data) {
+  private static function get_meta_data($name, $data) {
     $regex = '/\[([^]]+)\]/i';
     preg_match_all($regex, $name, $groups, PREG_PATTERN_ORDER);
 
     return self::get_data_by_groups($groups, $data);
   }
 
-  private function get_data_by_groups($groups, $data) {
+  private static function get_data_by_groups($groups, $data) {
 
     $key = $groups[1][0];
 
@@ -77,10 +77,9 @@ class acpt_get {
     $c = count($groups[0]);
 
     for ($i = 1; $i < $c; $i++) :
-      $value = $data[$groups[1][$i]];
 
-      if(!empty($value)) :
-        $data = $value;
+      if(!empty($data[$groups[1][$i]])) :
+        $data = $data[$groups[1][$i]];
       else :
         $data = null;
         break 1;
