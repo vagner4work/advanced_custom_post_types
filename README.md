@@ -1,4 +1,4 @@
-Advanced Custom Post Types: 3.0.2
+Advanced Custom Post Types: v3.0.3
 ---
 
 This is a framework for creating not only custom post types, roles and taxonomies in WordPress but it will also give you the ability to rapidly create custom fields (post types only).
@@ -303,7 +303,7 @@ return $acpt_data;
 
 Grouping
 ---
-Since version 3.0.2 you can group form fields in the DB. This is good for making more dynamic forms and help prevent strange prefixes and ban naming.
+Since version 3.0.2 you can group form fields in the DB. This is good for making more dynamic forms and help prevent strange prefixes and bad naming.
 
 To group form fields, in the `$opt` array set the key 'group' and the value as a string with `[]` around the name. For example:
 
@@ -316,7 +316,7 @@ $form->text('desc', array('group' => '[slide]') ); // input attr name will be 'a
 }
 ```
 
-You can also stake groups:
+You can also stack groups:
 
 ```php
 // form api example, input names are much shorter now
@@ -401,5 +401,6 @@ Filters
 Change Log
 ---
 
-- v3.0.2 - code cleanup
+- v3.0.3 - code cleanup and adding new getter class
+- v3.0.2 - code cleanup and grouping added
 - v3.0 - tagging now being used for versions

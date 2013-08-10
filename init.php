@@ -2,7 +2,7 @@
 // Include this file in functions.php or plugin
 global $wp_version;
 if($wp_version < '3.5' || $wp_version == null ): exit('You need the 3.5+ version of WordPress.');
-else: $acpt_version = '3.0.2';
+else: $acpt_version = '3.0.3';
 endif;
 
 // load config
@@ -27,19 +27,9 @@ foreach($lib as $value) :
   require_once('core/class-'.$value.'.php');
 endforeach;
 
+require_once('core/functions.php');
+
 if($useDepreciated) { require_once('core/depreciated.php'); }
-
-// getting the meta
-function acpt_meta($name = '', $fallBack = '', $groups = true, $id = null) {
-  return acpt_get::meta($name, $fallBack, $groups, $id);
-}
-
-function e_acpt_meta($name = '', $fallBack = '', $groups = true, $theID = null) {
-    $data = acpt_meta($name, $groups, $fallBack, $theID);
-    ($fallBack !== '' ) ? true : $fallBack = 'No string data '.$name;
-    is_string($data) ? true : $data = $fallBack;
-    echo $data;
-}
 
 // setup
 if(ACPT_MESSAGES) add_filter('post_updated_messages', 'acpt_utility::set_messages' );
