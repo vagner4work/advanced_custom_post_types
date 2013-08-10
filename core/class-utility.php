@@ -65,4 +65,11 @@ class acpt_utility extends acpt {
     }
   }
 
+  static function groups_to_array($name) {
+    $regex = '/\[([^]]+)\]/i';
+    preg_match_all($regex, $name, $groups, PREG_PATTERN_ORDER);
+
+    return $groups[1];
+  }
+
 }

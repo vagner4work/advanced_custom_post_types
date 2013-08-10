@@ -58,15 +58,14 @@ class acpt_get {
   }
 
   private static function get_meta_data($name, $data) {
-    $regex = '/\[([^]]+)\]/i';
-    preg_match_all($regex, $name, $groups, PREG_PATTERN_ORDER);
+    $groups = acpt_utility::groups_to_array($name);
 
     return self::get_data_by_groups($groups, $data);
   }
 
   private static function get_data_by_groups($groups, $data) {
 
-    $key = $groups[1][0];
+    $key = $groups[0];
 
     if( isset($data[$key][0]) ) :
       $data = maybe_unserialize( $data[$key][0] );
@@ -74,12 +73,12 @@ class acpt_get {
       return null;
     endif;
 
-    $c = count($groups[0]);
+    $c = count($groups);
 
     for ($i = 1; $i < $c; $i++) :
 
-      if(!empty($data[$groups[1][$i]])) :
-        $data = $data[$groups[1][$i]];
+      if(!empty($data[$groups[$i]])) :
+        $data = $data[$groups[$i]];
       else :
         $data = null;
         break 1;

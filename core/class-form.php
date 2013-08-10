@@ -2,35 +2,35 @@
 
 class acpt_form extends acpt {
 
-public $name = null;
-public $action = null;
-public $method = null;
-public $group = null;
+  public $name = null;
+  public $action = null;
+  public $method = null;
+  public $group = null;
 
-function __construct($name, $opts=array()) {
-  return $this->make($name, $opts);
-}
+  function __construct($name, $opts=array()) {
+    return $this->make($name, $opts);
+  }
 
-/**
- * Make Form.
- *
- * @param string $name singular name is required
- * @param array $opts args [action, method]
- *
- * @return $this
- */
-function make($name, $opts=array()) {
+  /**
+   * Make Form.
+   *
+   * @param string $name singular name is required
+   * @param array $opts args [action, method]
+   *
+   * @return $this
+   */
+  function make($name, $opts=array()) {
     $this->test_for($name, 'Making Form: You need to enter a singular name.');
 
     $opts = $this->set_empty_keys($opts, array('group'));
     $this->group = $this->get_opt_by_test($opts['group'], '');
 
     if(isset($opts['method'])) :
-        $this->method = $opts['method'];
-        $field = '<form id="'.$name.'" ';
-        $field .= isset($opts['method']) ? 'method="'.$opts['method'].'" ' : 'method="post" ';
-        $field .= isset($opts['action']) ? 'action="'.$opts['action'].'" ' : 'action="'.$name.'" ';
-        $field .= '>';
+      $this->method = $opts['method'];
+      $field = '<form id="'.$name.'" ';
+      $field .= isset($opts['method']) ? 'method="'.$opts['method'].'" ' : 'method="post" ';
+      $field .= isset($opts['action']) ? 'action="'.$opts['action'].'" ' : 'action="'.$name.'" ';
+      $field .= '>';
     endif;
 
     if(isset($opts['action'])) $this->method = $opts['action'];
@@ -42,316 +42,347 @@ function make($name, $opts=array()) {
     echo '<input type="hidden" name="save_acpt" value="true" />';
 
     return $this;
-}
+  }
 
-/**
- * End Form.
- *
- * @param string $name singular name is required
- * @param array $opts args override and extend
- */
-function end($name=null, $opts=array()) {
-  if($name) :
-    $field = $opts['type'] == 'button' ? '<input type="button"' : '<input type="submit"';
-    $field .= 'value="'.esc_attr($name).'" />';
-    $field .= '</form>';
-  endif;
+  /**
+   * End Form.
+   *
+   * @param string $name singular name is required
+   * @param array $opts args override and extend
+   */
+  function end($name=null, $opts=array()) {
+    if($name) :
+      $field = $opts['type'] == 'button' ? '<input type="button"' : '<input type="submit"';
+      $field .= 'value="'.esc_attr($name).'" />';
+      $field .= '</form>';
+    endif;
 
-  if(isset($field)) echo $field;
-}
+    if(isset($field)) echo $field;
+  }
 
-/**
- * Form Text.
- *
- * @param string $name singular name is required
- * @param array $opts args override and extend
- * @param bool $label show label or not
- * @return $this
- */
-function text($name, $opts=array(), $label = true) {
-  $this->test_for($this->name, 'Making Form: You need to make the form first.');
-  $this->test_for($name, 'Making Form: You need to enter a singular name.');
+  /**
+   * Form Text.
+   *
+   * @param string $name singular name is required
+   * @param array $opts args override and extend
+   * @param bool $label show label or not
+   * @return $this
+   */
+  function text($name, $opts=array(), $label = true) {
+    $this->test_for($this->name, 'Making Form: You need to make the form first.');
+    $this->test_for($name, 'Making Form: You need to enter a singular name.');
 
-  $field = $this->get_field_name($name);
+    $field = $this->get_field_name($name);
 
-  $args = array(
-    'name' => $name,
-    'opts' => $opts,
-    'classes' => "text",
-    'field' => $field,
-    'label' => $label,
-    'html' => ''
-  );
+    $args = array(
+      'name' => $name,
+      'opts' => $opts,
+      'classes' => "text",
+      'field' => $field,
+      'label' => $label,
+      'html' => ''
+    );
 
-  echo apply_filters($field . '_filter', $this->get_text_form($args));
+    echo apply_filters($field . '_filter', $this->get_text_form($args));
 
-  return $this;
-}
+    return $this;
+  }
 
-/**
- * Form Color
- *
- * this function works well for making a form element {@link get_color_form()}
- *
- * @param string $name singular name is required
- * @param array $opts args override and extend
- * @param bool $label show label or not
- * @return $this
- */
-function color($name, $opts=array(), $label = true) {
-  $this->test_for($this->name, 'Making Form: You need to make the form first.');
-  $this->test_for($name, 'Making Form: You need to enter a singular name.');
+  /**
+   * Form Color
+   *
+   * this function works well for making a form element {@link get_color_form()}
+   *
+   * @param string $name singular name is required
+   * @param array $opts args override and extend
+   * @param bool $label show label or not
+   * @return $this
+   */
+  function color($name, $opts=array(), $label = true) {
+    $this->test_for($this->name, 'Making Form: You need to make the form first.');
+    $this->test_for($name, 'Making Form: You need to enter a singular name.');
 
-  $fieldName = $this->get_field_name($name);
+    $fieldName = $this->get_field_name($name);
 
-  $args = array(
-    'name' => $name,
-    'opts' => $opts,
-    'classes' => "color color-picker",
-    'field' => $fieldName,
-    'label' => $label,
-    'html' => ''
-  );
+    $args = array(
+      'name' => $name,
+      'opts' => $opts,
+      'classes' => "color color-picker",
+      'field' => $fieldName,
+      'label' => $label,
+      'html' => ''
+    );
 
-  echo apply_filters($fieldName . '_filter', $this->get_color_form($args));
+    echo apply_filters($fieldName . '_filter', $this->get_color_form($args));
 
-  return $this;
-}
+    return $this;
+  }
 
-/**
- * Form Textarea.
- *
- * @param string $name singular name is required
- * @param array $opts args override and extend
- * @param bool $label show label or not
- * @return $this
- */
-function textarea($name, $opts=array(), $label = true) {
-  $this->test_for($this->name, 'Making Form: You need to make the form first.');
-  $this->test_for($name, 'Making Form: You need to enter a singular name.');
+  /**
+   * Form Checkbox
+   *
+   * this function works well for making a form element {@link get_color_form()}
+   *
+   * @param string $name singular name is required
+   * @param array $opts args override and extend
+   * @param bool $label show label or not
+   * @return $this
+   */
+  function checkbox($name, $opts=array(), $label = true) {
+    $this->test_for($this->name, 'Making Form: You need to make the form first.');
+    $this->test_for($name, 'Making Form: You need to enter a singular name.');
 
-  $fieldName = $this->get_field_name($name);
+    $opts['labelTag'] = 'span';
+    $fieldName = $this->get_field_name($name);
 
-  $opts = $this->set_empty_keys($opts, array('group', 'sub'));
-  $value = $this->get_field_value($fieldName, $opts['group'], $opts['sub']);
+    $args = array(
+      'name' => $name,
+      'opts' => $opts,
+      'classes' => "checkbox",
+      'field' => $fieldName,
+      'label' => $label,
+      'html' => ''
+    );
 
-  // value
-  if(empty($value)) $value = '';
+    echo apply_filters($fieldName . '_filter', $this->get_checkbox_form($args));
 
-  $s = $this->get_opts($name, $opts, $fieldName, $label);
+    return $this;
+  }
 
-  $attr = array(
-    'readonly' => $s['read'],
-    'class' => "textarea $fieldName {$s['class']}",
-    'id' => $s['id'],
-    'name' => $s['name'],
-    'html' => acpt_sanitize::textarea($value)
-  );
-  $field = acpt_html::element('textarea', $attr);
+  /**
+   * Form Textarea.
+   *
+   * @param string $name singular name is required
+   * @param array $opts args override and extend
+   * @param bool $label show label or not
+   * @return $this
+   */
+  function textarea($name, $opts=array(), $label = true) {
+    $this->test_for($this->name, 'Making Form: You need to make the form first.');
+    $this->test_for($name, 'Making Form: You need to enter a singular name.');
 
-  $dev_note = $this->dev_message($fieldName, $opts['group'], $opts['sub']);
-
-  echo apply_filters($fieldName . '_filter', $s['bLabel'].$s['label'].$s['aLabel'].$field.$dev_note.$s['help'].$s['afterField']);
-
-  return $this;
-}
-
-/**
- * Form Select.
- *
- * @param string $name singular name is required
- * @param array $options values for select options
- * @param array $opts args override and extend
- * @param bool $label show label or not
- * @return $this
- */
-function select($name, $options=array('Key' => 'Value'), $opts=array(), $label = true) {
-  $this->test_for($this->name, 'Making Form: You need to make the form first.');
-  $this->test_for($name, 'Making Form: You need to enter a singular name.');
-
-  $optionsList = '';
-  $fieldName = $this->get_field_name($name);
-
-  // get options HTML
-  if(isset($options)) :
+    $fieldName = $this->get_field_name($name);
 
     $opts = $this->set_empty_keys($opts, array('group', 'sub'));
     $value = $this->get_field_value($fieldName, $opts['group'], $opts['sub']);
 
-    foreach( $options as $key => $option) :
-      if($option == $value)
-        $selected = 'selected="selected"';
-      else
-        $selected = null;
+    // value
+    if(empty($value)) $value = '';
 
-      if(array_key_exists('select_key', $opts) && $opts['select_key'] == true)
-        true;
-      else
-        $key = $option;
+    $s = $this->get_opts($name, $opts, $fieldName, $label);
 
-      $option = esc_attr($option);
+    $attr = array(
+      'readonly' => $s['read'],
+      'class' => "textarea $fieldName {$s['class']}",
+      'id' => $s['id'],
+      'name' => $s['name'],
+      'html' => acpt_sanitize::textarea($value)
+    );
+    $field = acpt_html::element('textarea', $attr);
 
-      $optionsList .= "<option $selected value=\"$option\">$key</option>";
-    endforeach;
+    $dev_note = $this->dev_message($fieldName, $opts['group'], $opts['sub']);
 
-  endif;
+    echo apply_filters($fieldName . '_filter', $s['bLabel'].$s['label'].$s['aLabel'].$field.$dev_note.$s['help'].$s['afterField']);
 
-  $s = $this->get_opts($name, $opts, $fieldName, $label);
+    return $this;
+  }
 
-  $attr = array(
-    'readonly' => $s['read'],
-    'class' => "select $fieldName {$s['class']}",
-    'id' => $s['id'],
-    'name' => $s['name'],
-    'html' => $optionsList
-  );
-  $field = acpt_html::element('select', $attr);
-  $dev_note = $this->dev_message($fieldName, $opts['group'], $opts['sub']);
+  /**
+   * Form Select.
+   *
+   * @param string $name singular name is required
+   * @param array $options values for select options
+   * @param array $opts args override and extend
+   * @param bool $label show label or not
+   * @return $this
+   */
+  function select($name, $options=array('Key' => 'Value'), $opts=array(), $label = true) {
+    $this->test_for($this->name, 'Making Form: You need to make the form first.');
+    $this->test_for($name, 'Making Form: You need to enter a singular name.');
 
-  echo apply_filters($fieldName . '_filter', $s['bLabel'].$s['label'].$s['aLabel'].$field.$dev_note.$s['help'].$s['afterField']);
+    $optionsList = '';
+    $fieldName = $this->get_field_name($name);
 
-  return $this;
-}
+    // get options HTML
+    if(isset($options)) :
 
-/**
- * Form Radio.
- *
- * @param string $name singular name is required
- * @param array $options values for radio options
- * @param array $opts args override and extend
- * @param bool $label show label or not
- * @return $this
- */
-function radio($name, $options=array('Key' => 'Value'), $opts=array(), $label = true) {
-  $this->test_for($this->name, 'Making Form: You need to make the form first.');
-  $this->test_for($name, 'Making Form: You need to enter a singular name.');
+      $opts = $this->set_empty_keys($opts, array('group', 'sub'));
+      $value = $this->get_field_value($fieldName, $opts['group'], $opts['sub']);
 
-  $optionsList = '';
-  $opts['labelTag'] = 'span';
-  $fieldName = $this->get_field_name($name);
+      foreach( $options as $key => $option) :
+        if($option == $value)
+          $selected = 'selected="selected"';
+        else
+          $selected = null;
 
-  // name
-  $s = $this->get_opts($name, $opts, $fieldName, $label);
+        if(array_key_exists('select_key', $opts) && $opts['select_key'] == true)
+          true;
+        else
+          $key = $option;
 
-  // get options HTML
-  if(!empty($options)) :
+        $option = esc_attr($option);
+
+        $optionsList .= "<option $selected value=\"$option\">$key</option>";
+      endforeach;
+
+    endif;
+
+    $s = $this->get_opts($name, $opts, $fieldName, $label);
+
+    $attr = array(
+      'readonly' => $s['read'],
+      'class' => "select $fieldName {$s['class']}",
+      'id' => $s['id'],
+      'name' => $s['name'],
+      'html' => $optionsList
+    );
+    $field = acpt_html::element('select', $attr);
+    $dev_note = $this->dev_message($fieldName, $opts['group'], $opts['sub']);
+
+    echo apply_filters($fieldName . '_filter', $s['bLabel'].$s['label'].$s['aLabel'].$field.$dev_note.$s['help'].$s['afterField']);
+
+    return $this;
+  }
+
+  /**
+   * Form Radio.
+   *
+   * @param string $name singular name is required
+   * @param array $options values for radio options
+   * @param array $opts args override and extend
+   * @param bool $label show label or not
+   * @return $this
+   */
+  function radio($name, $options=array('Key' => 'Value'), $opts=array(), $label = true) {
+    $this->test_for($this->name, 'Making Form: You need to make the form first.');
+    $this->test_for($name, 'Making Form: You need to enter a singular name.');
+
+    $optionsList = '';
+    $opts['labelTag'] = 'span';
+    $fieldName = $this->get_field_name($name);
+
+    // name
+    $s = $this->get_opts($name, $opts, $fieldName, $label);
+
+    // get options HTML
+    if(!empty($options)) :
+
+      $opts = $this->set_empty_keys($opts, array('group', 'sub'));
+      $value = $this->get_field_value($fieldName, $opts['group'], $opts['sub']);
+
+      foreach( $options as $key => $option) :
+        if($option == $value)
+          $checked = 'checked';
+        else
+          $checked = null;
+
+        if(array_key_exists('select_key', $opts) && $opts['select_key'] == true)
+          true;
+        else
+          $key = $option;
+
+        $anOption = array(array(
+          'label' => array(
+            'html' => array(array(
+              'input' => array(
+                'type' => 'radio',
+                'name' => $s['name'],
+                'value' => esc_attr($option),
+                'checked' => $checked
+              )
+            ), array(
+              'span' => array(
+                'html' => $key
+              )
+            ))
+          )
+        ));
+
+        $optionsList .= acpt_html::make_html($anOption);
+
+      endforeach;
+
+    endif;
+
+    $attr = array(
+      'readonly' => $s['read'],
+      'class' => "radio $fieldName {$s['class']}",
+      'id' => $s['id'],
+      'html' => $optionsList
+    );
+    $field = acpt_html::element('div', $attr);
+    $dev_note = $this->dev_message($fieldName, $opts['group'], $opts['sub']);
+
+    echo apply_filters($fieldName . '_filter', $s['bLabel'].$s['label'].$s['aLabel'].$field.$dev_note.$s['help'].$s['afterField']);
+
+    return $this;
+  }
+
+  /**
+   * Form WP Editor.
+   *
+   * In the $editor_setteings set array('teeny' => true) to have a smaller editor
+   *
+   * @param string $name singular name is required
+   * @param bool $label text for the label
+   * @param array $opts args override and extend wp_editor
+   * @param array $editor_settings
+   * @return $this
+   */
+  function editor($name, $label=null, $opts=array(), $editor_settings = array()) {
+    $this->test_for($this->name, 'Making Form: You need to make the form first.');
+    $this->test_for($name, 'Making Form: You need to enter a singular name.');
+
+    $fieldName = $this->get_field_name($name);
 
     $opts = $this->set_empty_keys($opts, array('group', 'sub'));
-    $value = $this->get_field_value($fieldName, $opts['group'], $opts['sub']);
+    $group = $this->get_opt_by_test($opts['group'], '');
+    $sub = $this->get_opt_by_test($opts['sub'], '');
 
-    foreach( $options as $key => $option) :
-      if($option == $value)
-        $checked = 'checked';
-      else
-        $checked = null;
-
-      if(array_key_exists('select_key', $opts) && $opts['select_key'] == true)
-        true;
-      else
-        $key = $option;
-
-      $anOption = array(array(
-        'label' => array(
-          'html' => array(array(
-            'input' => array(
-              'type' => 'radio',
-              'name' => $s['name'],
-              'value' => esc_attr($option),
-              'checked' => $checked
-            )
-          ), array(
-            'span' => array(
-              'html' => $key
-            )
-          ))
-        )
-      ));
-
-      $optionsList .= acpt_html::make_html($anOption);
-
-    endforeach;
-
-  endif;
-
-  $attr = array(
-    'readonly' => $s['read'],
-    'class' => "radio $fieldName {$s['class']}",
-    'id' => $s['id'],
-    'html' => $optionsList
-  );
-  $field = acpt_html::element('div', $attr);
-  $dev_note = $this->dev_message($fieldName, $opts['group'], $opts['sub']);
-
-  echo apply_filters($fieldName . '_filter', $s['bLabel'].$s['label'].$s['aLabel'].$field.$dev_note.$s['help'].$s['afterField']);
-
-  return $this;
-}
-
-/**
- * Form WP Editor.
- *
- * In the $editor_setteings set array('teeny' => true) to have a smaller editor
- *
- * @param string $name singular name is required
- * @param bool $label text for the label
- * @param array $opts args override and extend wp_editor
- * @param array $editor_settings
- * @return $this
- */
-function editor($name, $label=null, $opts=array(), $editor_settings = array()) {
-  $this->test_for($this->name, 'Making Form: You need to make the form first.');
-  $this->test_for($name, 'Making Form: You need to enter a singular name.');
-
-  $fieldName = $this->get_field_name($name);
-
-  $opts = $this->set_empty_keys($opts, array('group', 'sub'));
-  $group = $this->get_opt_by_test($opts['group'], '');
-  $sub = $this->get_opt_by_test($opts['sub'], '');
-
-  $v = $this->get_field_value($fieldName, $group, $sub);
-  $s = $this->get_opts($label, array('labelTag' => 'span'), $fieldName, true);
+    $v = $this->get_field_value($fieldName, $group, $sub);
+    $s = $this->get_opts($label, array('labelTag' => 'span'), $fieldName, true);
 
 
-  echo '<div class="control-group">';
-  echo $s['label'];
-  wp_editor(
-      acpt_sanitize::editor($v),
-      'wysisyg_'.$fieldName,
-      array_merge($editor_settings, array('textarea_name' => $this->get_acpt_post_name($fieldName, $group, $sub)))
-  );
-  echo $this->dev_message($fieldName, $group, $sub);
-  echo '</div>';
+    echo '<div class="control-group">';
+    echo $s['label'];
+    wp_editor(
+        acpt_sanitize::editor($v),
+        'wysisyg_'.$fieldName,
+        array_merge($editor_settings, array('textarea_name' => $this->get_acpt_post_name($fieldName, $group, $sub)))
+    );
+    echo $this->dev_message($fieldName, $group, $sub);
+    echo '</div>';
 
-  return $this;
-}
+    return $this;
+  }
 
-/**
- * Form Image
- *
- * @param string $name singular name is required
- * @param array $opts args override and extend
- * @param bool $label show label or not
- * @return $this
- */
-function image($name, $opts=array(), $label = true) {
-  $this->test_for($this->name, 'Making Form: You need to make the form first.');
-  $this->test_for($name, 'Making Form: You need to enter a singular name.');
+  /**
+   * Form Image
+   *
+   * @param string $name singular name is required
+   * @param array $opts args override and extend
+   * @param bool $label show label or not
+   * @return $this
+   */
+  function image($name, $opts=array(), $label = true) {
+    $this->test_for($this->name, 'Making Form: You need to make the form first.');
+    $this->test_for($name, 'Making Form: You need to enter a singular name.');
 
-  $fieldName = $this->get_field_name($name);
+    $fieldName = $this->get_field_name($name);
 
-  $args = array(
-    'name' => $name,
-    'opts' => $opts,
-    'classes' => "image upload-url",
-    'field' => $fieldName,
-    'label' => $label,
-    'html' => ''
-  );
+    $args = array(
+      'name' => $name,
+      'opts' => $opts,
+      'classes' => "image upload-url",
+      'field' => $fieldName,
+      'label' => $label,
+      'html' => ''
+    );
 
-  echo apply_filters($fieldName . '_filter', $this->get_image_form($args));
+    echo apply_filters($fieldName . '_filter', $this->get_image_form($args));
 
-  return $this;
-}
+    return $this;
+  }
 
   /**
    * Form File
@@ -525,6 +556,56 @@ function image($name, $opts=array(), $label = true) {
   }
 
   /**
+   * Checkbox Get Form
+   *
+   * @param $o
+   *
+   * @return string
+   */
+  protected function get_checkbox_form($o) {
+    $opts = $this->set_empty_keys($o['opts']);
+    $desc = isset($opts['desc']) ? $opts['desc'] : $opts['label'];
+    $group = $opts['group'];
+    $sub = $opts['sub'];
+    $s = $this->get_opts($o['name'], $opts, $o['field'], $o['label']);
+    $v = $this->get_field_value($o['field'], $group, $sub);
+
+    if( $v == 1 ) $checked = array('checked' => 'checked');
+    else $checked = array();
+
+    $attr = array(
+      'class' => "{$o['classes']}  acpt_{$o['field']} {$s['class']}",
+      'type' => 'checkbox',
+      'value' => 1,
+      'name' => $s['name'],
+      'id' => $s['id'],
+      'readonly' => $s['read']
+    );
+
+    $attr = array_merge($attr, $checked);
+
+    $input = acpt_html::input($attr);
+
+    $l = acpt_html::element('none', array('html' => " {$desc}" ), null);
+
+    $default = acpt_html::element('input', array(
+        'type' => 'hidden',
+        'name' => $s['name'],
+        'value' => '0'
+      ), null);
+
+    $field = acpt_html::element('label', array(
+        'html' => array($default, $input, $l)
+      ));
+
+    ;
+
+    $dev_note = $this->dev_message($o['field'], $group, $sub);
+
+    return $s['bLabel'].$s['label'].$s['aLabel'].$field.$o['html'].$dev_note.$s['help'].$s['afterField'];
+  }
+
+  /**
    * Get Google Map Form
    *
    * @param $o
@@ -689,12 +770,14 @@ function image($name, $opts=array(), $label = true) {
     $s['afterField'] = $this->get_opt_by_test($opts['afterField'], AFTER_FIELD);
     $opts['labelTag'] = $this->get_opt_by_test($opts['labelTag'], 'label');
 
-    if(isset($label)) :
+    if($label === true) :
       $s['label'] = acpt_html::element($opts['labelTag'], array(
         'class' => 'control-label',
         'for' => $s['id'],
         'html' => $this->get_opt_by_test($opts['label'], $name)
       ));
+    else :
+      $s['label'] = '';
     endif;
 
     return $s;
@@ -774,6 +857,12 @@ function image($name, $opts=array(), $label = true) {
    * @return string
    */
   private function get_acpt_post_name($field, $group, $sub ) {
+    $post_name = $this->get_post_name($field, $group, $sub);
+
+    return "acpt{$post_name}";
+  }
+
+  private function get_post_name($field, $group, $sub ) {
     $group = $this->get_opt_by_test($group, $this->group);
 
     if(!acpt_validate::bracket($group) && $group != '' ) {
@@ -784,7 +873,7 @@ function image($name, $opts=array(), $label = true) {
       $this->test_for(false, 'ACPT ERROR: You need to to the form sub group to an array format ['.$group.']');
     }
 
-    return "acpt{$group}[{$field}]{$sub}";
+    return "{$group}[{$field}]{$sub}";
   }
 
 }
