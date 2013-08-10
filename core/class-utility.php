@@ -65,35 +65,4 @@ class acpt_utility extends acpt {
     }
   }
 
-  static function acpt_get_meta($name, $data) {
-    $regex = '/\[([^]]+)\]/i';
-    preg_match_all($regex, $name, $groups, PREG_PATTERN_ORDER);
-
-    if(isset($groups[1][0]) && is_string($groups[1][0]) ) :
-
-      $meta = $groups[1][0];
-
-      if( isset($data[$meta][0]) && is_serialized($data[$meta][0]) ) {
-        $data = unserialize($data[$meta][0]);
-      } elseif(isset($data[$meta][0])) {
-        $data = $data[$meta][0];
-      } else {
-        return '';
-      }
-
-      $c = count($groups[0]);
-
-      for ($i = 1; $i < $c; $i++) {
-        if(isset($data[$groups[1][$i]])) { $data = $data[$groups[1][$i]]; }
-        else { return ''; }
-      }
-
-    else :
-      return $data[0][$name];
-    endif;
-
-    return $data;
-
-  }
-
 }

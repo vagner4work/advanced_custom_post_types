@@ -11,7 +11,7 @@ function acpt_seo_meta() {
 }
 
 function meta_acpt_seo() {
-	acpt_form('acpt_seo', array('sub' => '[seo][meta]'))
+	acpt_form('acpt_seo', array('group' => '[seo][meta]'))
 	->text('title', array('label' => 'Title'))
 	->textarea('description', array('label' => 'Description'));
 }

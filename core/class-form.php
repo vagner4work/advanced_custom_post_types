@@ -752,12 +752,11 @@ function image($name, $opts=array(), $label = true) {
     global $post;
     $group = $this->get_opt_by_test($group, $this->group);
 
-    if(isset($post->ID)) {
-
-      $value = acpt_meta("{$group}[{$field}]{$sub}");
-
-    }
-    else { $value = null; }
+    if(isset($post->ID)) :
+      $value = acpt_get::meta("{$group}[{$field}]{$sub}");
+    else :
+      $value = null;
+    endif;
 
     return $value;
   }
