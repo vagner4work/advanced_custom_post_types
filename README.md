@@ -1,4 +1,4 @@
-Advanced Custom Post Types: v3.1.0
+Advanced Custom Post Types: v3.1.1
 ---
 
 This is a framework for creating not only custom post types, roles and taxonomies in WordPress but it will also give you the ability to rapidly create custom fields (post types only).
@@ -386,6 +386,8 @@ function meta_details() {
 Actions
 ---
 
+- start_acpt_option
+- end_acpt_option
 - start_acpt_meta
 - end_acpt_meta
 - start_acpt_save
@@ -402,6 +404,7 @@ Filters
 Change Log
 ---
 
+- v3.1.1 - add inline documentation and fix bugs
 - v3.1.0 - checkbox form field added
 - v3.0.3 - code cleanup and adding new getter class
 - v3.0.2 - code cleanup and grouping added
