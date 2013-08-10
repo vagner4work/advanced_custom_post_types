@@ -2,6 +2,15 @@
 
 class acpt_get {
 
+  static function option($name = '', $fallBack = '', $groups = true, $id = null) {
+    if(!acpt_validate::bracket($name)) die("ACPT Error: You need to use brackets [{$name}]");
+    $data = null;
+    do_action('start_acpt_option', $name, $fallBack, $id);
+
+    do_action('end_acpt_option', $data);
+    return $data = null;
+  }
+
   /**
    * Get Meta Data
    *

@@ -838,7 +838,7 @@ class acpt_form extends acpt {
     if(isset($post->ID)) :
       $value = acpt_get::meta("{$group}[{$field}]{$sub}");
     else :
-      $value = null;
+      $value = acpt_get::option("{$group}[{$field}]{$sub}");
     endif;
 
     return $value;
