@@ -5,7 +5,7 @@ class acpt_get {
   static function option($name = '', $fallBack = '', $groups = true, $id = null) {
     if(!acpt_validate::bracket($name)) die("ACPT Error: You need to use brackets [{$name}]");
     $data = null;
-    do_action('start_acpt_option', $name, $fallBack, $id);
+    do_action('start_acpt_option', $name, $fallBack, $groups, $id);
 
     do_action('end_acpt_option', $data);
     return $data = null;
@@ -26,7 +26,7 @@ class acpt_get {
   static function meta($name = '', $fallBack = '', $groups = true, $id = null) {
     if(!acpt_validate::bracket($name)) die("ACPT Error: You need to use brackets [{$name}]");
 
-    do_action('start_acpt_meta', $name, $fallBack, $id);
+    do_action('start_acpt_meta', $name, $fallBack, $groups, $id);
 
     global $post;
     empty($id) ? $id = $post->ID : true;
