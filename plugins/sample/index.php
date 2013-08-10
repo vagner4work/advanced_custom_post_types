@@ -32,7 +32,7 @@ function meta_custom() {
   // notice the groups arg sets the data in the
   // DB as one item serialized as an array
 	acpt_form('details')
-  ->checkbox('checkbox', array('label' => 'Checkbox Example', 'desc' => 'Select this for value of 1', 'group' => '[checkboxes]'))
+  ->checkbox('checkbox', array('label' => 'Checkbox Example', 'desc' => 'Select this for value of 1'))
   ->text('text', array('label' => 'Text Field', 'class' => 'example-class', 'help' => 'Example help text'))
   ->color('1', array('group' => '[details_colors]', 'label' => 'Color Field', 'default' => '#000', 'palette' => array('#fff', '#f00', '#f30')))
   ->color('2', array('group' => '[details_colors]', 'label' => 'Color Field (no palette)'))

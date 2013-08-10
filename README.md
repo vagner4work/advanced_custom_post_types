@@ -1,4 +1,4 @@
-Advanced Custom Post Types: v3.0.3
+Advanced Custom Post Types: v3.1.0
 ---
 
 This is a framework for creating not only custom post types, roles and taxonomies in WordPress but it will also give you the ability to rapidly create custom fields (post types only).
@@ -241,6 +241,7 @@ function meta_details() {
 
 
 	$form->textarea('address',array('label' => 'Textarea'));
+	$form->checkbox('checkbox', array('label' => 'Checkbox Example', 'desc' => 'Select this for value of 1'));
 	$form->select('rooms', array('one', 'two', 'three'), array('label' => 'Select List'));
 	$form->radio('baths', array('blue', 'green', 'red'), array('label' => 'Radio Buttons'));
 
@@ -401,6 +402,7 @@ Filters
 Change Log
 ---
 
+- v3.1.0 - checkbox form field added
 - v3.0.3 - code cleanup and adding new getter class
 - v3.0.2 - code cleanup and grouping added
 - v3.0 - tagging now being used for versions
