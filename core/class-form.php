@@ -6,6 +6,11 @@ class acpt_form extends acpt {
   public $action = null;
   public $method = null;
   public $group = null;
+  public $label = null;
+  public $labelTag = null;
+  public $bLabel = null;
+  public $aLabel = null;
+  public $aField = null;
 
   function __construct($name, $opts=array()) {
     return $this->make($name, $opts);
@@ -22,8 +27,19 @@ class acpt_form extends acpt {
   function make($name, $opts=array()) {
     $this->test_for($name, 'Making Form: You need to enter a singular name.');
 
-    $opts = $this->set_empty_keys($opts, array('group'));
+    $opts = $this->set_empty_keys($opts, array('group', 'label', 'labelTag', 'bLabel', 'aLabel', 'aField'));
     $this->group = $this->get_opt_by_test($opts['group'], '');
+
+    if($opts['label'] === false ) {
+      $this->label = false;
+    } elseif($opts['label'] === true) {
+      $this->label = true;
+    }
+
+    $this->labelTag = $this->get_opt_by_test($opts['labelTag']);
+    $this->bLabel = is_string($opts['bLabel']) ? $opts['bLabel'] : null;
+    $this->aLabel = is_string($opts['aLabel']) ? $opts['aLabel'] : null;
+    $this->aField = is_string($opts['aField']) ? $opts['aField'] : null;
 
     if(isset($opts['method'])) :
       $this->method = $opts['method'];
@@ -68,7 +84,7 @@ class acpt_form extends acpt {
    * @param bool $label show label or not
    * @return $this
    */
-  function text($name, $opts=array(), $label = true) {
+  function text($name, $opts=array(), $label = null) {
     $this->test_for($this->name, 'Making Form: You need to make the form first.');
     $this->test_for($name, 'Making Form: You need to enter a singular name.');
 
@@ -98,7 +114,7 @@ class acpt_form extends acpt {
    * @param bool $label show label or not
    * @return $this
    */
-  function color($name, $opts=array(), $label = true) {
+  function color($name, $opts=array(), $label = null) {
     $this->test_for($this->name, 'Making Form: You need to make the form first.');
     $this->test_for($name, 'Making Form: You need to enter a singular name.');
 
@@ -128,7 +144,7 @@ class acpt_form extends acpt {
    * @param bool $label show label or not
    * @return $this
    */
-  function checkbox($name, $opts=array(), $label = true) {
+  function checkbox($name, $opts=array(), $label = null) {
     $this->test_for($this->name, 'Making Form: You need to make the form first.');
     $this->test_for($name, 'Making Form: You need to enter a singular name.');
 
@@ -157,7 +173,7 @@ class acpt_form extends acpt {
    * @param bool $label show label or not
    * @return $this
    */
-  function textarea($name, $opts=array(), $label = true) {
+  function textarea($name, $opts=array(), $label = null) {
     $this->test_for($this->name, 'Making Form: You need to make the form first.');
     $this->test_for($name, 'Making Form: You need to enter a singular name.');
 
@@ -182,7 +198,7 @@ class acpt_form extends acpt {
 
     $dev_note = $this->dev_message($fieldName, $opts['group'], $opts['sub']);
 
-    echo apply_filters($fieldName . '_filter', $s['bLabel'].$s['label'].$s['aLabel'].$field.$dev_note.$s['help'].$s['afterField']);
+    echo apply_filters($fieldName . '_filter', $s['bLabel'].$s['label'].$s['aLabel'].$field.$dev_note.$s['help'].$s['aField']);
 
     return $this;
   }
@@ -196,7 +212,7 @@ class acpt_form extends acpt {
    * @param bool $label show label or not
    * @return $this
    */
-  function select($name, $options=array('Key' => 'Value'), $opts=array(), $label = true) {
+  function select($name, $options=array('Key' => 'Value'), $opts=array(), $label = null) {
     $this->test_for($this->name, 'Making Form: You need to make the form first.');
     $this->test_for($name, 'Making Form: You need to enter a singular name.');
 
@@ -239,7 +255,7 @@ class acpt_form extends acpt {
     $field = acpt_html::element('select', $attr);
     $dev_note = $this->dev_message($fieldName, $opts['group'], $opts['sub']);
 
-    echo apply_filters($fieldName . '_filter', $s['bLabel'].$s['label'].$s['aLabel'].$field.$dev_note.$s['help'].$s['afterField']);
+    echo apply_filters($fieldName . '_filter', $s['bLabel'].$s['label'].$s['aLabel'].$field.$dev_note.$s['help'].$s['aField']);
 
     return $this;
   }
@@ -253,7 +269,7 @@ class acpt_form extends acpt {
    * @param bool $label show label or not
    * @return $this
    */
-  function radio($name, $options=array('Key' => 'Value'), $opts=array(), $label = true) {
+  function radio($name, $options=array('Key' => 'Value'), $opts=array(), $label = null) {
     $this->test_for($this->name, 'Making Form: You need to make the form first.');
     $this->test_for($name, 'Making Form: You need to enter a singular name.');
 
@@ -313,7 +329,7 @@ class acpt_form extends acpt {
     $field = acpt_html::element('div', $attr);
     $dev_note = $this->dev_message($fieldName, $opts['group'], $opts['sub']);
 
-    echo apply_filters($fieldName . '_filter', $s['bLabel'].$s['label'].$s['aLabel'].$field.$dev_note.$s['help'].$s['afterField']);
+    echo apply_filters($fieldName . '_filter', $s['bLabel'].$s['label'].$s['aLabel'].$field.$dev_note.$s['help'].$s['aField']);
 
     return $this;
   }
@@ -364,7 +380,7 @@ class acpt_form extends acpt {
    * @param bool $label show label or not
    * @return $this
    */
-  function image($name, $opts=array(), $label = true) {
+  function image($name, $opts=array(), $label = null) {
     $this->test_for($this->name, 'Making Form: You need to make the form first.');
     $this->test_for($name, 'Making Form: You need to enter a singular name.');
 
@@ -392,7 +408,7 @@ class acpt_form extends acpt {
    * @param bool $label show label or not
    * @return $this
    */
-  function file($name, $opts=array(), $label = true) {
+  function file($name, $opts=array(), $label = null) {
     $this->test_for($this->name, 'Making Form: You need to make the form first.');
     $this->test_for($name, 'Making Form: You need to enter a singular name.');
 
@@ -602,7 +618,7 @@ class acpt_form extends acpt {
 
     $dev_note = $this->dev_message($o['field'], $group, $sub);
 
-    return $s['bLabel'].$s['label'].$s['aLabel'].$field.$o['html'].$dev_note.$s['help'].$s['afterField'];
+    return $s['bLabel'].$s['label'].$s['aLabel'].$field.$o['html'].$dev_note.$s['help'].$s['aField'];
   }
 
   /**
@@ -731,7 +747,7 @@ class acpt_form extends acpt {
 
     $dev_note = $this->dev_message($o['field'], $o['opts']['group'], $o['opts']['sub']);
 
-    return $s['bLabel'].$s['label'].$s['aLabel'].$field.$o['html'].$dev_note.$s['help'].$s['afterField'];
+    return $s['bLabel'].$s['label'].$s['aLabel'].$field.$o['html'].$dev_note.$s['help'].$s['aField'];
   }
 
   /**
@@ -765,17 +781,59 @@ class acpt_form extends acpt {
     $s['id'] = 'acpt_'.$fieldName;
 
     // label
-    $s['bLabel'] = $this->get_opt_by_test($opts['bLabel'], BEFORE_LABEL);
-    $s['aLabel'] = $this->get_opt_by_test($opts['aLabel'], AFTER_LABEL);
-    $s['afterField'] = $this->get_opt_by_test($opts['afterField'], AFTER_FIELD);
+    $labelSettings = $this->get_input_label($s, $opts, $name, $label);
+    $s = array_merge($s, $labelSettings);
+
+    return $s;
+  }
+
+  /**
+   * Setup Label Data
+   *
+   * Grab label data from the form object and from each inputs settings.
+   *
+   * @param $s
+   * @param $opts
+   * @param $name
+   * @param $label
+   *
+   * @return mixed
+   */
+  private function get_input_label($s, $opts, $name, $label) {
+
+    // is there a label at all?
+    if(is_null($label) && is_bool($this->label)) {
+      $label = $this->label;
+    } elseif( is_null($label) ) {
+      $label = true;
+    }
+
+    if( is_string($this->bLabel) && is_null($opts['bLabel']) ) {
+      $opts['bLabel'] = $this->bLabel;
+    }
+
+    if( is_string($this->aLabel) && is_null($opts['aLabel'])) {
+      $opts['aLabel'] = $this->aLabel;
+    }
+
+    if( is_string($this->aField) && is_null($opts['aField'])) {
+      $opts['aField'] = $this->aField;
+    }
+
+    $opts['labelTag'] = $this->get_opt_by_test($this->labelTag, $opts['labelTag']);
+
+    $s['bLabel'] = is_null($opts['bLabel']) ? BEFORE_LABEL : $opts['bLabel'];
+    $s['aLabel'] = is_null($opts['aLabel']) ? AFTER_LABEL : $opts['aLabel'];
+    $s['aField'] = is_null($opts['aField']) ? AFTER_FIELD : $opts['aField'];
     $opts['labelTag'] = $this->get_opt_by_test($opts['labelTag'], 'label');
 
+    // show label?
     if($label === true) :
       $s['label'] = acpt_html::element($opts['labelTag'], array(
-        'class' => 'control-label',
-        'for' => $s['id'],
-        'html' => $this->get_opt_by_test($opts['label'], $name)
-      ));
+          'class' => 'control-label',
+          'for' => $s['id'],
+          'html' => $this->get_opt_by_test($opts['label'], $name)
+        ));
     else :
       $s['label'] = '';
     endif;

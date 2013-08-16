@@ -94,7 +94,7 @@ class acpt_tax extends acpt {
 		$args = array(
 		    'labels' => $labels,
 		    'show_ui' => true,
-		    'rewrite' => array( 'slug' => $singular ),
+		    'rewrite' => array( 'slug' => sanitize_title($singular) ),
 		);
 		
 		$this->args = array_merge($args, $hierarchical, $cap, $settings);
