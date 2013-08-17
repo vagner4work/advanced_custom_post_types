@@ -170,3 +170,20 @@ input[readonly].dev_note {
   position: absolute;
   z-index: 100;
 }
+
+/* options */
+#screen-meta.acpt-options {
+  display: block;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 3px;
+  margin-top: 20px;
+}
+
+.acpt-options .help-tab-content {
+  padding-top: 17px;
+}
+
+.acpt-options input[type="submit"] {
+  margin-top: 17px;
+}

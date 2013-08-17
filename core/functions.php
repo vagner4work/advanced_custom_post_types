@@ -42,8 +42,8 @@ function e_acpt_meta($name = '', $fallBack = '', $groups = true, $id = null) {
  *
  * @return acpt_form
  */
-function acpt_form($name, $opts=array()) {
-  return new acpt_form($name, $opts);
+function acpt_form($name, $opts=array(), $echo = true) {
+  return new acpt_form($name, $opts, $echo);
 }
 
 /**

@@ -20,7 +20,8 @@ $lib = array(
   'tax',
   'role',
   'form',
-  'meta_box'
+  'meta_box',
+  'options'
 );
 
 foreach($lib as $value) :

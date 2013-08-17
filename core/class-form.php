@@ -11,9 +11,11 @@ class acpt_form extends acpt {
   public $bLabel = null;
   public $aLabel = null;
   public $aField = null;
+  public $echo = null;
+  public $buffer = '';
 
-  function __construct($name, $opts=array()) {
-    return $this->make($name, $opts);
+  function __construct($name, $opts=array(), $echo = true) {
+    return $this->make($name, $opts, $echo);
   }
 
   /**
@@ -24,11 +26,17 @@ class acpt_form extends acpt {
    *
    * @return $this
    */
-  function make($name, $opts=array()) {
+  function make($name, $opts=array(), $echo = true) {
     $this->test_for($name, 'Making Form: You need to enter a singular name.');
 
-    $opts = $this->set_empty_keys($opts, array('group', 'label', 'labelTag', 'bLabel', 'aLabel', 'aField'));
+    $opts = $this->set_empty_keys($opts, array('group', 'label', 'labelTag', 'bLabel', 'aLabel', 'aField', 'method', 'action'));
     $this->group = $this->get_opt_by_test($opts['group'], '');
+
+    if(is_bool($echo)) {
+      $this->echo = $echo;
+    } else {
+      $this->echo = true;
+    }
 
     if($opts['label'] === false ) {
       $this->label = false;
@@ -41,15 +49,15 @@ class acpt_form extends acpt {
     $this->aLabel = is_string($opts['aLabel']) ? $opts['aLabel'] : null;
     $this->aField = is_string($opts['aField']) ? $opts['aField'] : null;
 
-    if(isset($opts['method'])) :
+    if($opts['method'] === true ) :
       $this->method = $opts['method'];
       $field = '<form id="'.$name.'" ';
-      $field .= isset($opts['method']) ? 'method="'.$opts['method'].'" ' : 'method="post" ';
-      $field .= isset($opts['action']) ? 'action="'.$opts['action'].'" ' : 'action="'.$name.'" ';
+      $field .= 'method="post" ';
+      $field .= is_string($opts['action']) ? 'action="'.$opts['action'].'" ' : 'action="'.esc_attr($_SERVER["REQUEST_URI"]).'" ';
       $field .= '>';
     endif;
 
-    if(isset($opts['action'])) $this->method = $opts['action'];
+    if(is_string($opts['action'])) $this->action = $opts['action'];
 
     $this->name = $name;
 
@@ -67,13 +75,15 @@ class acpt_form extends acpt {
    * @param array $opts args override and extend
    */
   function end($name=null, $opts=array()) {
+    $opts = $this->set_empty_keys($opts, array('type'));
+    $field = '';
     if($name) :
       $field = $opts['type'] == 'button' ? '<input type="button"' : '<input type="submit"';
-      $field .= 'value="'.esc_attr($name).'" />';
-      $field .= '</form>';
+      $field .= 'value="'.esc_attr($name).'" class="button-primary" />';
     endif;
+    $field .= '</form>';
 
-    if(isset($field)) echo $field;
+    echo $field;
   }
 
   /**
@@ -99,7 +109,12 @@ class acpt_form extends acpt {
       'html' => ''
     );
 
+    if($this->echo === false) { ob_start(); }
     echo apply_filters($field . '_filter', $this->get_text_form($args));
+    if($this->echo === false) {
+      $data = ob_get_clean();
+      $this->buffer .= $data;
+    }
 
     return $this;
   }
@@ -129,7 +144,12 @@ class acpt_form extends acpt {
       'html' => ''
     );
 
+    if($this->echo === false) { ob_start(); }
     echo apply_filters($fieldName . '_filter', $this->get_color_form($args));
+    if($this->echo === false) {
+      $data = ob_get_clean();
+      $this->buffer .= $data;
+    }
 
     return $this;
   }
@@ -160,7 +180,12 @@ class acpt_form extends acpt {
       'html' => ''
     );
 
+    if($this->echo === false) { ob_start(); }
     echo apply_filters($fieldName . '_filter', $this->get_checkbox_form($args));
+    if($this->echo === false) {
+      $data = ob_get_clean();
+      $this->buffer .= $data;
+    }
 
     return $this;
   }
@@ -198,7 +223,12 @@ class acpt_form extends acpt {
 
     $dev_note = $this->dev_message($fieldName, $opts['group'], $opts['sub']);
 
+    if($this->echo === false) { ob_start(); }
     echo apply_filters($fieldName . '_filter', $s['bLabel'].$s['label'].$s['aLabel'].$field.$dev_note.$s['help'].$s['aField']);
+    if($this->echo === false) {
+      $data = ob_get_clean();
+      $this->buffer .= $data;
+    }
 
     return $this;
   }
@@ -255,7 +285,12 @@ class acpt_form extends acpt {
     $field = acpt_html::element('select', $attr);
     $dev_note = $this->dev_message($fieldName, $opts['group'], $opts['sub']);
 
+    if($this->echo === false) { ob_start(); }
     echo apply_filters($fieldName . '_filter', $s['bLabel'].$s['label'].$s['aLabel'].$field.$dev_note.$s['help'].$s['aField']);
+    if($this->echo === false) {
+      $data = ob_get_clean();
+      $this->buffer .= $data;
+    }
 
     return $this;
   }
@@ -329,7 +364,12 @@ class acpt_form extends acpt {
     $field = acpt_html::element('div', $attr);
     $dev_note = $this->dev_message($fieldName, $opts['group'], $opts['sub']);
 
+    if($this->echo === false) { ob_start(); }
     echo apply_filters($fieldName . '_filter', $s['bLabel'].$s['label'].$s['aLabel'].$field.$dev_note.$s['help'].$s['aField']);
+    if($this->echo === false) {
+      $data = ob_get_clean();
+      $this->buffer .= $data;
+    }
 
     return $this;
   }
@@ -358,7 +398,7 @@ class acpt_form extends acpt {
     $v = $this->get_field_value($fieldName, $group, $sub);
     $s = $this->get_opts($label, array('labelTag' => 'span'), $fieldName, true);
 
-
+    if($this->echo === false) { ob_start(); }
     echo '<div class="control-group">';
     echo $s['label'];
     wp_editor(
@@ -368,6 +408,10 @@ class acpt_form extends acpt {
     );
     echo $this->dev_message($fieldName, $group, $sub);
     echo '</div>';
+    if($this->echo === false) {
+      $data = ob_get_clean();
+      $this->buffer .= $data;
+    }
 
     return $this;
   }
@@ -395,7 +439,12 @@ class acpt_form extends acpt {
       'html' => ''
     );
 
+    if($this->echo === false) { ob_start(); }
     echo apply_filters($fieldName . '_filter', $this->get_image_form($args));
+    if($this->echo === false) {
+      $data = ob_get_clean();
+      $this->buffer .= $data;
+    }
 
     return $this;
   }
@@ -423,7 +472,12 @@ class acpt_form extends acpt {
       'html' => ''
     );
 
+    if($this->echo === false) { ob_start(); }
     echo apply_filters($fieldName . '_filter', $this->get_file_form($args));
+    if($this->echo === false) {
+      $data = ob_get_clean();
+      $this->buffer .= $data;
+    }
 
     return $this;
   }
@@ -451,7 +505,12 @@ class acpt_form extends acpt {
       'html' => ''
     );
 
+    if($this->echo === false) { ob_start(); }
     echo apply_filters($fieldName . '_filter', $this->get_google_map_form($args));
+    if($this->echo === false) {
+      $data = ob_get_clean();
+      $this->buffer .= $data;
+    }
 
     return $this;
   }
@@ -479,7 +538,12 @@ class acpt_form extends acpt {
       'html' => ''
     );
 
+    if($this->echo === false) { ob_start(); }
     echo apply_filters($fieldName . '_filter', $this->get_date_form($args));
+    if($this->echo === false) {
+      $data = ob_get_clean();
+      $this->buffer .= $data;
+    }
 
     return $this;
   }
