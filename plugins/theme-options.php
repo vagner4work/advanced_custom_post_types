@@ -3,11 +3,11 @@
 add_action('admin_menu', 'acpt_add_themeOptions');
 
 function acpt_add_themeOptions() {
-  add_submenu_page('themes.php', 'Theme Options', 'Theme Options', 'edit_theme_options', 'theme_acpt_options', 'acpt_pageContent');
+  add_submenu_page('themes.php', 'Theme Options', 'Theme Options', 'edit_theme_options', 'theme_acpt_options', 'acpt_pageContent_themeOptions');
 }
 
 
-function acpt_pageContent() {
+function acpt_pageContent_themeOptions() {
   ?>
   <div class="wrap">
   <?php screen_icon('themes'); ?> <h2>Theme Options</h2>
@@ -26,30 +26,29 @@ function acpt_pageContent() {
     ->color('Color Field (no palette)')
     ->google_map('Address Field')
     ->date('Date Field')
+    ->editor('WYSIWYG Editor')
     ->select('Select List', array('one', 'two', 'three'))
     ->select('Select List Key', array('One' => '1', 'Two' => '2'), array('select_key' =>  true))
     ->radio('radio', array('blue', 'green', 'red'), array('label' => 'Radio Buttons'))
-    ->editor('WYSIWYG Editor')
     ->buffer('advanced');
 
 
   $screen = new acpt_options();
   $screen->add_tab( array(
-      'id' => 'general',            //unique id for the tab
-      'title' => "General",      //unique visible title for the tab
+      'id' => 'general',
+      'title' => "General",
       'content' => $form->buffer['general']
     ) )
     ->add_tab( array(
-        'id' => 'advanced',            //unique id for the tab
-        'title' => "Advanced",      //unique visible title for the tab
-        'content' => $form->buffer['advanced']  //actual help text
-        //'callback' => 'acpt_textCallback' //optional function to callback
+        'id' => 'advanced',
+        'title' => "Advanced",
+        'content' => $form->buffer['advanced']
       ) )
     ->add_tab( array(
-        'id' => 'help',            //unique id for the tab
-        'title' => "Help",      //unique visible title for the tab
-        'content' => '',  //actual help text
-        'callback' => 'acpt_textCallback' //optional function to callback
+        'id' => 'help',
+        'title' => "Help",
+        'content' => '',
+        'callback' => 'acpt_help_text'
       ) );
 
   $screen->set_sidebar('<input type="submit" value="Save Changes" class="button-primary" />');
@@ -61,7 +60,7 @@ function acpt_pageContent() {
   <?php
 }
 
-function acpt_textCallback() {
+function acpt_help_text() {
   ?>
   This is some example text for the plugin using multiple tabs. This might be helpful to show how to add more than one tab.
 <?php

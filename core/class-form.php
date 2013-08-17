@@ -24,6 +24,7 @@ class acpt_form extends acpt {
    *
    * @param string $name singular name is required
    * @param array $opts args [action, method]
+   * @param bool $echo
    *
    * @return $this
    */
