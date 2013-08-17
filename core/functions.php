@@ -35,6 +35,20 @@ function e_acpt_meta($name = '', $fallBack = '', $groups = true, $id = null) {
 }
 
 /**
+ * Get from site options instead
+ *
+ * @param string $name
+ * @param string $fallBack
+ * @param bool $groups
+ *
+ * @return mixed
+ */
+function acpt_option($name = '', $fallBack = '', $groups = true) {
+  return acpt_get::option($name, $fallBack, $groups, 'options');
+}
+
+
+/**
  * Access function for acpt_form class
  *
  * @param $name

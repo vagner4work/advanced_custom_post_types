@@ -51,6 +51,13 @@ class acpt_form extends acpt {
     $this->aField = is_string($opts['aField']) ? $opts['aField'] : null;
 
     if($opts['method'] === true ) :
+
+      if(isset($_POST['save_acpt'])) {
+        acpt_save::save_post_fields('options');
+      }
+
+      settings_errors();
+
       $this->method = $opts['method'];
       $field = '<form id="'.$name.'" ';
       $field .= 'method="post" ';
@@ -939,10 +946,17 @@ class acpt_form extends acpt {
    * @return string
    */
   protected function dev_message($fieldName, $group, $sub) {
+    global $post;
     $group = $this->get_opt_by_test($group, $this->group);
 
+    if(isset($post)) {
+      $getter = 'meta';
+    } else {
+      $getter = 'option';
+    }
+
     if(DEV_MODE == true) :
-        $v = "acpt_meta('{$group}[{$fieldName}]{$sub}');";
+        $v = "acpt_{$getter}('{$group}[{$fieldName}]{$sub}');";
     else :
         $v = '';
     endif;

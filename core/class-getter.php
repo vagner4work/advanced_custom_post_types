@@ -26,7 +26,11 @@ class acpt_get {
      */
     do_action('start_acpt_option', $name, $fallBack, $groups, $id);
 
-    $data = null;
+    if($groups === true ) :
+      $data = self::get_groups($name, 'options');
+    else :
+      $data = null;
+    endif;
 
     /*
     * Action end_acpt_option
@@ -89,10 +93,20 @@ class acpt_get {
    * @return mixed|null
    */
   private static function get_groups($name, $id) {
-    $data = get_post_meta($id);
+
+    if($id === 'options') {
+      $optG = acpt_utility::groups_to_array($name);
+
+      $data[$optG[0]] = get_option($optG[0]);
+
+      return self::get_data_by_groups($optG, $data);
+    } else {
+      $data = get_post_meta($id);
+    }
+
 
     if(!empty($data)) :
-      $data = acpt_get::get_meta_data($name, $data);
+      $data = self::get_meta_data($name, $data);
     else :
       $data = null;
     endif;
@@ -148,6 +162,8 @@ class acpt_get {
 
     if( isset($data[$key][0]) ) :
       $data = maybe_unserialize( $data[$key][0] );
+    elseif( isset($data[$key]) ) :
+      $data = maybe_unserialize( $data[$key] );
     else :
       return null;
     endif;
