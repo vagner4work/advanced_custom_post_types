@@ -28,14 +28,22 @@ class acpt {
    * Replace white space with underscore and make all text lowercase
    *
    * @param $name
+   * @param $spacer
    *
    * @return mixed
    */
-  protected function make_computer_name($name) {
+  protected function make_computer_name($name, $spacer = '_') {
     $pattern = '/(\s+)/';
-    $replacement = '_';
+    $replacement = $spacer;
     $computerName = preg_replace($pattern,$replacement,strtolower(trim($name)));
     return $computerName;
+  }
+
+  function sanitize_name($name) {
+    $name = sanitize_title($name, '');
+    $pattern = '/(\-+)/';
+    $replacement = '_';
+    return preg_replace($pattern,$replacement,strtolower(trim($name)));
   }
 
   /**

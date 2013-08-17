@@ -94,11 +94,26 @@ class acpt_form extends acpt {
     echo $field;
   }
 
+  /**
+   * Buffer Output
+   *
+   * Use buffering to catch output from the forms api and index in into
+   * the buffer attribute. To index recall buffer and add a name. Access
+   * the buffer in the object $this->buffer[index]
+   *
+   * If you are buffering the whole form it the data with main.
+   *
+   * @param null $index
+   *
+   * @return $this
+   */
   function buffer($index = null) {
     if($this->echo === true ) {
 
+      $index = $this->sanitize_name($index);
+
       if($this->buffering === false ) {
-        if(isset($index)) {
+        if(isset($index) && $index !== '') {
           die('Making Form: Starting buffer... Index when the buffer ends.');
         }
         ob_start();
@@ -976,6 +991,7 @@ class acpt_form extends acpt {
    * @return string
    */
   protected function get_field_name($name) {
+    $name = $this->sanitize_name($name);
     return $this->name.'_'.$name;
   }
   /**
