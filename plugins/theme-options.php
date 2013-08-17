@@ -3,11 +3,15 @@
 add_action('admin_menu', 'acpt_add_themeOptions');
 
 function acpt_add_themeOptions() {
-  add_submenu_page('themes.php', 'Title', 'Menu Title', 'read', 'theme_acpt_options', 'acpt_pageContent');
+  add_submenu_page('themes.php', 'Theme Options', 'Theme Options', 'edit_theme_options', 'theme_acpt_options', 'acpt_pageContent');
 }
 
 
 function acpt_pageContent() {
+  ?>
+  <div class="wrap">
+  <?php screen_icon('themes'); ?> <h2>Theme Options</h2>
+  <?php
   $form = acpt_form('options', array('group' => '[acpt_options]', 'method' => true));
 
   $form->buffer()
@@ -53,6 +57,9 @@ function acpt_pageContent() {
   $screen->make();
 
   $form->end();
+  ?>
+  </div>
+  <?php
 }
 
 function acpt_textCallback() {
