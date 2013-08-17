@@ -2,7 +2,7 @@
 // Include this file in functions.php or plugin
 global $wp_version;
 if($wp_version < '3.5' || $wp_version == null ): exit('You need the 3.5+ version of WordPress.');
-else: $acpt_version = '3.1.1';
+else: $acpt_version = '3.2.0';
 endif;
 
 // load config

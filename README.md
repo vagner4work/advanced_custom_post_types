@@ -1,5 +1,7 @@
-Advanced Custom Post Types: v3.1.1
+Advanced Custom Post Types: v3.2.0
 ---
+
+UPDATE: In 3.2.0 pages options were added but not documented as of yet see the ACPT theme-options plugin for  for example.
 
 This is a framework for creating not only custom post types, roles and taxonomies in WordPress but it will also give you the ability to rapidly create custom fields (post types only).
 
@@ -404,6 +406,7 @@ Filters
 Change Log
 ---
 
+- v3.2.0 - form buffering, page options, saving options and more
 - v3.1.1 - add inline documentation and fix bugs
 - v3.1.0 - checkbox form field added
 - v3.0.3 - code cleanup and adding new getter class
