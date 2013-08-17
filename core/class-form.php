@@ -12,7 +12,8 @@ class acpt_form extends acpt {
   public $aLabel = null;
   public $aField = null;
   public $echo = null;
-  public $buffer = '';
+  public $buffer = array('main' => '');
+  private $buffering = false;
 
   function __construct($name, $opts=array(), $echo = true) {
     return $this->make($name, $opts, $echo);
@@ -86,6 +87,27 @@ class acpt_form extends acpt {
     echo $field;
   }
 
+  function buffer($index = null) {
+    if($this->echo === true ) {
+
+      if($this->buffering === false ) {
+        if(isset($index)) {
+          die('Making Form: Starting buffer... Index when the buffer ends.');
+        }
+        ob_start();
+        $this->buffering = true;
+      } else {
+        $this->test_for($index, 'Making Form: Ending buffer... add an index.');
+        $data = ob_get_clean();
+        $this->buffer[$index] = $data;
+        $this->buffering = false;
+      }
+
+    }
+
+    return $this;
+  }
+
   /**
    * Form Text.
    *
@@ -113,7 +135,7 @@ class acpt_form extends acpt {
     echo apply_filters($field . '_filter', $this->get_text_form($args));
     if($this->echo === false) {
       $data = ob_get_clean();
-      $this->buffer .= $data;
+      $this->buffer['main'] .= $data;
     }
 
     return $this;
@@ -148,7 +170,7 @@ class acpt_form extends acpt {
     echo apply_filters($fieldName . '_filter', $this->get_color_form($args));
     if($this->echo === false) {
       $data = ob_get_clean();
-      $this->buffer .= $data;
+      $this->buffer['main'] .= $data;
     }
 
     return $this;
@@ -184,7 +206,7 @@ class acpt_form extends acpt {
     echo apply_filters($fieldName . '_filter', $this->get_checkbox_form($args));
     if($this->echo === false) {
       $data = ob_get_clean();
-      $this->buffer .= $data;
+      $this->buffer['main'] .= $data;
     }
 
     return $this;
@@ -227,7 +249,7 @@ class acpt_form extends acpt {
     echo apply_filters($fieldName . '_filter', $s['bLabel'].$s['label'].$s['aLabel'].$field.$dev_note.$s['help'].$s['aField']);
     if($this->echo === false) {
       $data = ob_get_clean();
-      $this->buffer .= $data;
+      $this->buffer['main'] .= $data;
     }
 
     return $this;
@@ -289,7 +311,7 @@ class acpt_form extends acpt {
     echo apply_filters($fieldName . '_filter', $s['bLabel'].$s['label'].$s['aLabel'].$field.$dev_note.$s['help'].$s['aField']);
     if($this->echo === false) {
       $data = ob_get_clean();
-      $this->buffer .= $data;
+      $this->buffer['main'] .= $data;
     }
 
     return $this;
@@ -368,7 +390,7 @@ class acpt_form extends acpt {
     echo apply_filters($fieldName . '_filter', $s['bLabel'].$s['label'].$s['aLabel'].$field.$dev_note.$s['help'].$s['aField']);
     if($this->echo === false) {
       $data = ob_get_clean();
-      $this->buffer .= $data;
+      $this->buffer['main'] .= $data;
     }
 
     return $this;
@@ -410,7 +432,7 @@ class acpt_form extends acpt {
     echo '</div>';
     if($this->echo === false) {
       $data = ob_get_clean();
-      $this->buffer .= $data;
+      $this->buffer['main'] .= $data;
     }
 
     return $this;
@@ -443,7 +465,7 @@ class acpt_form extends acpt {
     echo apply_filters($fieldName . '_filter', $this->get_image_form($args));
     if($this->echo === false) {
       $data = ob_get_clean();
-      $this->buffer .= $data;
+      $this->buffer['main'] .= $data;
     }
 
     return $this;
@@ -476,7 +498,7 @@ class acpt_form extends acpt {
     echo apply_filters($fieldName . '_filter', $this->get_file_form($args));
     if($this->echo === false) {
       $data = ob_get_clean();
-      $this->buffer .= $data;
+      $this->buffer['main'] .= $data;
     }
 
     return $this;
@@ -509,7 +531,7 @@ class acpt_form extends acpt {
     echo apply_filters($fieldName . '_filter', $this->get_google_map_form($args));
     if($this->echo === false) {
       $data = ob_get_clean();
-      $this->buffer .= $data;
+      $this->buffer['main'] .= $data;
     }
 
     return $this;
@@ -542,7 +564,7 @@ class acpt_form extends acpt {
     echo apply_filters($fieldName . '_filter', $this->get_date_form($args));
     if($this->echo === false) {
       $data = ob_get_clean();
-      $this->buffer .= $data;
+      $this->buffer['main'] .= $data;
     }
 
     return $this;
