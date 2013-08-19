@@ -14,6 +14,7 @@ class acpt_form extends acpt {
   public $echo = null;
   public $buffer = array('main' => '');
   private $buffering = false;
+  public $saveMessage = 'Changes Saved';
 
   function __construct($name, $opts=array(), $echo = true) {
     return $this->make($name, $opts, $echo);
@@ -57,8 +58,6 @@ class acpt_form extends acpt {
         acpt_save::save_post_fields('options');
       }
 
-      settings_errors();
-
       $this->method = $opts['method'];
       $field = '<form id="'.$name.'" ';
       $field .= 'method="post" ';
@@ -93,6 +92,20 @@ class acpt_form extends acpt {
     $field .= '</form>';
 
     echo $field;
+  }
+
+  function notice($message = null, $class = 'updated') {
+    if(is_string($message)) {
+      $this->saveMessage = $message;
+    }
+
+
+    if(isset($_POST['save_acpt'])) : ?>
+      <div class="<?php echo $class; ?>">
+        <p><?php echo $this->saveMessage; ?></p>
+      </div>
+    <?php endif;
+
   }
 
   /**
