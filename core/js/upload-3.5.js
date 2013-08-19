@@ -35,7 +35,7 @@ jQuery(document).ready(function($) {
                 multiple: false  // Set to true to allow multiple files to be selected
             });
 
-            console.log(wp.media.frames);
+            // console.log(wp.media.frames);
 
             // When an image is selected, run a callback.
             temp_frame.on( 'select', function() {
@@ -49,6 +49,7 @@ jQuery(document).ready(function($) {
                     $(container).find('.image-placeholder').append($('<img>').attr('src', attachment.url));
                 }
 
+                //console.log(attachment);
                 $(url).val(attachment.url);
                 $(container).find('.attachment-id-hidden').val(attachment.id);
 

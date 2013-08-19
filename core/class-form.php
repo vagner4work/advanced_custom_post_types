@@ -53,7 +53,6 @@ class acpt_form extends acpt {
     $this->bLabel = is_string($opts['bLabel']) ? $opts['bLabel'] : null;
     $this->aLabel = is_string($opts['aLabel']) ? $opts['aLabel'] : null;
     $this->aField = is_string($opts['aField']) ? $opts['aField'] : null;
-
     $this->saveName = 'save_acpt_form_'.$this->name;
 
     if($opts['method'] === true ) :
@@ -70,7 +69,6 @@ class acpt_form extends acpt {
     endif;
 
     if(is_string($opts['action'])) $this->action = $opts['action'];
-
 
     if(isset($field)) echo $field;
     wp_nonce_field('nonce_actp_nonce_action','nonce_acpt_nonce_field');
@@ -663,7 +661,7 @@ class acpt_form extends acpt {
 
     $btn = array('input' => array(
       'type' => 'button',
-      'class' => 'button-primary upload-button',
+      'class' => 'button upload-button',
       'value' => esc_attr($btnValue)
     ));
 
@@ -845,7 +843,7 @@ class acpt_form extends acpt {
     $attrName = acpt_html::make_html_attr('name', $name); // $o['field'].'_id', $o['opts']['group'], $o['opts']['sub']);
 
     $o['html'] = "<input type=\"hidden\" class=\"attachment-id-hidden\" {$attrName} {$valueID}>";
-    $o['html'] .= '<input type="button" class="button-primary upload-button" value="'.$button.'"> <span class="clear-attachment">clear file</span>';
+    $o['html'] .= '<input type="button" class="button upload-button" value="'.$button.'"> <span class="clear-attachment">clear file</span>';
 
     return $this->get_text_form($o);
   }
