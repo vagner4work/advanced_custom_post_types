@@ -70,7 +70,7 @@ class acpt_utility {
       wp_enqueue_media();
       wp_enqueue_script('upload', ACPT_LOCATION .'/'.ACPT_FOLDER_NAME.'/core/js/upload-3.5.js', array('jquery'));
       wp_enqueue_script('plupload');
-      wp_enqueue_script('media-upload');
+      //wp_enqueue_script('media-upload');
       wp_enqueue_style('thickbox');
       wp_enqueue_script('thickbox');
     }
