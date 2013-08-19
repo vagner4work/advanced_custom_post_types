@@ -985,16 +985,17 @@ class acpt_form extends acpt {
     }
 
     if(DEV_MODE == true) :
-        $v = "acpt_{$getter}('{$group}[{$fieldName}]{$sub}');";
+      $v = "acpt_{$getter}('{$group}[{$fieldName}]{$sub}');";
+      $data = acpt_html::input(array(
+          'class' => 'dev_note',
+          'readonly' => true,
+          'value' => esc_attr($v)
+        ), true);
     else :
-        $v = '';
+      $data = '';
     endif;
 
-    return acpt_html::input(array(
-        'class' => 'dev_note',
-        'readonly' => true,
-        'value' => esc_attr($v)
-    ), true);
+    return $data;
   }
 
   /**

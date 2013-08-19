@@ -73,7 +73,7 @@
   padding: 0;
   display: inline-block;
   vertical-align: text-bottom;
-  margin: 0 0 1em;
+  margin: 0 0 5px;
 }
 
 input[readonly].dev_note {
@@ -186,4 +186,13 @@ input[readonly].dev_note {
 
 .acpt-options input[type="submit"] {
   margin-top: 17px;
+}
+
+.acpt-options label {
+  line-height: inherit;
+}
+
+.acpt-options .control-group {
+  margin: 0;
+  padding: 15px 0;
 }
