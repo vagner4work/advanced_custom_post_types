@@ -47,7 +47,7 @@ function acpt_pageContent_themeOptions() {
     ->buffer('advanced'); //index
 
 
-  $screen = new acpt_options();
+  $screen = new acpt_layout();
   $screen->add_tab( array(
       'id' => 'general',
       'title' => "General",

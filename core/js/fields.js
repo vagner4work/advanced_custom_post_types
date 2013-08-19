@@ -58,7 +58,17 @@ jQuery(document).ready(function($){
             }, 1000);
 
         });
-
-
     });
+
+    // Tabs
+    $('.acpt-tabs li').each(function(){
+
+        $(this).click(function(e){
+            $(this).addClass('active').siblings().removeClass('active');
+            var section = $(this).find('a').attr('href');
+            $(section).addClass('active').siblings().removeClass('active');
+            e.preventDefault();
+        });
+    });
+
 });

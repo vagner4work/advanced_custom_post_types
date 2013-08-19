@@ -83,7 +83,7 @@ input[readonly].dev_note {
   color: #333;
   font-size: 10px;
   width: 25%;
-  background: inherit;
+  background: #f1f1f1;
   border: 1px dotted #ccc;
 }
 
@@ -195,4 +195,79 @@ input[readonly].dev_note {
 .acpt-options .control-group {
   margin: 0;
   padding: 15px 0;
+}
+
+/* tabs */
+.tab-section.active {
+  display: block;
+}
+
+.tabbed-sections {
+  margin: -6px -12px 15px -10px;
+}
+.acpt-tabs {float: none;
+  overflow: hidden;
+  padding: 5px 20px 0}
+
+.tab-section {
+  clear: both;
+  width: 100%;
+  display: none;
+}
+
+.acpt-tabs li { display: inline; margin: 5px 0; padding: 5px; }
+.tabbed-sections.ui-tabs { padding: 0; }
+.tabbed-sections .ui-tabs-hide { display: none !important; }
+.tabbed-sections .ui-widget-header { border: none; }
+.tabbed-sections .acpt-tabs { background:#eaeaea;padding:3px 9px 0;margin:0;overflow:hidden;zoom:1;line-height:1em;-webkit-box-shadow:inset 0 -1px 0 0 #d5d5d5;-moz-box-shadow:inset 0 -1px 0 0 x #d5d5d5;box-shadow:inset 0 -1px 0 0 #d5d5d5; }
+.tabbed-sections .acpt-tabs li { float:left;padding:0;margin:0 5px 0 0; }
+.tabbed-sections .acpt-tabs li.alignright { float: right; }
+.tabbed-sections .acpt-tabs li.hide { display: none; }
+.tabbed-sections .acpt-tabs li a {
+  padding:0;
+  margin:0;
+  border:0;
+  border:1px solid #d5d5d5;
+  float:left;
+  padding:9px 9px;
+  background:#ececec;
+  text-decoration:none;
+  color:#555;
+  -moz-border-radius-topleft:3px;
+  -moz-border-radius-topright:3px;
+  -webkit-border-top-left-radius:3px;
+  -webkit-border-top-right-radius:3px;
+  border-top-left-radius:3px;
+  border-top-right-radius:3px;
+  -webkit-box-shadow:inset 0 1px 0 1px rgba(255, 255, 255, 0.5);
+  -moz-box-shadow:inset 0 1px 0 1px rgba(255, 255, 255, 0.5);
+  box-shadow:inset 0 1px 0 1px rgba(255, 255, 255, 0.5);
+}
+
+.tabbed-sections .acpt-tabs li.active a {
+  background: #f9f9f9;
+  position: relative;
+  top: 1px;
+}
+
+
+.clearfix:after {
+  content: ".";
+  display: block;
+  clear: both;
+  visibility: hidden;
+  line-height: 0;
+  height: 0;
+}
+
+.clearfix {
+  display: inline-block;
+}
+
+html[xmlns] .clearfix {
+  display: block;
+}
+
+* html .clearfix {
+  height: 1%;
 }

@@ -31,13 +31,14 @@ function acpt_meta_init() {
 function meta_custom() {
   // notice the groups arg sets the data in the
   // DB as one item serialized as an array
-	acpt_form('details')
+	$form = acpt_form('details')->buffer()
   ->checkbox('checkbox', array('label' => 'Checkbox Example', 'desc' => 'Select this for value of 1'))
   ->text('text', array('label' => 'Text Field', 'class' => 'example-class', 'help' => 'Example help text'))
   ->color('1', array('group' => '[details_colors]', 'label' => 'Color Field', 'default' => '#000', 'palette' => array('#fff', '#f00', '#f30')))
   ->color('2', array('group' => '[details_colors]', 'label' => 'Color Field (no palette)'))
   ->image('image', array('label' => 'Image Field', 'button' => 'Add Your Image', 'sub' => '[details_files]'))
 	->file('file', array('label' => 'File Field', 'button' => 'Select a File', 'sub' => '[details_files]'))
+  ->buffer('tab1')->buffer()
 	->google_map('address', array('label' => 'Address Field'))
 	->date('date', array('label' => 'Date Field', 'button' => 'Enter a Date', 'group' => '[details_adv]'))
 	->textarea('textarea', array('label' => 'Textarea', 'group' => '[details_adv]'))
@@ -45,5 +46,22 @@ function meta_custom() {
 	->select('select_key', array('One' => '1', 'Two' => '2', 'Three' => '3'), array('label' => 'Select List Key', 'select_key' =>  true, 'group' => '[details_adv]'))
 	->radio('radio', array('blue', 'green', 'red'), array('label' => 'Radio Buttons', 'group' => '[details_adv]'))
 	->editor('editor', 'WYSIWYG Editor', array('group' => '[details_adv]'))
-  ->editor('editor_teeny', 'Teeny Editor', array(), array('teeny' => true, 'media_buttons' => false));
+  ->editor('editor_teeny', 'Teeny Editor', array(), array('teeny' => true, 'media_buttons' => false))->buffer('tab2');
+
+
+  $screen = new acpt_layout();
+  $screen->add_tab( array(
+      'id' => 'tab1',
+      'title' => "Tab 1",
+      'content' => $form->buffer['tab1']
+    ) )
+    ->add_tab( array(
+        'id' => 'tab2',
+        'title' => "Tab 2",
+        'content' => $form->buffer['tab2']
+    ) );
+
+  $screen->set_sidebar('<input type="submit" value="Save Changes" class="button-primary" />');
+  $screen->make('metabox');
+
 }

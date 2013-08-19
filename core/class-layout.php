@@ -7,7 +7,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-class acpt_options extends acpt {
+class acpt_layout extends acpt {
 
   private $_tabs = array();
   private $_sidebar = null;
@@ -121,8 +121,68 @@ class acpt_options extends acpt {
    *
    * @since 3.3.0
    */
-  public function make() {
+  public function make($style = 'default') {
+    switch($style) {
+      case 'default' :
+        $this->help_style_tabs();
+        break;
+      case 'metabox' :
+        $this->metabox_style_tabs();
+        break;
+    }
 
+  }
+
+  private function metabox_style_tabs() {
+    ?>
+    <div class="tabbed">
+    <div class="tabbed-sections">
+      <ul class="acpt-tabs alignleft">
+        <?php
+        $class = ' class="active"';
+        $tabs = $this->get_tabs();
+        foreach ( $tabs as $tab ) :
+          $link_id  = "tab-link-{$tab['id']}";
+          $panel_id = "tab-panel-{$tab['id']}";
+          ?>
+          <li id="<?php echo esc_attr( $link_id ); ?>"<?php echo $class; ?>>
+            <a href="<?php echo esc_url( "#$panel_id" ); ?>">
+              <?php echo esc_html( $tab['title'] ); ?>
+            </a>
+          </li>
+          <?php
+          $class = '';
+        endforeach;
+        ?>
+      </ul>
+    </div>
+    <div class="acpt-sections clearfix">
+      <?php
+      $classes = 'tab-section active';
+      foreach ( $tabs as $tab ):
+        $panel_id = "tab-panel-{$tab['id']}";
+        ?>
+
+        <div id="<?php echo esc_attr( $panel_id ); ?>" class="<?php echo $classes; ?>">
+          <?php
+          // Print tab content.
+          echo $tab['content'];
+
+          // If it exists, fire tab callback.
+          if ( ! empty( $tab['callback'] ) )
+            call_user_func_array( $tab['callback'], array( $this, $tab ) );
+          ?>
+        </div>
+        <?php
+        $classes = 'tab-section';
+      endforeach;
+      ?>
+    </div>
+    </div>
+    <?php
+  }
+
+  private function help_style_tabs() {
     // Default help only if there is no old-style block of text and no new-style help tabs.
     $help_sidebar = $this->get_sidebar();
 

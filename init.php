@@ -21,7 +21,7 @@ $lib = array(
   'role',
   'form',
   'meta_box',
-  'options'
+  'layout'
 );
 
 foreach($lib as $value) :
