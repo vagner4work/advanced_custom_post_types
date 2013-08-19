@@ -21,7 +21,6 @@ function acpt_add_themeOptions_adminBar($admin_bar) {
   );
 }
 
-
 function acpt_pageContent_themeOptions() {
   ?>
   <div class="wrap">
@@ -29,14 +28,14 @@ function acpt_pageContent_themeOptions() {
   <?php
   $form = acpt_form('options', array('group' => '[acpt_options]', 'method' => true));
   $form->notice();
-  $form->buffer()
+  $form->buffer() // buffer
     ->checkbox('Checkbox Example', array('desc' => 'Select this for value of 1'))
     ->text('Text Field')
     ->image('Image Field')
     ->file('File Field')
     ->textarea('Textarea')
-    ->buffer('general')
-    ->buffer()
+    ->buffer('general') // index
+    ->buffer() // buffer
     ->color('Color Field', array('palette' => array('#fff', '#f00', '#f30')))
     ->color('Color Field (no palette)')
     ->google_map('Address Field')
@@ -44,8 +43,8 @@ function acpt_pageContent_themeOptions() {
     ->editor('WYSIWYG Editor')
     ->select('Select List', array('one', 'two', 'three'))
     ->select('Select List Key', array('One' => '1', 'Two' => '2'), array('select_key' =>  true))
-    ->radio('radio', array('blue', 'green', 'red'), array('label' => 'Radio Buttons'))
-    ->buffer('advanced');
+    ->radio('Radio Buttons', array('blue', 'green', 'red'))
+    ->buffer('advanced'); //index
 
 
   $screen = new acpt_options();
