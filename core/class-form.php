@@ -15,6 +15,7 @@ class acpt_form extends acpt {
   public $buffer = array('main' => '');
   private $buffering = false;
   public $saveMessage = 'Changes Saved';
+  private $saveName = null;
 
   function __construct($name, $opts=array(), $echo = true) {
     return $this->make($name, $opts, $echo);
@@ -31,6 +32,7 @@ class acpt_form extends acpt {
    */
   function make($name, $opts=array(), $echo = true) {
     $this->test_for($name, 'Making Form: You need to enter a singular name.');
+    $this->name = $name;
 
     $opts = $this->set_empty_keys($opts, array('group', 'label', 'labelTag', 'bLabel', 'aLabel', 'aField', 'method', 'action'));
     $this->group = $this->get_opt_by_test($opts['group'], '');
@@ -52,9 +54,11 @@ class acpt_form extends acpt {
     $this->aLabel = is_string($opts['aLabel']) ? $opts['aLabel'] : null;
     $this->aField = is_string($opts['aField']) ? $opts['aField'] : null;
 
+    $this->saveName = 'save_acpt_form_'.$this->name;
+
     if($opts['method'] === true ) :
 
-      if(isset($_POST['save_acpt'])) {
+      if(isset($_POST[$this->saveName])) {
         acpt_save::save_post_fields('options');
       }
 
@@ -67,10 +71,10 @@ class acpt_form extends acpt {
 
     if(is_string($opts['action'])) $this->action = $opts['action'];
 
-    $this->name = $name;
 
     if(isset($field)) echo $field;
     wp_nonce_field('nonce_actp_nonce_action','nonce_acpt_nonce_field');
+    echo '<input type="hidden" name="'.$this->saveName.'" value="true" />';
     echo '<input type="hidden" name="save_acpt" value="true" />';
 
     return $this;
@@ -100,7 +104,7 @@ class acpt_form extends acpt {
     }
 
 
-    if(isset($_POST['save_acpt'])) : ?>
+    if(isset($_POST[$this->saveName])) : ?>
       <div class="<?php echo $class; ?>">
         <p><?php echo $this->saveMessage; ?></p>
       </div>
