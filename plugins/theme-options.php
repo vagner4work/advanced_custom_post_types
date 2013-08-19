@@ -13,7 +13,7 @@ function acpt_pageContent_themeOptions() {
   <?php screen_icon('themes'); ?> <h2>Theme Options</h2>
   <?php
   $form = acpt_form('options', array('group' => '[acpt_options]', 'method' => true));
-
+  $form->notice();
   $form->buffer()
     ->checkbox('Checkbox Example', array('desc' => 'Select this for value of 1'))
     ->text('Text Field')
