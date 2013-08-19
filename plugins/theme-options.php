@@ -6,12 +6,12 @@ function acpt_add_themeOptions() {
   add_submenu_page('themes.php', 'Theme Options', 'Theme Options', 'edit_theme_options', 'theme_acpt_options', 'acpt_pageContent_themeOptions');
 }
 
-add_action('admin_bar_menu', 'acpt_add_themeOptions_adminBar', 40);
+add_action('admin_bar_menu', 'acpt_add_themeOptions_adminBar');
 
 function acpt_add_themeOptions_adminBar($admin_bar) {
   $admin_bar->add_menu( array(
       'id'    => 'my-item',
-      // 'parent' => 'top-secondary',
+      'parent' => 'top-secondary',
       'title' => 'Options',
       'href'  => admin_url().'themes.php?page=theme_acpt_options',
       'meta'  => array(
