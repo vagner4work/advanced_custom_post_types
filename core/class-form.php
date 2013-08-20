@@ -437,7 +437,10 @@ class acpt_form extends acpt {
   /**
    * Form WP Editor.
    *
-   * In the $editor_setteings set array('teeny' => true) to have a smaller editor
+   * In the $editor_setteings set array('teeny' => true) to have a smaller editor.
+   * Note that it is not a good idea to use this in a meta box or in a hidden area
+   * as TinyMCE can be buggy. http://core.trac.wordpress.org/ticket/22168
+   *
    *
    * @param string $name singular name is required
    * @param bool $label text for the label
@@ -458,14 +461,25 @@ class acpt_form extends acpt {
     $v = $this->get_field_value($fieldName, $group, $sub);
     $s = $this->get_opts($label, array('labelTag' => 'span'), $fieldName, true);
 
+    $noOverride = array(
+      'textarea_name' => $this->get_acpt_post_name($fieldName, $group, $sub)
+    );
+
+    $defaultSettings = array(
+      'textarea_rows' => 15,
+      'tinymce' => array( 'plugins' => 'wordpress' )
+    );
+
+    $v = acpt_sanitize::editor($v);
+    $id = 'wysisyg'.$this->letterLower($fieldName);
+    $editor_settings = array_merge($defaultSettings, $editor_settings, $noOverride);
+
     if($this->echo === false) { ob_start(); }
     echo '<div class="control-group">';
     echo $s['label'];
-    wp_editor(
-        acpt_sanitize::editor($v),
-        'wysisyg'.$this->letterLower($fieldName),
-        array_merge($editor_settings, array('textarea_rows' => 15,'textarea_name' => $this->get_acpt_post_name($fieldName, $group, $sub)))
-    );
+
+    wp_editor($v,$id,$editor_settings);
+
     echo $this->dev_message($fieldName, $group, $sub);
     echo '</div>';
     if($this->echo === false) {

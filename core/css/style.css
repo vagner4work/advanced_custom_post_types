@@ -196,7 +196,10 @@ input[readonly].dev_note {
   padding: 15px 0;
 }
 
-/* tabs */
+/* tabs
+
+Fork from woo themes sidebar widgets
+*/
 .tab-section.active {
   display: block;
 }
