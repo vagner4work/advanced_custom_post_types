@@ -134,7 +134,17 @@ class acpt_layout extends acpt {
   }
 
   private function metabox_style_tabs() {
+    // Default help only if there is no old-style block of text and no new-style help tabs.
+    $help_sidebar = $this->get_sidebar();
+
+    $help_class = '';
+    if ( ! $help_sidebar ) :
+      $help_class .= ' no-sidebar';
+    endif;
+
+    // Time to render!
     ?>
+
     <div class="tabbed">
     <div class="tabbed-sections">
       <ul class="acpt-tabs alignleft">
@@ -156,6 +166,13 @@ class acpt_layout extends acpt {
         ?>
       </ul>
     </div>
+
+    <?php if ( $help_sidebar ) : ?>
+      <div class="tabbed-sidebar">
+        <?php echo $help_sidebar; ?>
+      </div>
+    <?php endif; ?>
+
     <div class="acpt-sections clearfix">
       <?php
       $classes = 'tab-section active';

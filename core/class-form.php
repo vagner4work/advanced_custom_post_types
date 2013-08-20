@@ -857,7 +857,7 @@ class acpt_form extends acpt {
     $attrName = acpt_html::make_html_attr('name', $name); // $o['field'].'_id', $o['opts']['group'], $o['opts']['sub']);
 
     $o['html'] = "<input type=\"hidden\" class=\"attachment-id-hidden\" {$attrName} {$valueID}>";
-    $o['html'] .= '<input type="button" class="button upload-button" value="'.$button.'"> <span class="clear-attachment">clear file</span>';
+    $o['html'] .= '<input type="button" class="button upload-button" value="'.$button.'"> <span class="clear-attachment">Remove</span>';
 
     return $this->get_text_form($o);
   }

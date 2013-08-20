@@ -29,39 +29,48 @@ function acpt_meta_init() {
 }
 
 function meta_custom() {
-  // notice the groups arg sets the data in the
-  // DB as one item serialized as an array
-	$form = acpt_form('details')->buffer()
-  ->checkbox('checkbox', array('label' => 'Checkbox Example', 'desc' => 'Select this for value of 1'))
-  ->text('text', array('label' => 'Text Field', 'class' => 'example-class', 'help' => 'Example help text'))
-  ->color('1', array('group' => '[details_colors]', 'label' => 'Color Field', 'default' => '#000', 'palette' => array('#fff', '#f00', '#f30')))
-  ->color('2', array('group' => '[details_colors]', 'label' => 'Color Field (no palette)'))
-  ->image('image', array('label' => 'Image Field', 'button' => 'Add Your Image', 'sub' => '[details_files]'))
-	->file('file', array('label' => 'File Field', 'button' => 'Select a File', 'sub' => '[details_files]'))
-  ->buffer('tab1')->buffer()
-	->google_map('address', array('label' => 'Address Field'))
-	->date('date', array('label' => 'Date Field', 'button' => 'Enter a Date', 'group' => '[details_adv]'))
-	->textarea('textarea', array('label' => 'Textarea', 'group' => '[details_adv]'))
-	->select('select', array('one', 'two', 'three'), array('label' => 'Select List', 'group' => '[details_adv]'))
-	->select('select_key', array('One' => '1', 'Two' => '2', 'Three' => '3'), array('label' => 'Select List Key', 'select_key' =>  true, 'group' => '[details_adv]'))
-	->radio('radio', array('blue', 'green', 'red'), array('label' => 'Radio Buttons', 'group' => '[details_adv]'))
-	->editor('editor', 'WYSIWYG Editor', array('group' => '[details_adv]'))
-  ->editor('editor_teeny', 'Teeny Editor', array(), array('teeny' => true, 'media_buttons' => false))->buffer('tab2');
+  $palette = array('#FF5F20', '#FF751A', '#FF9E57', '#FFC498', '#FFE4D0', '#FFFFFF', '#000000');
 
+	$form = acpt_form('details', array('group' => '[sample]'))
+    ->buffer() // start buffer
+    ->checkbox('Checkbox', array('desc' => 'Select this for value of 1'))
+    ->checkbox('checkbox_2', array('desc' => 'The second checkbox for value of 1'), false)
+    ->checkbox('checkbox_3', array('desc' => 'A third box for value of 1'), false)
+    ->color('1', array('label' => 'Color Field', 'default' => '#000', 'palette' => $palette))
+    ->color('2', array('label' => 'Color Field (no palette)'))
+    ->select('Select', array('one', 'two', 'three'))
+    ->select('select_key', array('One' => '1', 'Two' => '2'), array('label' => 'Select List (custom key)', 'select_key' =>  true))
+    ->radio('radio', array('blue', 'green', 'red'), array('label' => 'Radio Buttons'))
+    ->buffer('options')->buffer() // save buffer and start again
+    ->text('Text', array('class' => 'example-class', 'help' => 'Example help text'))
+    ->textarea('Textarea', array('label' => 'Textarea'))
+    ->image('Image', array('button' => 'Add Your Image'))
+    ->file('File', array('button' => 'Select a File'))
+    ->buffer('text')->buffer() // buffer
+    ->date('date', array('label' => 'Date Field', 'button' => 'Enter a Date'))
+    ->google_map('address', array('label' => 'Address Field'))
+    // editors bug out if a metabox is moved, this is a WordPress issue
+    ->editor('editor', 'WYSIWYG Editor')
+    ->editor('editor_teeny', 'Teeny Editor', array(), array('teeny' => true, 'media_buttons' => false))
+    ->buffer('adv'); // save buffer
 
-  $screen = new acpt_layout();
-  $screen->add_tab( array(
+  $tabs = new acpt_layout();
+  $tabs
+    ->add_tab( array(
       'id' => 'tab1',
-      'title' => "Tab 1",
-      'content' => $form->buffer['tab1']
+      'title' => "Text &amp; File Fields",
+      'content' => $form->buffer['text']
     ) )
     ->add_tab( array(
         'id' => 'tab2',
-        'title' => "Tab 2",
-        'content' => $form->buffer['tab2']
-    ) );
-
-  $screen->set_sidebar('<input type="submit" value="Save Changes" class="button-primary" />');
-  $screen->make('metabox');
+        'title' => "Option Fields",
+        'content' => $form->buffer['options']
+      ) )
+    ->add_tab( array(
+        'id' => 'tab3',
+        'title' => "Advanced Fields",
+        'content' => $form->buffer['adv']
+    ) )
+    ->make('metabox');
 
 }
