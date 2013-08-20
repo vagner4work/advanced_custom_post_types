@@ -46,6 +46,13 @@ class acpt {
     return preg_replace($pattern,$replacement,strtolower(trim($name)));
   }
 
+  function letterLower($name) {
+    $name = sanitize_title($name, '');
+    $pattern = '/(\-+)/';
+    $replacement = '';
+    return preg_replace($pattern,$replacement,strtolower(trim($name)));
+  }
+
   /**
    * Test for value if there is none die.
    *

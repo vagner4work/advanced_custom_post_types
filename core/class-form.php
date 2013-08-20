@@ -463,8 +463,8 @@ class acpt_form extends acpt {
     echo $s['label'];
     wp_editor(
         acpt_sanitize::editor($v),
-        'wysisyg_'.$fieldName,
-        array_merge($editor_settings, array('textarea_name' => $this->get_acpt_post_name($fieldName, $group, $sub)))
+        'wysisyg'.$this->letterLower($fieldName),
+        array_merge($editor_settings, array('textarea_rows' => 15,'textarea_name' => $this->get_acpt_post_name($fieldName, $group, $sub)))
     );
     echo $this->dev_message($fieldName, $group, $sub);
     echo '</div>';
