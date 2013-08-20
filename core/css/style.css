@@ -112,10 +112,9 @@ input[readonly].dev_note {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
   padding: 5px;
   box-sizing: border-box;
-  max-width: 100%;
+  max-width: 600px;
   max-height: 200px;
   float: left;
-  clear: both;
   background: #fff;
 }
 
