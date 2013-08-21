@@ -127,17 +127,19 @@ function acpt_seo_general_cb() {
     <p>Google has <b>no definitive character limits</b> for page "Titles" and "Descriptions". Because of this there is no way to provide an accurate preview. But, your Google search result may look something like:</p>
     <div class="acpt-seo-preview-google">
       <span class="acpt-hide" id="acpt-seo-preview-google-title-orig">
-        <?php echo substr($post->post_title, 0, 59); ?>
+        <?php echo substr(strip_tags($post->post_title), 0, 59); ?>
       </span>
       <span id="acpt-seo-preview-google-title">
         <?php
         $title = acpt_meta('[seo][meta][acpt_seo_title]');
         if(!empty($title)) {
-          $tl = strlen($title);
-          echo substr($title, 0, 59);
+          $s = strip_tags($title);
+          $tl = strlen($s);
+          echo substr($s, 0, 59);
         } else {
-          $tl = strlen($post->post_title);
-          echo substr($post->post_title, 0, 59);
+          $s = strip_tags($post->post_title);
+          $tl = strlen($s);
+          echo substr($s, 0, 59);
         }
 
         if($tl > 59) {
@@ -149,17 +151,19 @@ function acpt_seo_general_cb() {
         <?php echo get_permalink($post->ID); ?>
       </div>
       <span class="acpt-hide" id="acpt-seo-preview-google-desc-orig">
-        <?php echo substr($post->post_content, 0, 150); ?>
+        <?php echo substr(strip_tags($post->post_content), 0, 150); ?>
       </span>
       <span id="acpt-seo-preview-google-desc">
         <?php
         $desc = acpt_meta('[seo][meta][acpt_seo_description]');
         if(!empty($desc)) {
-          $dl = strlen($desc);
-          echo substr($desc, 0, 150);
+          $s = strip_tags($desc);
+          $dl = strlen($s);
+          echo substr($s, 0, 150);
         } else {
-          $dl = strlen($post->post_content);
-          echo substr($post->post_content, 0, 150);
+          $s = strip_tags($post->post_content);
+          $dl = strlen($s);
+          echo substr($s, 0, 150);
         }
 
         if($dl > 150) {
