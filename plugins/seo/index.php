@@ -49,7 +49,8 @@ function meta_acpt_seo() {
 
   $redirect = array(
     'label' => '301 Redirect',
-    'help' => 'Move this page permanently to a new URL.'
+    'help' => 'Move this page permanently to a new URL. <a href="#acpt_acpt_seo_redirect" id="acpt_acpt_seo_redirect_lock">Unlock 301 Redirect</a>',
+    'readonly' => true
   );
 
   $follow = array(
@@ -107,7 +108,7 @@ function meta_acpt_seo() {
       ) )
     ->add_tab( array(
         'id' => 'seo-social',
-        'title' => "Open Graph",
+        'title' => "OG",
         'content' => $form->buffer['social']
       ) )
     ->add_tab( array(
@@ -122,8 +123,8 @@ function meta_acpt_seo() {
 function acpt_seo_general_cb() {
   global $post; ?>
   <div id="acpt-seo-preview" class="control-group">
-    <h4>Result Preview</h4>
-    <p>Your Google search result may look something like this:</p>
+    <h4>Example Preview</h4>
+    <p>Google has <b>no definitive character limits</b> for page "Titles" and "Descriptions". Because of this there is no way to provide an accurate preview. But, your Google search result may look something like:</p>
     <div class="acpt-seo-preview-google">
       <span class="acpt-hide" id="acpt-seo-preview-google-title-orig">
         <?php echo substr($post->post_title, 0, 59); ?>
@@ -148,17 +149,22 @@ function acpt_seo_general_cb() {
         <?php echo get_permalink($post->ID); ?>
       </div>
       <span class="acpt-hide" id="acpt-seo-preview-google-desc-orig">
-        <?php echo substr($post->post_content, 0, 156); ?>
+        <?php echo substr($post->post_content, 0, 150); ?>
       </span>
       <span id="acpt-seo-preview-google-desc">
         <?php
         $desc = acpt_meta('[seo][meta][acpt_seo_description]');
         if(!empty($desc)) {
-          echo substr($desc, 0, 156);
+          $dl = strlen($desc);
+          echo substr($desc, 0, 150);
         } else {
-          echo substr($post->post_content, 0, 156);
+          $dl = strlen($post->post_content);
+          echo substr($post->post_content, 0, 150);
         }
-        echo ' ...';
+
+        if($dl > 150) {
+          echo ' ...';
+        }
         ?>
       </span>
     </div>
