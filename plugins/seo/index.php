@@ -1,6 +1,7 @@
 <?php
 // add acpt seo to wordpress
 if( !defined('WPSEO_URL') && !defined('AIOSEOP_VERSION') ) {
+  define('ACPT_SEO', '2.0');
 	add_action( 'add_meta_boxes', 'acpt_seo_meta' );
 	add_filter( 'wp_title', 'acpt_seo_title', 100 );
 	add_action( 'wp_head' , 'acpt_seo_head_data', 0);
@@ -26,14 +27,19 @@ function meta_acpt_seo() {
     'label' => 'Search Result Description'
   );
 
+  $og_title = array(
+    'label' => 'Title',
+    'help' => 'The open graph protocol is used by social networks like FB, Google+ and Pinterest. Set the title used when sharing.'
+  );
+
   $og_desc = array(
     'label' => 'Description',
-    'help' => 'Use <a href="http://ogp.me/" target="_blank">open graph protocol</a> to set Facebook and Google+ descriptions to override "Search Result Description".'
+    'help' => 'Set the open graph description to override "Search Result Description". Will be used by FB, Google+ and Pinterest.'
   );
 
   $img = array(
     'label' => 'Image',
-    'help' => 'The image is shown when sharing socially using the open graph protocol.'
+    'help' => 'The image is shown when sharing socially using the open graph protocol. Will be used by FB, Google+ and Pinterest.'
   );
 
   $canon = array(
@@ -80,6 +86,7 @@ function meta_acpt_seo() {
       ->textarea('description', $desc)
     ->buffer('general') // index buffer
     ->buffer()
+      ->text('og_title', $og_title)
       ->textarea('og_desc', $og_desc)
       ->image('meta_img', $img)
     ->buffer('social') // index buffer
@@ -95,7 +102,8 @@ function meta_acpt_seo() {
     ->add_tab( array(
         'id' => 'seo-general',
         'title' => "Basic",
-        'content' => $form->buffer['general']
+        'content' => $form->buffer['general'],
+        'callback' => 'acpt_seo_general_cb'
       ) )
     ->add_tab( array(
         'id' => 'seo-social',
@@ -110,6 +118,52 @@ function meta_acpt_seo() {
     ->make('metabox');
 
 }
+
+function acpt_seo_general_cb() {
+  global $post; ?>
+  <div id="acpt-seo-preview" class="control-group">
+    <h4>Result Preview</h4>
+    <p>Your Google search result may look something like this:</p>
+    <div class="acpt-seo-preview-google">
+      <span class="acpt-hide" id="acpt-seo-preview-google-title-orig">
+        <?php echo substr($post->post_title, 0, 59); ?>
+      </span>
+      <span id="acpt-seo-preview-google-title">
+        <?php
+        $title = acpt_meta('[seo][meta][acpt_seo_title]');
+        if(!empty($title)) {
+          $tl = strlen($title);
+          echo substr($title, 0, 59);
+        } else {
+          $tl = strlen($post->post_title);
+          echo substr($post->post_title, 0, 59);
+        }
+
+        if($tl > 59) {
+          echo '...';
+        }
+        ?>
+      </span>
+      <div id="acpt-seo-preview-google-url">
+        <?php echo get_permalink($post->ID); ?>
+      </div>
+      <span class="acpt-hide" id="acpt-seo-preview-google-desc-orig">
+        <?php echo substr($post->post_content, 0, 156); ?>
+      </span>
+      <span id="acpt-seo-preview-google-desc">
+        <?php
+        $desc = acpt_meta('[seo][meta][acpt_seo_description]');
+        if(!empty($desc)) {
+          echo substr($desc, 0, 156);
+        } else {
+          echo substr($post->post_content, 0, 156);
+        }
+        echo ' ...';
+        ?>
+      </span>
+    </div>
+  </div>
+<?php }
 
 // Page Title
 function acpt_seo_title( $title, $sep = '', $other = '' ) {
@@ -135,6 +189,7 @@ function acpt_seo_head_data() {
 
   // meta vars
 	$desc = esc_attr(acpt_meta('[seo][meta][acpt_seo_description]'));
+  $og_title = esc_attr(acpt_meta('[seo][meta][acpt_seo_og_title]'));
   $og_desc = esc_attr(acpt_meta('[seo][meta][acpt_seo_og_desc]'));
   $img = esc_attr(acpt_meta('[seo][meta][acpt_seo_meta_img]'));
   $canon = esc_attr(acpt_meta('[seo][meta][acpt_seo_canonical]'));
@@ -159,8 +214,9 @@ function acpt_seo_head_data() {
   }
 
   // OG
-  if( !empty( $img ) ) { echo "<meta property=\"og:image\" content=\"{$img}\" />"; }
+  if( !empty( $og_title ) ) { echo "<meta property=\"og:title\" content=\"{$og_title}\" />"; }
   if( !empty( $og_desc ) ) { echo "<meta property=\"og:description\" content=\"{$og_desc}\" />"; }
+  if( !empty( $img ) ) { echo "<meta property=\"og:image\" content=\"{$img}\" />"; }
 
   // Basic
 	if( !empty( $desc ) ) { echo "<meta name=\"Description\" content=\"{$desc}\" />"; }
@@ -176,3 +232,12 @@ function acpt_seo_redirect() {
     }
   }
 }
+
+// CSS
+function acpt_seo_css() {
+  $path = acpt_utility::plugin_url('seo');
+  wp_enqueue_style('acpt-seo', $path . 'style.css' );
+  wp_enqueue_script('acpt-seo', $path . 'script.js' );
+}
+
+add_action('admin_init', 'acpt_seo_css');

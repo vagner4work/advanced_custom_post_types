@@ -40,6 +40,8 @@ if( is_admin() ) add_action('admin_enqueue_scripts', 'acpt_utility::upload_scrip
 
 // load plugins
 if(ACPT_LOAD_PLUGINS == true) :
+  $acptPlugins = apply_filters('acpt_plugin_manage', $acptPlugins);
+
 	foreach($acptPlugins as $plugin) :
 
     /*
@@ -48,14 +50,14 @@ if(ACPT_LOAD_PLUGINS == true) :
      * Set a custom plugin path. This should be a file system level path
      * not relative to http location.
      */
-    $pluginsFolder = apply_filters('acpt_plugin_folder', ACPT_FILE_PATH.'/'.ACPT_FOLDER_NAME.'/plugins/');
-		if (file_exists($pluginsFolder . $plugin . '/index.php')) :
-			$pluginFile = $plugin . '/index.php';
+    $pluginsFolder = acpt_utility::plugin_dir($plugin);
+		if (file_exists($pluginsFolder . 'index.php')) :
+			$pluginFile = $pluginsFolder . 'index.php';
 		else :
-			$pluginFile =  $plugin . '.php';
+			$pluginFile =  acpt_utility::plugin_dir() . $plugin . '.php';
 		endif;
 
-		include_once($pluginsFolder.$pluginFile);
+		include_once($pluginFile);
 
 	endforeach;
 endif;

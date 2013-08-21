@@ -99,4 +99,20 @@ class acpt_utility {
     return $groups[1];
   }
 
+  static function plugin_dir($plugin = '') {
+    if( !empty($plugin) ) {
+      $plugin = $plugin . '/';
+    }
+
+    return apply_filters('acpt_plugin_folder', ACPT_FILE_PATH.'/'.ACPT_FOLDER_NAME.'/plugins/') . $plugin;
+  }
+
+  static function plugin_url($plugin = '') {
+    if( !empty($plugin) ) {
+      $plugin = $plugin . '/';
+    }
+
+    return apply_filters('acpt_plugin_url', ACPT_LOCATION . '/' . ACPT_FOLDER_NAME . '/plugins/') . $plugin;
+  }
+
 }
