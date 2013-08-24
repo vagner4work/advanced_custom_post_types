@@ -12,7 +12,7 @@ if( !defined('WPSEO_URL') && !defined('AIOSEOP_VERSION') ) {
 // setup metabox
 function acpt_seo_meta() {
 	$publicTypes = get_post_types( array( 'public' => true ) );
-	acpt_meta_box('acpt_seo', $publicTypes, array('label' => 'Search Engine Optimization'));
+	acpt_meta_box('acpt_seo', $publicTypes, array('label' => 'Search Engine Optimization', 'priority' => 'low'));
 }
 
 // build metabox interface

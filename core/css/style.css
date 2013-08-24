@@ -185,11 +185,6 @@ input[readonly].dev_note {
   padding: 3px;
 }
 
-.inside .control-group .wp-picker-holder {
-  position: absolute;
-  z-index: 100;
-}
-
 /* options */
 #screen-meta.acpt-options {
   display: block;
@@ -306,6 +301,20 @@ Fork from woo themes sidebar widgets
   position: relative;
   top: 1px;
 }
+/* tabs help in post type */
+#post-body-content #screen-meta.acpt-options {
+  margin: 0 0 20px 4px;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+
+/* inside without tabs */
+#post-body-content .inside .control-group {
+  padding: 15px 0;
+  margin: 0;
+}
+
 
 /* layout basic */
 
