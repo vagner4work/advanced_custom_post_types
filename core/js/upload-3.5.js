@@ -90,7 +90,7 @@ jQuery(document).ready(function($) {
         if( button.length > 0 ){ set_uploader(button[0], uploadUrl[0], el, type);}
 
         $(el).on('click', '.image-placeholder .remove-image', function(){
-            $(this).parent().parent().find('.upload-url').attr('value', '');
+            $(this).parent().parent().find('.upload-url, .attachment-id-hidden').attr('value', '');
             $(this).parent().remove();
             $(el).append('<div class="image-placeholder"><div class="remove-image"></div></div>');
         });

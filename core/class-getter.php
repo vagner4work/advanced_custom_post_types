@@ -64,7 +64,7 @@ class acpt_get {
     do_action('start_acpt_meta', $name, $fallBack, $groups, $id);
 
     global $post;
-    empty($id) ? $id = $post->ID : true;
+    empty($id) && isset($post) ? $id = $post->ID : true;
 
     if($groups === true ) :
       $data = self::get_groups($name, $id);
