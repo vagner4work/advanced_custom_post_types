@@ -24,6 +24,10 @@ class acpt {
     return $this;
   }
 
+  private function unslash(&$v) {
+    $v = wp_unslash($v);
+  }
+
   /**
    * Replace white space with underscore and make all text lowercase
    *

@@ -168,6 +168,8 @@ class acpt_get {
       return null;
     endif;
 
+    self::unslash($data);
+
     $c = count($groups);
 
     for ($i = 1; $i < $c; $i++) :
@@ -182,6 +184,10 @@ class acpt_get {
     endfor;
 
     return $data;
+  }
+
+  private function unslash(&$v) {
+    $v = wp_unslash($v);
   }
 
 }
