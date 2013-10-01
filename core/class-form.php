@@ -155,28 +155,7 @@ class acpt_form extends acpt {
    * @return $this
    */
   function text($name, $opts=array(), $label = null) {
-    $this->test_for($this->name, 'Making Form: You need to make the form first.');
-    $this->test_for($name, 'Making Form: You need to enter a singular name.');
-
-    $field = $this->get_field_name($name);
-
-    $args = array(
-      'name' => $name,
-      'opts' => $opts,
-      'classes' => "text",
-      'field' => $field,
-      'label' => $label,
-      'html' => ''
-    );
-
-    if($this->echo === false) { ob_start(); }
-    echo apply_filters($field . '_filter', $this->get_text_form($args));
-    if($this->echo === false) {
-      $data = ob_get_clean();
-      $this->buffer['main'] .= $data;
-    }
-
-    return $this;
+    return include 'fields/text/method.php';
   }
 
   /**
@@ -190,28 +169,7 @@ class acpt_form extends acpt {
    * @return $this
    */
   function color($name, $opts=array(), $label = null) {
-    $this->test_for($this->name, 'Making Form: You need to make the form first.');
-    $this->test_for($name, 'Making Form: You need to enter a singular name.');
-
-    $fieldName = $this->get_field_name($name);
-
-    $args = array(
-      'name' => $name,
-      'opts' => $opts,
-      'classes' => "color color-picker",
-      'field' => $fieldName,
-      'label' => $label,
-      'html' => ''
-    );
-
-    if($this->echo === false) { ob_start(); }
-    echo apply_filters($fieldName . '_filter', $this->get_color_form($args));
-    if($this->echo === false) {
-      $data = ob_get_clean();
-      $this->buffer['main'] .= $data;
-    }
-
-    return $this;
+    return include 'fields/color/method.php';
   }
 
   /**
@@ -225,29 +183,7 @@ class acpt_form extends acpt {
    * @return $this
    */
   function checkbox($name, $opts=array(), $label = null) {
-    $this->test_for($this->name, 'Making Form: You need to make the form first.');
-    $this->test_for($name, 'Making Form: You need to enter a singular name.');
-
-    $opts['labelTag'] = 'span';
-    $fieldName = $this->get_field_name($name);
-
-    $args = array(
-      'name' => $name,
-      'opts' => $opts,
-      'classes' => "checkbox",
-      'field' => $fieldName,
-      'label' => $label,
-      'html' => ''
-    );
-
-    if($this->echo === false) { ob_start(); }
-    echo apply_filters($fieldName . '_filter', $this->get_checkbox_form($args));
-    if($this->echo === false) {
-      $data = ob_get_clean();
-      $this->buffer['main'] .= $data;
-    }
-
-    return $this;
+    return include 'fields/checkbox/method.php';
   }
 
   /**
@@ -259,38 +195,7 @@ class acpt_form extends acpt {
    * @return $this
    */
   function textarea($name, $opts=array(), $label = null) {
-    $this->test_for($this->name, 'Making Form: You need to make the form first.');
-    $this->test_for($name, 'Making Form: You need to enter a singular name.');
-
-    $fieldName = $this->get_field_name($name);
-
-    $opts = $this->set_empty_keys($opts, array('group', 'sub'));
-    $value = $this->get_field_value($fieldName, $opts['group'], $opts['sub']);
-
-    // value
-    if(empty($value)) $value = '';
-
-    $s = $this->get_opts($name, $opts, $fieldName, $label);
-
-    $attr = array(
-      'readonly' => $s['read'],
-      'class' => "textarea $fieldName {$s['class']}",
-      'id' => $s['id'],
-      'name' => $s['name'],
-      'html' => acpt_sanitize::textarea($value)
-    );
-    $field = acpt_html::element('textarea', $attr);
-
-    $dev_note = $this->dev_message($fieldName, $opts['group'], $opts['sub']);
-
-    if($this->echo === false) { ob_start(); }
-    echo apply_filters($fieldName . '_filter', $s['bLabel'].$s['label'].$s['aLabel'].$field.$dev_note.$s['help'].$s['aField']);
-    if($this->echo === false) {
-      $data = ob_get_clean();
-      $this->buffer['main'] .= $data;
-    }
-
-    return $this;
+    return include 'fields/textarea/method.php';
   }
 
   /**
@@ -303,56 +208,7 @@ class acpt_form extends acpt {
    * @return $this
    */
   function select($name, $options=array('Key' => 'Value'), $opts=array(), $label = null) {
-    $this->test_for($this->name, 'Making Form: You need to make the form first.');
-    $this->test_for($name, 'Making Form: You need to enter a singular name.');
-
-    $optionsList = '';
-    $fieldName = $this->get_field_name($name);
-
-    // get options HTML
-    if(isset($options)) :
-
-      $opts = $this->set_empty_keys($opts, array('group', 'sub'));
-      $value = $this->get_field_value($fieldName, $opts['group'], $opts['sub']);
-
-      foreach( $options as $key => $option) :
-        if($option == $value)
-          $selected = 'selected="selected"';
-        else
-          $selected = null;
-
-        if(array_key_exists('select_key', $opts) && $opts['select_key'] == true)
-          true;
-        else
-          $key = $option;
-
-        $option = esc_attr($option);
-
-        $optionsList .= "<option $selected value=\"$option\">$key</option>";
-      endforeach;
-
-    endif;
-
-    $s = $this->get_opts($name, $opts, $fieldName, $label);
-
-    $attr = array(
-      'readonly' => $s['read'],
-      'class' => "select $fieldName {$s['class']}",
-      'id' => $s['id'],
-      'name' => $s['name'],
-      'html' => $optionsList
-    );
-    $field = acpt_html::element('select', $attr);
-    $dev_note = $this->dev_message($fieldName, $opts['group'], $opts['sub']);
-
-    if($this->echo === false) { ob_start(); }
-    echo apply_filters($fieldName . '_filter', $s['bLabel'].$s['label'].$s['aLabel'].$field.$dev_note.$s['help'].$s['aField']);
-    if($this->echo === false) {
-      $data = ob_get_clean();
-      $this->buffer['main'] .= $data;
-    }
-
-    return $this;
+    return include 'fields/select/method.php';
   }
 
   /**
@@ -365,73 +221,19 @@ class acpt_form extends acpt {
    * @return $this
    */
   function radio($name, $options=array('Key' => 'Value'), $opts=array(), $label = null) {
-    $this->test_for($this->name, 'Making Form: You need to make the form first.');
-    $this->test_for($name, 'Making Form: You need to enter a singular name.');
+    return include 'fields/radio/method.php';
+  }
 
-    $optionsList = '';
-    $opts['labelTag'] = 'span';
-    $fieldName = $this->get_field_name($name);
-
-    // name
-    $s = $this->get_opts($name, $opts, $fieldName, $label);
-
-    // get options HTML
-    if(!empty($options)) :
-
-      $opts = $this->set_empty_keys($opts, array('group', 'sub'));
-      $value = $this->get_field_value($fieldName, $opts['group'], $opts['sub']);
-
-      foreach( $options as $key => $option) :
-        if($option == $value)
-          $checked = 'checked';
-        else
-          $checked = null;
-
-        if(array_key_exists('select_key', $opts) && $opts['select_key'] == true)
-          true;
-        else
-          $key = $option;
-
-        $anOption = array(array(
-          'label' => array(
-            'html' => array(array(
-              'input' => array(
-                'type' => 'radio',
-                'name' => $s['name'],
-                'value' => esc_attr($option),
-                'checked' => $checked
-              )
-            ), array(
-              'span' => array(
-                'html' => $key
-              )
-            ))
-          )
-        ));
-
-        $optionsList .= acpt_html::make_html($anOption);
-
-      endforeach;
-
-    endif;
-
-    $attr = array(
-      'readonly' => $s['read'],
-      'class' => "radio $fieldName {$s['class']}",
-      'id' => $s['id'],
-      'html' => $optionsList
-    );
-    $field = acpt_html::element('div', $attr);
-    $dev_note = $this->dev_message($fieldName, $opts['group'], $opts['sub']);
-
-    if($this->echo === false) { ob_start(); }
-    echo apply_filters($fieldName . '_filter', $s['bLabel'].$s['label'].$s['aLabel'].$field.$dev_note.$s['help'].$s['aField']);
-    if($this->echo === false) {
-      $data = ob_get_clean();
-      $this->buffer['main'] .= $data;
-    }
-
-    return $this;
+  /**
+   * Form Text Repeater.
+   *
+   * @param string $name singular name is required
+   * @param array $opts args override and extend
+   * @param bool $label show label or not
+   * @return $this
+   */
+  function text_repeater($name, $opts=array(), $label = null) {
+    return include 'fields/text_repeater/method.php';
   }
 
   /**
@@ -449,45 +251,7 @@ class acpt_form extends acpt {
    * @return $this
    */
   function editor($name, $label=null, $opts=array(), $editor_settings = array()) {
-    $this->test_for($this->name, 'Making Form: You need to make the form first.');
-    $this->test_for($name, 'Making Form: You need to enter a singular name.');
-
-    $fieldName = $this->get_field_name($name);
-
-    $opts = $this->set_empty_keys($opts, array('group', 'sub'));
-    $group = $this->get_opt_by_test($opts['group'], '');
-    $sub = $this->get_opt_by_test($opts['sub'], '');
-
-    $v = $this->get_field_value($fieldName, $group, $sub);
-    $s = $this->get_opts($label, array('labelTag' => 'span'), $fieldName, true);
-
-    $noOverride = array(
-      'textarea_name' => $this->get_acpt_post_name($fieldName, $group, $sub)
-    );
-
-    $defaultSettings = array(
-      'textarea_rows' => 15,
-      'tinymce' => array( 'plugins' => 'wordpress' )
-    );
-
-    $v = acpt_sanitize::editor($v);
-    $id = 'wysisyg'.$this->letterLower($fieldName);
-    $editor_settings = array_merge($defaultSettings, $editor_settings, $noOverride);
-
-    if($this->echo === false) { ob_start(); }
-    echo '<div class="control-group">';
-    echo $s['label'];
-
-    wp_editor($v,$id,$editor_settings);
-
-    echo $this->dev_message($fieldName, $group, $sub);
-    echo '</div>';
-    if($this->echo === false) {
-      $data = ob_get_clean();
-      $this->buffer['main'] .= $data;
-    }
-
-    return $this;
+    return include 'fields/editor/method.php';
   }
 
   /**
@@ -499,28 +263,7 @@ class acpt_form extends acpt {
    * @return $this
    */
   function image($name, $opts=array(), $label = null) {
-    $this->test_for($this->name, 'Making Form: You need to make the form first.');
-    $this->test_for($name, 'Making Form: You need to enter a singular name.');
-
-    $fieldName = $this->get_field_name($name);
-
-    $args = array(
-      'name' => $name,
-      'opts' => $opts,
-      'classes' => "image upload-url",
-      'field' => $fieldName,
-      'label' => $label,
-      'html' => ''
-    );
-
-    if($this->echo === false) { ob_start(); }
-    echo apply_filters($fieldName . '_filter', $this->get_image_form($args));
-    if($this->echo === false) {
-      $data = ob_get_clean();
-      $this->buffer['main'] .= $data;
-    }
-
-    return $this;
+    return include 'fields/image/method.php';
   }
 
   /**
@@ -532,28 +275,7 @@ class acpt_form extends acpt {
    * @return $this
    */
   function file($name, $opts=array(), $label = null) {
-    $this->test_for($this->name, 'Making Form: You need to make the form first.');
-    $this->test_for($name, 'Making Form: You need to enter a singular name.');
-
-    $fieldName = $this->get_field_name($name);
-
-    $args = array(
-      'name' => $name,
-      'opts' => $opts,
-      'classes' => "file upload-url",
-      'field' => $fieldName,
-      'label' => $label,
-      'html' => ''
-    );
-
-    if($this->echo === false) { ob_start(); }
-    echo apply_filters($fieldName . '_filter', $this->get_file_form($args));
-    if($this->echo === false) {
-      $data = ob_get_clean();
-      $this->buffer['main'] .= $data;
-    }
-
-    return $this;
+    return include 'fields/file/method.php';
   }
 
   /**
@@ -565,28 +287,7 @@ class acpt_form extends acpt {
    * @return $this
    */
   function google_map($name, $opts=array(), $label = true) {
-    $this->test_for($this->name, 'Making Form: You need to make the form first.');
-    $this->test_for($name, 'Making Form: You need to enter a singular name.');
-
-    $fieldName = $this->get_field_name($name);
-
-    $args = array(
-      'name' => $name,
-      'opts' => $opts,
-      'classes' => "googleMap",
-      'field' => $fieldName,
-      'label' => $label,
-      'html' => ''
-    );
-
-    if($this->echo === false) { ob_start(); }
-    echo apply_filters($fieldName . '_filter', $this->get_google_map_form($args));
-    if($this->echo === false) {
-      $data = ob_get_clean();
-      $this->buffer['main'] .= $data;
-    }
-
-    return $this;
+    return include 'fields/google_map/method.php';
   }
 
   /**
@@ -598,42 +299,7 @@ class acpt_form extends acpt {
    * @return $this
    */
   function date($name, $opts=array(), $label = true) {
-    $this->test_for($this->name, 'Making Form: You need to make the form first.');
-    $this->test_for($name, 'Making Form: You need to enter a singular name.');
-
-    $fieldName = $this->get_field_name($name);
-
-    $args = array(
-      'name' => $name,
-      'opts' => $opts,
-      'classes' => "date date-picker",
-      'field' => $fieldName,
-      'label' => $label,
-      'html' => ''
-    );
-
-    if($this->echo === false) { ob_start(); }
-    echo apply_filters($fieldName . '_filter', $this->get_date_form($args));
-    if($this->echo === false) {
-      $data = ob_get_clean();
-      $this->buffer['main'] .= $data;
-    }
-
-    return $this;
-  }
-
-  /**
-   * Get Date Form
-   *
-   * @param $o
-   *
-   * @return string
-   */
-  function get_date_form($o) {
-    $o['opts'] = $this->set_empty_keys($o['opts']);
-    //$o['opts']['readonly'] = $this->get_opt_by_test($o['opts']['readonly'], true);
-
-    return $this->get_text_form($o);
+    return include 'fields/date/method.php';
   }
 
   /**
@@ -644,69 +310,7 @@ class acpt_form extends acpt {
    * @return string
    */
   function get_image_form($o) {
-    $o['opts'] = $this->set_empty_keys($o['opts']);
-    $o['opts']['readonly'] = $this->get_opt_by_test($o['opts']['readonly'], true);
-
-    // setup for grouping
-    $group = $this->get_opt_by_test($o['opts']['group'], '');
-    $sub = $this->get_opt_by_test($o['opts']['sub'], '');
-    $field = $o['field'];
-
-    $value = $this->get_field_value($field, $group, $sub);
-    $name = $this->get_acpt_post_name($field.'_id', $group, $sub);
-
-    // button text
-    $btnValue = $this->get_opt_by_test($o['opts']['button'], "Insert Image", $o['opts']['button']);
-
-    // placeholder image and image id value
-    if(!empty($value)) :
-      $placeHolderImage = '<img class="upload-img" src="'.esc_url($value).'" />';
-      $vID = $this->get_field_value($field.'_id', $group, $sub);
-    else :
-      $vID = $placeHolderImage = '';
-    endif;
-
-    $attachmentID = acpt_html::input(array(
-      'type' => 'hidden',
-      'class' => 'attachment-id-hidden',
-      'name' => $name,
-      'value' => esc_attr($vID)
-    ));
-
-    $btn = array('input' => array(
-      'type' => 'button',
-      'class' => 'button upload-button',
-      'value' => esc_attr($btnValue)
-    ));
-
-    $phRemove = array(
-        'a' => array(
-          'class' => 'remove-image',
-          'html' => 'remove'
-        )
-    );
-
-    $phImg = array(
-      'none' => array(
-        'html' => $placeHolderImage
-      )
-    );
-
-    $ph = array(
-      'div' => array(
-        'class' => 'image-placeholder',
-        'html' => array(
-          $phRemove,
-          $phImg
-        )
-      )
-    );
-
-    $html = array($attachmentID, $btn, $ph );
-
-    $o['html'] = acpt_html::make_html($html);
-
-    return $this->get_text_form($o);
+    return include 'fields/image/get.php';
   }
 
   /**

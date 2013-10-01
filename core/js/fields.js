@@ -88,4 +88,27 @@ jQuery(document).ready(function($){
         });
     }
 
+    // text repeater field
+    $('.text-repeater-field').each(function(index) {
+      console.log(index);
+      var
+        field = $(this).data('name'),
+        list = $(this).next(),
+        el = $('<div class="add-text-repeater button" style="float: right">Add</div>');
+
+      el.click(function(e){
+        list.append('<li><input type="text" name="'+field+'"/><b>Remove</b></li>');
+      });
+
+      $(this)
+        .parent()
+        .parent()
+        .prepend(el);
+    });
+
+    $('.text-repeater-field + .list').sortable();
+    $('.text-repeater-field + .list').on('click', 'b', function(){
+      $(this).parent().remove();
+    });
+
 });

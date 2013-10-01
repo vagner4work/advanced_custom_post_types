@@ -346,3 +346,26 @@ html[xmlns] .clearfix {
 * html .clearfix {
   height: 1%;
 }
+
+.text-repeater-field + .list li {
+  background: #eee;
+  border-radius: 3px;
+  padding: 3px 30px;
+  position: relative;
+  border: solid 1px #d5d5d5;
+  -webkit-box-shadow: 0 1px 2px #ccc;
+  -moz-box-shadow: 0 1px 2px #ccc;
+  box-shadow: 0 1px 2px #ccc;
+  background: #eee url('../img/repeater.png') no-repeat 0 3px;
+  cursor: pointer;
+}
+
+.text-repeater-field + .list li b {
+  position: absolute;
+  top: 0;
+  right: 0;
+  text-indent: -9999px;
+  height: 100%;
+  width: 29px;
+  background: url('../img/repeater.png') no-repeat -30px -27px;
+}

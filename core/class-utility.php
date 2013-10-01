@@ -65,6 +65,7 @@ class acpt_utility {
     wp_enqueue_script( 'jquery-ui-datepicker', array( 'jquery' ), '1.0', true );
     wp_enqueue_style( 'wp-color-picker' );
     wp_enqueue_script( 'wp-color-picker' );
+    wp_enqueue_script('jquery-ui-sortable', array( 'jquery' ), '1.0', true);
 
     if(function_exists( 'wp_enqueue_media' )){
       wp_enqueue_media();

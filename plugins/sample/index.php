@@ -43,6 +43,7 @@ function meta_custom() {
     ->radio('radio', array('blue', 'green', 'red'), array('label' => 'Radio Buttons'))
     ->buffer('options')->buffer() // save buffer and start again
     ->text('Text', array('class' => 'example-class', 'help' => 'Example help text'))
+    ->text_repeater('Text Repeater', array('class' => 'example-class', 'help' => 'Example help text'))
     ->textarea('Textarea', array('label' => 'Textarea'))
     ->image('Image', array('button' => 'Add Your Image'))
     ->file('File', array('button' => 'Select a File'))
