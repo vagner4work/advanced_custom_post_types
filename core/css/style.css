@@ -4,6 +4,8 @@
   width: 100%;
   padding: 5px;
   resize: none;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
 
@@ -347,6 +349,11 @@ html[xmlns] .clearfix {
   height: 1%;
 }
 
+.text-repeater-field + .list {
+  margin: 0;
+  padding: 0;
+}
+
 .text-repeater-field + .list li {
   background: #eee;
   border-radius: 3px;
@@ -358,6 +365,8 @@ html[xmlns] .clearfix {
   box-shadow: 0 1px 2px #ccc;
   background: #eee url('../img/repeater.png') no-repeat 0 3px;
   cursor: pointer;
+  margin: 5px 0;
+  list-style-type: none !important;
 }
 
 .text-repeater-field + .list li b {
@@ -368,4 +377,34 @@ html[xmlns] .clearfix {
   height: 100%;
   width: 29px;
   background: url('../img/repeater.png') no-repeat -30px -27px;
+}
+
+.image-repeater-set {
+  margin: 0;
+}
+
+.image-repeater-set li {
+  float: left;
+  width: 100px;
+  height: 100px;
+  padding: 10px 20px 40px;
+  overflow: hidden;
+  position: relative;
+  cursor: move;
+}
+
+.image-repeater-set li b {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  color: red;
+  display: block;
+  width: 100%;
+  text-align: center;
+  cursor: pointer;
+}
+
+.image-repeater-set li img {
+  max-width: 100% !important;
+  height: auto !important;
 }

@@ -31,6 +31,7 @@ if(!empty($options)) :
       'label' => array(
         'html' => array(array(
           'input' => array(
+            'id' => 'radio-' . sanitize_title($option),
             'type' => 'radio',
             'name' => $s['name'],
             'value' => esc_attr($option),

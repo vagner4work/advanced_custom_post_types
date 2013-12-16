@@ -31,6 +31,7 @@ function acpt_pageContent_themeOptions() {
   $form->buffer() // buffer
     ->checkbox('Checkbox Example', array('desc' => 'Select this for value of 1'))
     ->text('Text Field')
+    ->text_repeater('Text Repeater')
     ->image('Image Field')
     ->file('File Field')
     ->textarea('Textarea')

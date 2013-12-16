@@ -90,7 +90,7 @@ class acpt_post_type extends acpt {
 			  background-position: <?php echo $this->icon_pos[$this->icon]['i']; ?>;
 			}
 
-			#adminmenu #menu-posts-<?php echo $this->singular; ?>:hover div.wp-menu-image,
+			#adminmenu <?php echo '#menu-posts-'.$this->singular.':hover div.wp-menu-image'; ?>,
 			#adminmenu #menu-posts-<?php echo $this->singular; ?>.wp-has-current-submenu div.wp-menu-image,
 			#adminmenu #menu-posts-<?php echo $this->singular; ?>.current div.wp-menu-image {
 			  background-position: <?php echo $this->icon_pos[$this->icon]['a']; ?>;
@@ -151,6 +151,7 @@ class acpt_post_type extends acpt {
 			'read_private_posts' => 'read_private_'.$plural,
 		);
 
+    // @link http://justintadlock.com/archives/2010/07/10/meta-capabilities-for-custom-post-types
 		if($cap === true) :
 			$cap = array(
 				'capability_type' => $singular,

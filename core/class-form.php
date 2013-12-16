@@ -16,9 +16,15 @@ class acpt_form extends acpt {
   private $buffering = false;
   public $saveMessage = 'Changes Saved';
   private $saveName = null;
+  public $store = null;
+  public $user = null;
+  public $connect = null;
+  public $insert = false;
+  public $insert_data = array();
+  public $added_post_id = null;
 
-  function __construct($name, $opts=array(), $echo = true) {
-    return $this->make($name, $opts, $echo);
+  function __construct($name, $opts=array(), $echo = true, $store = null) {
+    return $this->make($name, $opts, $echo, $store);
   }
 
   /**
@@ -30,9 +36,21 @@ class acpt_form extends acpt {
    *
    * @return $this
    */
-  function make($name, $opts=array(), $echo = true) {
+  function make($name, $opts=array(), $echo = true, $store = null) {
     $this->test_for($name, 'Making Form: You need to enter a singular name.');
     $this->name = $name;
+
+    if(isset($store) && is_string($store)) {
+      $this->store = $store;
+    } elseif(isset($store) && is_array($store)) {
+      $this->store = $store['store'];
+      $this->connect = $store['connect'];
+      $this->insert = $store['insert'];
+      $this->insert_data = $store['insert_data'];
+    } elseif(is_int($store)) {
+      $this->store = $store;
+    }
+
 
     $opts = $this->set_empty_keys($opts, array('group', 'label', 'labelTag', 'bLabel', 'aLabel', 'aField', 'method', 'action'));
     $this->group = $this->get_opt_by_test($opts['group'], '');
@@ -55,18 +73,47 @@ class acpt_form extends acpt {
     $this->aField = is_string($opts['aField']) ? $opts['aField'] : null;
     $this->saveName = 'save_acpt_form_'.$this->name;
 
-    if($opts['method'] === true ) :
+    if($opts['method'] === true ) {
 
       if(isset($_POST[$this->saveName])) {
-        acpt_save::save_post_fields('options');
+        if(empty($this->store)) {
+          $this->store = 'options';
+        }
+
+        // if editing or adding a post
+        if($this->insert == true) {
+          if( is_int($this->store) ) {
+            $args = array( 'ID' => $this->store);
+
+            if(!empty($_POST['acpt']['insert']['post_title']))  {
+              $args['post_title'] = $_POST['acpt']['insert']['post_title'];
+            }
+
+           wp_update_post( $args );
+          } else {
+           $args = array(
+             'post_type' => $this->insert_data['post_type'],
+             'post_status'   => 'publish',
+             'post_title'   => 'item'
+           );
+
+            if(!empty($_POST['acpt']['insert']['post_title']))  {
+              $args['post_title'] = $_POST['acpt']['insert']['post_title'];
+            }
+
+           $this->added_post_id = wp_insert_post($args);
+          }
+        } else {
+          acpt_save::save_post_fields($this->store, $this);
+        }
+
       }
 
       $this->method = $opts['method'];
-      $field = '<form id="'.$name.'" ';
-      $field .= 'method="post" ';
+      $field = '<form id="'.$name.'" method="post" ';
       $field .= is_string($opts['action']) ? 'action="'.$opts['action'].'" ' : 'action="'.esc_attr($_SERVER["REQUEST_URI"]).'" ';
       $field .= '>';
-    endif;
+    }
 
     if(is_string($opts['action'])) $this->action = $opts['action'];
 
@@ -156,6 +203,42 @@ class acpt_form extends acpt {
    */
   function text($name, $opts=array(), $label = null) {
     return include 'fields/text/method.php';
+  }
+
+  /**
+   * Form Text.
+   *
+   * @param string $name singular name is required
+   * @param array $opts args override and extend
+   * @param bool $label show label or not
+   * @return $this
+   */
+  function title($name, $opts=array(), $label = null) {
+    return include 'fields/title/method.php';
+  }
+
+  /**
+   * Form Email.
+   *
+   * @param string $name singular name is required
+   * @param array $opts args override and extend
+   * @param bool $label show label or not
+   * @return $this
+   */
+  function user_email($name, $opts=array(), $label = null, $user_id) {
+    return include 'fields/email/method.php';
+  }
+
+  /**
+   * Form Hidden.
+   *
+   * @param string $name singular name is required
+   * @param array $opts args override and extend
+   * @param bool $label show label or not
+   * @return $this
+   */
+  function hidden($name, $opts=array(), $label = null) {
+    return include 'fields/hidden/method.php';
   }
 
   /**
@@ -264,6 +347,18 @@ class acpt_form extends acpt {
    */
   function image($name, $opts=array(), $label = null) {
     return include 'fields/image/method.php';
+  }
+
+  /**
+   * Form Image Repeater
+   *
+   * @param string $name singular name is required
+   * @param array $opts args override and extend
+   * @param bool $label show label or not
+   * @return $this
+   */
+  function image_repeater($name, $opts=array(), $label = null) {
+    return include 'fields/image_repeater/method.php';
   }
 
   /**
@@ -493,6 +588,99 @@ class acpt_form extends acpt {
   }
 
   /**
+   * Get Title Form
+   *
+   * @param $o
+   *
+   * @return string
+   */
+  protected function get_title_form($o) {
+    $o['opts'] = $this->set_empty_keys($o['opts']);
+    $s = $this->get_opts($o['name'], $o['opts'], $o['field'], $o['label']);
+
+    if(!empty($o['value'])) {
+      $v = $o['value'];
+    } else {
+      $v = $this->get_field_value($o['field'], $o['opts']['group'], $o['opts']['sub']);
+    }
+
+    $field = acpt_html::input(array(
+      'class' => "{$o['classes']}  acpt_{$o['field']} {$s['class']}",
+      'type' => 'text',
+      'value' => esc_attr($v),
+      'name' => $s['name'],
+      'id' => $s['id'],
+      'readonly' => $s['read']
+    ), true);
+
+    $dev_note = $this->dev_message($o['field'], $o['opts']['group'], $o['opts']['sub']);
+
+    return $s['bLabel'].$s['label'].$s['aLabel'].$field.$o['html'].$dev_note.$s['help'].$s['aField'];
+  }
+
+  /**
+   * Get User Email Form
+   *
+   * @param $o
+   *
+   * @return string
+   */
+  protected function get_email_form($o) {
+    $o['opts'] = $this->set_empty_keys($o['opts']);
+    $s = $this->get_opts($o['name'], $o['opts'], $o['field'], $o['label']);
+
+    if(!empty($o['value'])) {
+      $v = $o['value'];
+    } else {
+      $v = $this->get_field_value($o['field'], $o['opts']['group'], $o['opts']['sub']);
+    }
+
+    $field = acpt_html::input(array(
+      'class' => "{$o['classes']}  acpt_{$o['field']} {$s['class']}",
+      'type' => 'text',
+      'value' => esc_attr($v),
+      'name' => $s['name'],
+      'id' => $s['id'],
+      'readonly' => $s['read']
+    ), true);
+
+    $dev_note = $this->dev_message($o['field'], $o['opts']['group'], $o['opts']['sub']);
+
+    return $s['bLabel'].$s['label'].$s['aLabel'].$field.$o['html'].$dev_note.$s['help'].$s['aField'];
+  }
+
+  /**
+   * Get Hidden Form
+   *
+   * @param $o
+   *
+   * @return string
+   */
+  protected function get_hidden_form($o) {
+    $o['opts'] = $this->set_empty_keys($o['opts']);
+    $s = $this->get_opts($o['name'], $o['opts'], $o['field'], $o['label']);
+
+    if(!empty($o['value'])) {
+      $v = $o['value'];
+    } else {
+      $v = $this->get_field_value($o['field'], $o['opts']['group'], $o['opts']['sub']);
+    }
+
+    $field = acpt_html::input(array(
+      'class' => "{$o['classes']}  acpt_{$o['field']} {$s['class']}",
+      'type' => 'hidden',
+      'value' => esc_attr($v),
+      'name' => $s['name'],
+      'id' => $s['id'],
+      'readonly' => $s['read']
+    ), true);
+
+    $dev_note = $this->dev_message($o['field'], $o['opts']['group'], $o['opts']['sub']);
+
+    return $s['bLabel'].$s['label'].$s['aLabel'].$field.$o['html'].$dev_note.$s['help'].$s['aField'];
+  }
+
+  /**
    * Get Input Options
    *
    * Testing each field needs to prevent errors.
@@ -598,10 +786,13 @@ class acpt_form extends acpt {
     global $post;
     $group = $this->get_opt_by_test($group, $this->group);
 
-    if(isset($post)) {
-      $getter = 'meta';
-    } else {
+    if($this->store == 'options') {
       $getter = 'option';
+    } elseif($this->store == 'user_meta') {
+      $getter = 'user_meta';
+    }
+    elseif(isset($post)) {
+      $getter = 'meta';
     }
 
     if(DEV_MODE == true) :
@@ -614,6 +805,10 @@ class acpt_form extends acpt {
     else :
       $data = '';
     endif;
+
+    if(!is_admin()) {
+      $data = '';
+    }
 
     return $data;
   }
@@ -644,10 +839,12 @@ class acpt_form extends acpt {
     global $post;
     $group = $this->get_opt_by_test($group, $this->group);
 
-    if(isset($post->ID)) :
-      $value = acpt_get::meta("{$group}[{$field}]{$sub}");
-    else :
+    if($this->store == 'options') :
       $value = acpt_get::option("{$group}[{$field}]{$sub}");
+    elseif($this->store == 'user_meta') :
+      $value = acpt_get::user_meta("{$group}[{$field}]{$sub}", $this->user);
+    elseif(isset($post->ID)) :
+      $value = acpt_get::meta("{$group}[{$field}]{$sub}");
     endif;
 
     return $value;

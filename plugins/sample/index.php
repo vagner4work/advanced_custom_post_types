@@ -5,8 +5,8 @@ function acpt_sample_init() {
 
   // in supports add the meta box custom
   $args_sample = array(
-  'supports' => array( 'title', 'editor', 'page-attributes', 'custom'  ),
-  'hierarchical' => true,
+    'supports' => array( 'title', 'editor', 'page-attributes', 'custom'  ),
+    'hierarchical' => true,
   );
 
   $args_example = array(

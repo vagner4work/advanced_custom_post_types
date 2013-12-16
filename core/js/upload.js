@@ -50,7 +50,7 @@ jQuery(document).ready(function() {
         jQuery(el).on('click', '.image-placeholder .remove-image', function(){
             jQuery(this).parent().parent().find('.upload-url').attr('value', '');
             jQuery(this).parent().remove();
-            jQuery(el).append('<div class="image-placeholder"><div class="remove-image"></div></div>');
+            jQuery(el).append('<div class="image-placeholder"><div class="remove-image">remove</div></div>');
         });
     });
 

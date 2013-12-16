@@ -9,10 +9,6 @@
  **/
 class acpt_role extends acpt {
 
-  function __construct($role = null, $settings = array(), $postType = null) {
-    return $this->make($role, $settings, $postType);
-  }
-
 	/**
 	 * Make Role. Do not use before init. Use before making a post type.
 	 * 

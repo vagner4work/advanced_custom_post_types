@@ -42,6 +42,45 @@ class acpt_get {
   }
 
   /**
+   * Get User Meta Data
+   *
+   * This will in the future get data form the wp_options table.
+   * For now it is a place hold so you can get data if it is not
+   * saved into a post.
+   *
+   * @param string $name
+   * @param string $fallBack
+   * @param bool $groups
+   * @param null $id
+   *
+   * @return null
+   */
+  static function user_meta($name = '', $user_id = null, $fallBack = '', $groups = true, $id = null) {
+    if(!acpt_validate::bracket($name)) die("ACPT Error: You need to use brackets [{$name}]");
+
+    /*
+     * Action start_acpt_option
+     *
+     * Do anything with input data before it is gotten
+     */
+    do_action('start_acpt_user_meta', $name, $user_id, $fallBack, $groups, $id);
+
+    if($groups === true ) :
+      $data = self::get_groups($name, 'user_meta', $user_id);
+    else :
+      $data = null;
+    endif;
+
+    /*
+    * Action end_acpt_option
+    *
+    * Do anything you like with resolved data before it is returned.
+    */
+    do_action('end_acpt_option', $data);
+    return $data;
+  }
+
+  /**
    * Get Meta Data
    *
    * Get meta data using custom syntax with brackets.
@@ -92,7 +131,7 @@ class acpt_get {
    *
    * @return mixed|null
    */
-  private static function get_groups($name, $id) {
+  private static function get_groups($name, $id, $user_id = null) {
 
     if($id === 'options') {
       $optG = acpt_utility::groups_to_array($name);
@@ -100,7 +139,19 @@ class acpt_get {
       $data[$optG[0]] = get_option($optG[0]);
 
       return self::get_data_by_groups($optG, $data);
-    } else {
+    }
+    elseif($id === 'user_meta') {
+      $optG = acpt_utility::groups_to_array($name);
+      if($user_id == null) {
+        $user_id = get_current_user_id();
+      }
+
+      $data[$optG[0]] = get_user_meta($user_id, $optG[0]);
+
+      return self::get_data_by_groups($optG, $data);
+    }
+
+    else {
       $data = get_post_meta($id);
     }
 
@@ -182,6 +233,10 @@ class acpt_get {
       endif;
 
     endfor;
+
+    if(is_array($data) && count($data) == 0) {
+      $data = null;
+    }
 
     return $data;
   }

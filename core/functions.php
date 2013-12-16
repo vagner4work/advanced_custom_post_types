@@ -47,6 +47,10 @@ function acpt_option($name = '', $fallBack = '', $groups = true) {
   return acpt_get::option($name, $fallBack, $groups, 'options');
 }
 
+function acpt_user_meta($name = '', $user_id = null, $fallBack = '', $groups = true, $id = null) {
+  return acpt_get::user_meta($name, $user_id, $fallBack, $groups, $id);
+}
+
 
 /**
  * Access function for acpt_form class
@@ -56,8 +60,8 @@ function acpt_option($name = '', $fallBack = '', $groups = true) {
  *
  * @return acpt_form
  */
-function acpt_form($name, $opts=array(), $echo = true) {
-  return new acpt_form($name, $opts, $echo);
+function acpt_form($name, $opts=array(), $echo = true, $store = null) {
+  return new acpt_form($name, $opts, $echo, $store);
 }
 
 /**

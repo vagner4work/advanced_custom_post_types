@@ -7,7 +7,7 @@ $field = $this->get_field_name($name);
 $args = array(
   'name' => $name,
   'opts' => $opts,
-  'classes' => "text-repeater",
+  'classes' => "image-repeater text-repeater",
   'field' => $field,
   'label' => $label,
   'html' => ''
@@ -23,36 +23,31 @@ $v = $this->get_field_value($o['field'], $o['opts']['group'], '');
 
 $fields = '';
 
-if(count($v) > 0) :
+if(count($v) > 0 && is_array($v)) :
   foreach($v as $k => $v ) {
 
     $input_item = acpt_html::input(array(
-      'type' => 'text',
+      'type' => 'hidden',
       'value' => esc_attr($v),
-      'name' => $s['name'].'[]'
+      'name' => $s['name'].'[]',
+      'class' => 'image-id'
     ), true);
 
-    $fields = $fields . '<li>'.$input_item.'<b>Remove</b></li>';
-  }
-else :
-  $input_item = acpt_html::input(array(
-    'type' => 'text',
-    'value' => '',
-    'name' => $s['name'].'[]'
-  ), true);
+    $img = wp_get_attachment_image($v, 'thumbnail');
 
-  $fields = $fields . '<li>'.$input_item.'<b>Remove</b></li>';
+    $fields = $fields . '<li>'.$input_item.'<div class="image-placeholder">'.$img.'</div><b>Remove</b></li>';
+  }
 endif;
 
 $hidden_field = acpt_html::input(array(
-  'class' => "text-repeater-field",
+  'class' => "image-repeater-field",
   'type' => 'hidden',
   'data-name' => $s['name'].'[]'
 ), true);
 
 $dev_note = $this->dev_message($o['field'], $o['opts']['group'], '');
 
-$the_code = $s['bLabel'].$s['label'].$s['aLabel'].$hidden_field.'<ul class="list">'.$fields.'</ul>'.$o['html'].$dev_note.$s['help'].$s['aField'];
+$the_code = $s['bLabel'].$s['label'].$s['aLabel'].$hidden_field.'<ul class="list image-repeater-set">'.$fields.'</ul>'.$o['html'].$dev_note.$s['help'].$s['aField'];
 
 echo apply_filters($field . '_filter', $the_code);
 
