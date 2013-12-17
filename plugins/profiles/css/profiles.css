@@ -1,0 +1,179 @@
+.profile-wrapper {
+  padding: 40px 0;
+}
+
+.profile-content .avatar {
+  text-align: center;
+  overflow: hidden;
+}
+
+.profile-content .avatar img, img.avatar {
+  border-radius: 100px;
+  display: inline-block;
+  float: none;
+}
+
+.profile-content {
+  margin: 40px 0;
+}
+
+
+.profile-content .body {
+  margin-bottom: 80px;
+}
+
+.toggle-profile {
+  position: relative;
+}
+
+.toggle-profile .toggle-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.author-list {
+  width: 100%;
+}
+
+.author-list td {
+  padding: 15px 10px;
+}
+
+.author-list tr th:hover {
+  background: #f0f0f0;
+}
+
+.author-list tr th a {
+  color: #333333;
+  font-weight: bold;
+  display: block;
+  padding: 10px;
+  position: relative;
+}
+
+.author-list tr th:hover a:after {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 50%;
+  margin-top: -3px;
+  border: solid 6px transparent;
+  border-top: solid #333 6px;
+  right: 5px;
+}
+
+.author-list tr {
+  border-bottom: solid 1px #f0f0f0;
+}
+
+.author-list tr:hover td {
+  background: #f7f7f7;
+  cursor: pointer;
+}
+
+.author-list img {
+  display: inline-block;
+  float: none;
+}
+
+.table-center {
+  text-align: center;
+}
+
+.table-left {
+  text-align: left;
+}
+
+.author-search {
+  float: right;
+}
+
+.author-search input[type="submit"], .author-search label {
+  position: absolute;
+  left: -99999px;
+}
+
+.author-nav {
+  clear: both;
+  text-align: center;
+  margin: 40px 0;
+}
+
+#menu .profile-avatar {
+  width: 25px;
+  height: auto;
+  border-radius: 100px;
+}
+
+.main .profile-avatar {
+  width: 72px;
+  height: auto;
+}
+
+#confirm-password label span {
+  display: block;
+}
+
+.profile-gallery {
+  clear: both;
+}
+
+.gallery-image {
+  margin: 20px;
+  float: left;
+}
+
+.profile-gallery .button {
+  font-size: 12px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  padding: 9px 15px;
+  background: none;
+  background-image: none;
+  border: none;
+  background-color: #08C;
+  color: #fff;
+}
+
+.image-repeater-set {
+  margin: 0;
+}
+
+.image-repeater-set li {
+  float: left;
+  width: 100px;
+  height: 100px;
+  padding: 10px 20px 40px;
+  overflow: hidden;
+  position: relative;
+  cursor: move;
+}
+
+.image-repeater-set li b {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  color: #08C;
+  font-weight: normal;
+  display: block;
+  width: 100%;
+  text-align: center;
+  cursor: pointer;
+}
+
+.image-repeater-set li img {
+  max-width: 100% !important;
+  height: auto !important;
+}
+
+.profile-gallery .image-placeholder img {
+  width: 100px;
+  height: auto;
+  float: left;
+  margin-right: 10px;
+}

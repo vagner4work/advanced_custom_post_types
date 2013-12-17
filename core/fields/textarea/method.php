@@ -17,6 +17,7 @@ $attr = array(
   'class' => "textarea $fieldName {$s['class']}",
   'id' => $s['id'],
   'name' => $s['name'],
+  'placeholder' => $s['placeholder'],
   'html' => acpt_sanitize::textarea($value)
 );
 $field = acpt_html::element('textarea', $attr);

@@ -90,7 +90,7 @@ class acpt {
     $keys = array_keys($opts);
 
     if($desired_keys === false) {
-      $desired_keys = array('readonly', 'group', 'sub', 'button', 'help', 'bLabel', 'aLabel', 'aField', 'label', 'labelTag', 'class');
+      $desired_keys = array('readonly', 'placeholder', 'group', 'sub', 'button', 'help', 'bLabel', 'aLabel', 'aField', 'label', 'labelTag', 'class');
     }
 
     foreach($desired_keys as $desired_key){

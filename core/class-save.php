@@ -39,8 +39,8 @@ class acpt_save extends acpt {
         self::save_options_meta($metaData);
       } elseif($postID === 'user_meta') {
 
-        if(isset($_POST['user_id'])) {
-          $user_id = $_POST['user_id'];
+        if(isset($form->user)) {
+          $user_id = $form->user;
         } else {
           $user_id = null;
         }
@@ -105,8 +105,16 @@ class acpt_save extends acpt {
       $user_id = get_current_user_id();
     endif;
 
-    if(!empty($metaData['user_insert']['user_email'])) {
-      wp_update_user( array ( 'ID' => $user_id, 'user_email' => $metaData['user_insert']['user_email'] ) );
+    if(!empty($metaData['user_insert']) && is_array($metaData['user_insert'])) {
+      $args = array('ID' => $user_id);
+      foreach($metaData['user_insert'] as $k => $v) {
+        if($k == 'user_pass' && !empty($v) && $v == $metaData['user_insert']['user_pass_confirm']) {
+          $args[$k] = $v;
+        } elseif($k != 'user_pass') {
+          $args[$k] = $v;
+        }
+      }
+      wp_update_user( $args );
       unset($metaData['user_insert']);
     }
 

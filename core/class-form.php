@@ -14,6 +14,7 @@ class acpt_form extends acpt {
   public $echo = null;
   public $buffer = array('main' => '');
   private $buffering = false;
+  public $advanced = false;
   public $saveMessage = 'Changes Saved';
   private $saveName = null;
   public $store = null;
@@ -23,8 +24,10 @@ class acpt_form extends acpt {
   public $insert_data = array();
   public $added_post_id = null;
 
-  function __construct($name, $opts=array(), $echo = true, $store = null) {
-    return $this->make($name, $opts, $echo, $store);
+  function __construct($name = null, $opts=array(), $echo = true, $store = null) {
+    if($name != null) {
+      return $this->make($name, $opts, $echo, $store);
+    }
   }
 
   /**
@@ -218,16 +221,44 @@ class acpt_form extends acpt {
   }
 
   /**
-   * Form Email.
+   * User Form Elements.
    *
    * @param string $name singular name is required
    * @param array $opts args override and extend
    * @param bool $label show label or not
    * @return $this
    */
-  function user_email($name, $opts=array(), $label = null, $user_id) {
-    return include 'fields/email/method.php';
+  function user_email($name, $opts=array(), $label = null, $user_id = null) {
+    if($user_id == null) $user_id = $this->user;
+
+    return include 'fields/user_email/method.php';
   }
+
+  function user_firstname($name, $opts=array(), $label = null, $user_id = null) {
+    if($user_id == null) $user_id = $this->user;
+
+    return include 'fields/user_firstname/method.php';
+  }
+
+  function user_lastname($name, $opts=array(), $label = null, $user_id = null) {
+    if($user_id == null) $user_id = $this->user;
+
+    return include 'fields/user_lastname/method.php';
+  }
+
+  function user_login($name, $opts=array(), $label = null, $user_id = null) {
+    if($user_id == null) $user_id = $this->user;
+
+    return include 'fields/user_login/method.php';
+  }
+
+  function user_pass($name, $opts=array(), $label = null, $user_id = null) {
+    if($user_id == null) $user_id = $this->user;
+
+    return include 'fields/user_pass/method.php';
+  }
+
+
 
   /**
    * Form Hidden.
@@ -579,6 +610,7 @@ class acpt_form extends acpt {
         'value' => esc_attr($v),
         'name' => $s['name'],
         'id' => $s['id'],
+        'placeholder' => $s['placeholder'],
         'readonly' => $s['read']
     ), true);
 
@@ -609,6 +641,7 @@ class acpt_form extends acpt {
       'type' => 'text',
       'value' => esc_attr($v),
       'name' => $s['name'],
+      'placeholder' => $s['placeholder'],
       'id' => $s['id'],
       'readonly' => $s['read']
     ), true);
@@ -640,9 +673,54 @@ class acpt_form extends acpt {
       'type' => 'text',
       'value' => esc_attr($v),
       'name' => $s['name'],
+      'placeholder' => $s['placeholder'],
       'id' => $s['id'],
       'readonly' => $s['read']
     ), true);
+
+    $dev_note = $this->dev_message($o['field'], $o['opts']['group'], $o['opts']['sub']);
+
+    return $s['bLabel'].$s['label'].$s['aLabel'].$field.$o['html'].$dev_note.$s['help'].$s['aField'];
+  }
+
+  /**
+   * Get User Password Form
+   *
+   * @param $o
+   *
+   * @return string
+   */
+  protected function get_pass_form($o) {
+    $o['opts'] = $this->set_empty_keys($o['opts']);
+    $s = $this->get_opts($o['name'], $o['opts'], $o['field'], $o['label']);
+
+    if(!empty($o['value'])) {
+      $v = $o['value'];
+    } else {
+      $v = $this->get_field_value($o['field'], $o['opts']['group'], $o['opts']['sub']);
+    }
+
+    $field = acpt_html::input(array(
+      'class' => "{$o['classes']}  acpt_{$o['field']} {$s['class']}",
+      'type' => 'password',
+      'value' => esc_attr($v),
+      'name' => $s['name'],
+      'id' => $s['id'],
+      'readonly' => $s['read']
+    ), true);
+
+    $field .= "<div id=\"confirm-password\"><label><span class=\"password-confirm-label\">Confirm Password<span>";
+
+    $field .= acpt_html::input(array(
+      'class' => "{$o['classes']}  acpt_{$o['field']} {$s['class']}",
+      'type' => 'password',
+      'value' => esc_attr($v),
+      'name' => 'acpt[user_insert][user_pass_confirm]',
+      'id' => $s['id'],
+      'readonly' => $s['read']
+    ), true);
+
+    $field .= '</label></div>';
 
     $dev_note = $this->dev_message($o['field'], $o['opts']['group'], $o['opts']['sub']);
 
@@ -705,6 +783,7 @@ class acpt_form extends acpt {
     // attributes
     $s['class'] = $this->get_opt_by_test($opts['class']);
     $s['read'] = $this->get_opt_by_test($opts['readonly']);
+    $s['placeholder'] = $this->get_opt_by_test($opts['placeholder']);
     $group = $this->get_opt_by_test($opts['group'], '');
     $sub = $this->get_opt_by_test($opts['sub'], '');
     $s['name'] = $this->get_acpt_post_name($fieldName, $group, $sub);
@@ -822,7 +901,12 @@ class acpt_form extends acpt {
    */
   protected function get_field_name($name) {
     $name = $this->sanitize_name($name);
-    return $this->name.'_'.$name;
+    if($this->advanced) {
+      return $name;
+    } else {
+      return $this->name.'_'.$name;
+    }
+
   }
   /**
    * Get Field Value
